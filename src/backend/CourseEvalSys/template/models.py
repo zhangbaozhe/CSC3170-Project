@@ -36,3 +36,13 @@ class CommentsLikeStatus(models.Model):
     Status = models.BooleanField('Status',db_column='Status',null=False)
     class Meta:
         db_table = 'CommentsLikeStatus'
+
+class MultiComment(models.Model):
+    Multi_Comment_ID = models.IntegerField('Multi_Comment_ID',db_column='Multi_Comment_ID',primary_key=True,null=False)
+    User_ID = models.ForeignKey('Users',to_field='User_ID',related_name='UID',on_delete=models.CASCADE)
+    Content = models.CharField('Content',db_column='Content',max_length=255,null=False)
+    Upper_Comment_ID = models.IntegerField('Upper_Comment_ID',db_column='Upper_Comment_ID',null=False,default=1)
+    Level = models.BooleanField('Level',db_column='Level',null=False,default = 0)
+    class Meta:
+        db_table = 'MultiComment'
+
