@@ -12,15 +12,15 @@ class Courses(models.Model):
     Course_Name = models.CharField('Course_name',db_column='Course_Name',max_length=255,null=False,unique=True)
     Department = models.CharField('Department',db_column='Department',max_length=255,null=False)
     Is_Valid = models.BooleanField('Is_Valid',db_column='Is_Valid',null=False) #0:not valid, 1:valid
-    Final_Score = models.FloatField('FinalScore',db_column='Final_Score',null=True) #average score?
+    Final_Score = models.FloatField('Final_Score',db_column='Final_Score',null=True) #average score?
     Credit = models.IntegerField('Credit',db_column='Credit',null=False,default=3)
     class Meta:
         db_table = 'Courses'
 
 class Comments(models.Model):
     Comment_ID = models.IntegerField('Comment_ID',db_column='Comment_ID',primary_key=True,null=False)
-    User_ID = models.ForeignKey('Users',to_field='User_ID',related_name='ID_of_User',on_delete=models.CASCADE)
-    Course_ID = models.ForeignKey('Courses',to_field='Course_ID',related_name='CourseID',on_delete=models.CASCADE)
+    User_ID = models.ForeignKey(Users,to_field='User_ID',related_name='ID_of_User',on_delete=models.CASCADE)
+    Course_ID = models.ForeignKey(Courses,to_field='Course_ID',related_name='CourseID',on_delete=models.CASCADE)
     Semester = models.CharField('Semeste',db_column='Semester',max_length=255,null = False)
     Year = models.IntegerField('Year',db_column='Year',null=False)
     Instructor = models.CharField('Instructor',db_column='Instructor',max_length=255,null=False)
@@ -34,7 +34,7 @@ class Comments(models.Model):
 class CommentsLikeStatus(models.Model):
     # Status_ID = models.AutoField(primary_key=True,default=1)
     Status_ID = models.IntegerField('Status_ID',db_column='Status_ID',primary_key=True,null=False,default=1)
-    User_ID = models.ForeignKey('Users',to_field='User_ID',related_name='UserID',on_delete=models.CASCADE)
+    User_ID = models.ForeignKey(Users,to_field='User_ID',related_name='UserID',on_delete=models.CASCADE)
     CommentID = models.ForeignKey(Comments, related_name='ID_of_Comment',on_delete=models.CASCADE) # 0:dislike, 1:like
     Status = models.BooleanField('Status',db_column='Status',null=False)
     class Meta:
@@ -45,10 +45,10 @@ class CommentsLikeStatus(models.Model):
 
 class MultiComment(models.Model):
     Multi_Comment_ID = models.IntegerField('Multi_Comment_ID',db_column='Multi_Comment_ID',primary_key=True,null=False)
-    User_ID = models.ForeignKey('Users',to_field='User_ID',related_name='UID',on_delete=models.CASCADE)
+    User_ID = models.ForeignKey(Users,to_field='User_ID',related_name='UID',on_delete=models.CASCADE)
     Content = models.CharField('Content',db_column='Content',max_length=255,null=False)
-    Upper_Comment_ID = models.IntegerField('Upper_Comment_ID',db_column='Upper_Comment_ID',null=False,default=1)
-    Level = models.BooleanField('Level',db_column='Level',null=False,default = 0)
+    Lower_Comment_ID = models.IntegerField('Lower_Comment_ID',db_column='Lower_Comment_ID',null=False,default=1)
+    # Level = models.BooleanField('Level',db_column='Level',null=False,default = 0)
     class Meta:
         db_table = 'MultiComment'
 
