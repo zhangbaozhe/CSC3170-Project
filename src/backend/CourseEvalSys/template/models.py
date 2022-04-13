@@ -13,6 +13,7 @@ class Courses(models.Model):
     Department = models.CharField('Department',db_column='Department',max_length=255,null=False)
     Is_Valid = models.BooleanField('Is_Valid',db_column='Is_Valid',null=False) #0:not valid, 1:valid
     Final_Score = models.FloatField('FinalScore',db_column='Final_Score',null=True) #average score?
+    Credit = models.IntegerField('Credit',db_column='Credit',null=False,default=3)
     class Meta:
         db_table = 'Courses'
 
@@ -41,8 +42,6 @@ class CommentsLikeStatus(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['User_ID', 'CommentID'], name='like_id'),
         ]
-
-
 
 class MultiComment(models.Model):
     Multi_Comment_ID = models.IntegerField('Multi_Comment_ID',db_column='Multi_Comment_ID',primary_key=True,null=False)
