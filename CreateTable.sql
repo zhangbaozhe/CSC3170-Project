@@ -5,7 +5,7 @@ USE `CommentSystem`;
 -- Users
 CREATE TABLE IF NOT EXISTS `Users` (
     `UserID` INT(8) NOT NULL, 
-    `Username` VARCHAR(25) DISTINCT NOT NULL, -- set as distinct user name
+    `Username` VARCHAR(25) NOT NULL, -- set as distinct user name
     `Password` VARCHAR(30) NOT NULL,  -- TODO: can be set as infinite long? 
     PRIMARY KEY (`UserID`)
 )ENGINE=InnoDB;
@@ -15,6 +15,25 @@ CREATE TABLE IF NOT EXISTS `Give` (
     `UserID` INT(8) NOT NULL, 
     `CommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`UserID`, `CommentID`)
+)ENGINE=InnoDB;
+
+
+
+-- Evaluate
+CREATE TABLE IF NOT EXISTS `Evaluate` (
+    `CourseID` VARCHAR(10) NOT NULL, 
+    `CommentID` INT(8) NOT NULL, 
+    PRIMARY KEY (`CourseID`, `CommentID`)
+)ENGINE=InnoDB;
+
+-- Courses
+CREATE TABLE IF NOT EXISTS `Courses` (
+    `CourseID` VARCHAR(10) NOT NULL, 
+    `CourseName` VARCHAR(30) NOT NULL, 
+    `School` VARCHAR(30) NOT NULL, -- department changed to school
+    `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
+    `FinalScore` DECIMAL(2,1), 
+    PRIMARY KEY (`CourseID`)
 )ENGINE=InnoDB;
 
 -- Comments
@@ -33,23 +52,6 @@ CREATE TABLE IF NOT EXISTS `Comments` (
     PRIMARY KEY (`CommentID`), 
     FOREIGN KEY (`CourseID`) REFERENCES `Courses` (`CourseID`)
     -- TODO: UserID foreign key
-)ENGINE=InnoDB;
-
--- Evaluate
-CREATE TABLE IF NOT EXISTS `Evaluate` (
-    `CourseID` VARCHAR(10) NOT NULL, 
-    `CommentID` INT(8) NOT NULL, 
-    PRIMARY KEY (`CourseID`, `CommentID`)
-)ENGINE=InnoDB;
-
--- Courses
-CREATE TABLE IF NOT EXISTS `Courses` (
-    `CourseID` VARCHAR(10) NOT NULL, 
-    `CourseName` VARCHAR(30) NOT NULL, 
-    `School` VARCHAR(30) NOT NULL, -- department changed to school
-    `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
-    `FinalScore` DECIMAL(2,1), 
-    PRIMARY KEY (`CourseID`)
 )ENGINE=InnoDB;
 
 -- Appraise
