@@ -22,16 +22,17 @@ CREATE TABLE IF NOT EXISTS `Comments` (
     `CommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
     `CourseID` VARCHAR(10) NOT NULL, 
-    `Semester` VARCHAR(10), -- TODO: finite insertion
-    `Year` DATE, -- TODO: only year? 
+    `Semester` INT(1), -- TODO: finite insertion
+    `Year` INT(4),  
     `Instructor` VARCHAR(20), -- null?
     `Score` DECIMAL(2,1) NOT NULL, 
     `Content` VARCHAR(140), 
     `LikeNum` INT(5) NOT NULL, 
     `DislikeNum` INT(5) NOT NULL, 
-    `Credits` INT(1) NOT NULL, 
+    `Credits` INT(1) NOT NULL, -- FIXME: credit in course table
     PRIMARY KEY (`CommentID`), 
     FOREIGN KEY (`CourseID`) REFERENCES `Courses` (`CourseID`)
+    -- TODO: UserID foreign key
 )ENGINE=InnoDB;
 
 -- Evaluate
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `Courses` (
     `CourseID` VARCHAR(10) NOT NULL, 
     `CourseName` VARCHAR(30) NOT NULL, 
     `School` VARCHAR(30) NOT NULL, -- department changed to school
-    `IsValid` BOOLEAN NOT NULL, 
+    `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
     `FinalScore` DECIMAL(2,1), 
     PRIMARY KEY (`CourseID`)
 )ENGINE=InnoDB;
@@ -62,23 +63,23 @@ CREATE TABLE IF NOT EXISTS `Appraise` (
 CREATE TABLE IF NOT EXISTS `CommentLikeStatus` (
     `CommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
-    `Status`,  -- FIXME: need to recheck
+    `Status` INT(1) NOT NULL,  -- TODO: three states, like, dislike, neutral
     PRIMARY KEY (`CommentID`, `UserID`)
 )ENGINE=InnoDB;
 
--- Set
+-- Set TODO: maybe redaundant 
 CREATE TABLE IF NOT EXISTS `Set` (
     `CommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
     PRIMARY KEY (`CommentID`, `UserID`)
 )ENGINE=InnoDB;
 
--- MultiComments
+-- MultiComments -- TODO: to be or not to be
 CREATE TABLE IF NOT EXISTS `MultiComments` (
     `MultiCommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
     `Content` VARCHAR(140), 
-    `LowerLevelCommentID` INT(8) NOT NULL, -- TODO: what's this?
+    `ParentCommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`MultiCommentID`)
 )ENGINE=InnoDB;
 
@@ -92,6 +93,6 @@ CREATE TABLE IF NOT EXISTS `Reply1` (
 -- Reply2
 CREATE TABLE IF NOT EXISTS `Reply2` (
     `MultiCommentID` INT(8) NOT NULL, 
-    `LowerLevelCommentID` INT(8) NOT NULL, 
-    PRIMARY KEY (`MultiCommentID`, `LowerLevelCommentID`)
+    `ParentCommentID` INT(8) NOT NULL, 
+    PRIMARY KEY (`MultiCommentID`, `ParentCommentID`)
 )ENGINE=InnoDB;
