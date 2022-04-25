@@ -4,7 +4,7 @@ USE `CommentSystem`;
 
 -- Users
 CREATE TABLE IF NOT EXISTS `Users` (
-    `UserID` INT(8) NOT NULL, 
+    `UserID` INT NOT NULL AUTO_INCREMENT, 
     `Username` VARCHAR(25) NOT NULL, -- set as distinct user name
     `Password` VARCHAR(30) NOT NULL,  -- TODO: can be set as infinite long? 
     PRIMARY KEY (`UserID`)
