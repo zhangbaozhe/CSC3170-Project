@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `Evaluate` (
 
 -- Courses
 CREATE TABLE IF NOT EXISTS `Courses` (
-    `CourseID` VARCHAR(10) NOT NULL, 
+    `CourseID` VARCHAR(10) NOT NULL AUTO_INCREMENT, 
     `CourseName` VARCHAR(30) NOT NULL, 
     `School` VARCHAR(30) NOT NULL, -- department changed to school
     `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `Courses` (
 
 -- Comments
 CREATE TABLE IF NOT EXISTS `Comments` (
-    `CommentID` INT(8) NOT NULL, 
+    `CommentID` INT(8) NOT NULL AUTO_INCREMENT, 
     `UserID` INT(8) NOT NULL, 
     `CourseID` VARCHAR(10) NOT NULL, 
     `Semester` INT(1), -- TODO: finite insertion

@@ -31,7 +31,7 @@
 
    step1: query `comment_like_status` with user_id
 
-   setp2: update/create `comment_like_status` (`set`?)
+   step2: update/create `comment_like_status` (`set`?)
 
    step3: update `comments`, `appraise`
 
