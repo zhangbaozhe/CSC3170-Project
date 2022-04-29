@@ -32,7 +32,7 @@ def hello_world(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
             # print(data)
-            return Response(data)
+            return JsonResponse(data, safe=False)
         elif request.method == 'POST':
             cursor.execute(
                 """
@@ -49,8 +49,8 @@ def hello_world(request):
                    VALUES (%s, %s); 
                     """, [de_data['msg_id'], de_data['msg_content']]
                 )
-                return Response(de_data, status=status.HTTP_201_CREATED)
-            return Response(de_data, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(de_data, status=status.HTTP_201_CREATED)
+            return JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
             
             
 
