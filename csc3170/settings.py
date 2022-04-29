@@ -121,5 +121,5 @@ STATIC_URL = '/static/'
 
 # Add for VueJS
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/dist/static"), 
+    os.path.join(BASE_DIR, "frontend/dist/static/"), 
 ]
