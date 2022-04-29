@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework', 
+    'backend'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'csc3170.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['frontend/dist'], # Baozhe modified
+        'DIRS': [], # Baozhe modified
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,5 +123,4 @@ STATIC_URL = '/static/'
 
 # Add for VueJS
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/dist/static"), 
 ]
