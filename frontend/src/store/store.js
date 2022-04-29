@@ -6,11 +6,7 @@ Vue.use(Vuex)
 
 const state = {
     userID: "",
-    userEmail:"",
-    userNickName: "Unknown",
-    avatar:"",
-    userIsOrganization:false,
-      msg: '123456',
+    userName:"",
     hasLogin: false,
   }
   
@@ -24,18 +20,11 @@ const state = {
     userIDUpdate(state, id){
       state.userID = id
     },
-    userEmailUpdate (state, useremail){
-      state.userEmail = useremail
+    userNameUpdate (state, userName){
+      state.userName = userName
     },
-    userNicknameUpdate (state, nickname){
-      state.userNickName = nickname
-    },
-    userAvatarUpdate (state, avatar_url){
-      state.avatar = avatar_url
-    },
-    userIsOrganizationUpdate(state, is_organization){
-      state.userIsOrganization = is_organization
-    }
+
+    
   }
   
   const actions = {
