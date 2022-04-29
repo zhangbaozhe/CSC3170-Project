@@ -16,9 +16,6 @@ new Vue({
   template: '<App/>'
 })
 // src/main.js
-
-
-
 new Vue({
-  vuetify,
+  vuetify
 }).$mount('#app')
