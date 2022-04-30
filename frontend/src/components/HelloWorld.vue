@@ -21,8 +21,13 @@ export default {
   created() {
     console.log("MOUNTED")
     axios
-      .get('http://127.0.0.1:3170/api/hellowrold/')
-      .then(response => (this.info = response.data))
+      .get('http://127.0.0.1:3170/api/helloworld/')
+      .then((response) => {
+        console.log(response.data)
+        this.info = response.data[0];
+        console.log(this.info);
+      })
+      
   }
 }
 </script>
