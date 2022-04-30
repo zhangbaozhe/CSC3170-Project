@@ -56,7 +56,7 @@ ROOT_URLCONF = 'csc3170.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], # Baozhe modified
+        'DIRS': ['frontend/dist'], # Baozhe modified
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
