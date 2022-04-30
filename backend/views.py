@@ -34,7 +34,12 @@ def hello_world(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
             # print(data)
-            return JsonResponse(data, safe=False)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
         elif request.method == 'POST':
             cursor.execute(
                 """
@@ -51,8 +56,18 @@ def hello_world(request):
                    VALUES (%s, %s); 
                     """, [de_data['msg_id'], de_data['msg_content']]
                 )
-                return JsonResponse(de_data, status=status.HTTP_201_CREATED)
-            return JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
+                response = JsonResponse(de_data, status=status.HTTP_201_CREATED)
+                response["Access-Control-Allow-Origin"] = "*"
+                response["Access-Control-Allow-Methods"] = "*"
+                response["Access-Control-Max-Age"] = "1000"
+                response["Access-Control-Allow-Headers"] = "*"
+                return response
+            response = JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
             
             
 

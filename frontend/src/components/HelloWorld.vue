@@ -1,8 +1,8 @@
 <template>
   <div id="msg-show">
-    <v-card v-for="msg in info.results" v-bind:key="msg.url">
-      <p>Message ID: {{ msg.MSG_ID }} </p>
-      <p>Message contents: {{ msg.MSG_CONTENT }} </p>
+    <v-card v-for="msg in info" v-bind:key="msg.url">
+      <p>Message ID: {{ msg["MSG_ID"] }} </p>
+      <p>Message contents: {{ msg["MSG_CONTENT"] }} </p>
     </v-card>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
   name: 'HelloWorld',
   data: function() {
     return {
-      info: ''
+      info: []
     }
   }, 
   created() {
@@ -24,7 +24,7 @@ export default {
       .get('http://127.0.0.1:3170/api/helloworld/')
       .then((response) => {
         console.log(response.data)
-        this.info = response.data[0];
+        this.info = response.data;
         console.log(this.info);
       })
       
