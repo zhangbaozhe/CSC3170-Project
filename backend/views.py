@@ -54,7 +54,7 @@ def hello_world(request):
                     """
                    INSERT INTO `messages` (`MSG_ID`, `MSG_CONTENT`)
                    VALUES (%s, %s); 
-                    """, [de_data['msg_id'], de_data['msg_content']]
+                    """, [de_data['MSG_ID'], de_data['MSG_CONTENT']]
                 )
                 response = JsonResponse(de_data, status=status.HTTP_201_CREATED)
                 response["Access-Control-Allow-Origin"] = "*"
