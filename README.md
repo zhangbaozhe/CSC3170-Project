@@ -6,10 +6,16 @@
 
 3. DONE: Install the new version `@vue/cli` by running `npm install -g @vue/cli`
 
-3. TODO: The global node modules are liste in `node_global_requirements.txt`
+3. The global node modules are liste in `node_global_requirements.txt`
 
-# Router specifications
+# Router specifications UPDATED: MAY 1, 2022
 
-- Use the router of django? Maybe use the Vue router
+- ~~Use the router of django? Maybe use the Vue router~~
+- Vue router
 
-# TODO: From frontend to backend
+# From frontend to backend UPDATED: MAY 1, 2022
+How to test the hello world application? 
+
+- At `app/csc3170` dir, run the django backend server
+- Open another terminal, go to `/app/csc3170/frontend`, run the Vue frontend
+- At your host browser, enter `localhost:8080` to test the POST and GET requests
