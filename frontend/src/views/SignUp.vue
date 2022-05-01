@@ -1,14 +1,19 @@
 <template>
   <div id="building">
-    <!-- 
     <v-container mt-16 py-16>
-      <v-row justify="center" align="center" class="mt-16">-->
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-          <div class="card1">
+
+      <v-row justify="center" align="center" class="mt-16">
+        <v-card 
+          class="px-2 pb-3" 
+          max-width=400px 
+          flat
+          outlined
+          tile
+        >
           <div class="text-center mt-4">
             <h1 class="primary--text text-uppercase">
-              <span class="font-weight-light">Course</span>
-              <span>Comment</span>
+              
+              <span>Sign Up</span>
             </h1>
           </div>
 
@@ -19,7 +24,7 @@
               >
                 <v-text-field
                   id="login"
-                  label="User Name"
+                  label="New User Name"
                   type="text"
                   v-model = "userName"
                   
@@ -32,7 +37,7 @@
               >
                 <v-text-field
                   id="password"
-                  label="Password"
+                  label="New Password"
                   type="password"
                   v-model="password"
                   :rules="[rules.required]"
@@ -49,7 +54,7 @@
                   depressed
                   @click="submit" 
                 >
-                  Login
+                  SignUp
                 </v-btn>
               </v-col>
 
@@ -58,18 +63,18 @@
               >
                 <v-btn 
                   block 
-                  @click="toSignUp"
+                  @click="toLogin"
                   tile
                   depressed
                 >
-                    Sign Up
+                    Log In
                 </v-btn>
               </v-col>
             </v-row>
           </v-card-text>
-          </div>
-      <!--</v-row>
-    </v-container>-->
+        </v-card>
+      </v-row>
+    </v-container>
     <!-- ？？ -->
     <v-snackbar v-model="snackbar">
       {{tip}}
@@ -120,8 +125,8 @@ export default {
         return false;
       }
     },
-    toSignUp: function(){
-      window.location.href = "/signup";
+    toLogin: function(){
+      window.location.href = "/login";
     },
   },
 }
@@ -132,14 +137,9 @@ export default {
 <style>
 #building{
 width:100%;			
-height:1000px;			
+height:100%;			
 background-size: cover; 
 position: absolute; 
 background-repeat: no-repeat;
-}
-.card1{
-  margin: auto;
-  width:25%;
-  height:25%;
 }
 </style>
