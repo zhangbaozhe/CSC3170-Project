@@ -5,4 +5,5 @@ app_name = 'backend'
 
 urlpatterns = [
     path('', views.hello_world, name='helloworld'), 
+    path('/login', views.login),
 ]

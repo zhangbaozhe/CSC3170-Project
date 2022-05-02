@@ -76,3 +76,26 @@ def hello_world(request):
     # if request.method == 'GET':
 
     # return JsonResponse(serializer.data, safe=False)
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def login(request):
+    with connection.cursor() as cursor:
+        if(request.method == "GET"):
+            try:
+                username = request.GET.get("username")
+                password = request.GET.get("password")
+            except:
+                return JsonResponse(status = 400)
+            cursor.execute(
+                """
+                SELECT * FROM `Users`
+                Where `Username` = %s and `Password` = %s;
+                """%(username, password)
+            )
+            if(len(cursor.fetchall()) == 0):
+                return JsonResponse({'messages': 'username or password is incorrect', 'status': 'failed'}, status = 400)
+            if(len(cursor.fetchall()) == 1):
+                return JsonResponse({'messages': 'login success', 'status':'success'}, status = 200)
+
+        
