@@ -4,5 +4,6 @@ from backend import views
 app_name = 'backend'
 
 urlpatterns = [
-    path('', views.hello_world, name='helloworld'), 
+    path('helloworld', views.hello_world, name='helloworld'), 
+    path('course', views.course, name='course'),
 ]

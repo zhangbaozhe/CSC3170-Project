@@ -2,8 +2,6 @@
 <template>
     <div>
         <div class="header">
-            
-
             <el-row>
                 <el-col :span="6">
                     <img src="https://i.cuhk.edu.cn/static/assets/images/white-logo-4.png" alt="无法显示">   
@@ -32,11 +30,11 @@
         <br/>
         <div class = "box1">
             <ul class = "list1">
-                <li>
+                <li v-for="comment in CommentInfo" v-bind:key="comment.CommentID" id="comment">
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span>用户名</span>
-                            <span>&nbsp;&nbsp;&nbsp;给分</span>
+                            <span>{{comment.Username}}</span>
+                            <span>&nbsp;&nbsp;&nbsp;{{comment.Score}}</span>
                             
                             <el-button style="float: right; padding: 3px 0" type="text" @click="OnClick(0)">点踩</el-button>
                             <el-button style="float: right; padding: 3px 0" type="text" @click="OnClick(1)">点赞</el-button>
@@ -44,14 +42,14 @@
                             
                         </div>
                         <div class="text">
-                            content
+                            {{comment.Content}}
                             <br/><br/>
                         </div>
                         <div>
                             <el-row>
-                                <el-col :span="6"><div class="grid-content bg-purple">Year:</div></el-col>
-                                <el-col :span="6"><div class="grid-content bg-purple-light">Semester:</div></el-col>
-                                <el-col :span="6"><div class="grid-content bg-purple">Instructor:</div></el-col>
+                                <el-col :span="6"><div class="grid-content bg-purple">Year: {{comment.Year}}</div></el-col>
+                                <el-col :span="6"><div class="grid-content bg-purple-light">Semester: {{comment.Semester}}</div></el-col>
+                                <el-col :span="6"><div class="grid-content bg-purple">Instructor: {{comment.Instructor}}</div></el-col>
                                 <el-col :span="6">
                                     <div class="grid-content bg-purple">
                                         <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
@@ -74,7 +72,7 @@
                         </div>
                     </el-card>
                 </li>
-                <li>
+                <!-- <li>
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span>用户名</span>
@@ -136,7 +134,7 @@
                             </el-row>
                         </div>
                     </el-card>
-                </li>
+                </li> -->
             </ul>
         </div>
         <br/><br/>
@@ -194,8 +192,9 @@
 </template>
 
 <script>
+    import axios from "axios"
     export default {
-        name: 'PageSix',
+        name: 'Course',
          data () {
             return {
                 count: 0,
@@ -239,6 +238,7 @@
 
                 value3: null,
                 drawer: false,
+                CommentInfo:[],
             }
             },
         methods: {
@@ -272,7 +272,21 @@
         },
         watch:{
             
-        }
+        },
+        created() {
+            console.log("MOUNTED");
+            axios.get("http://127.0.0.1:3170/api/course").then((response) => {
+            this.CommentInfo = response.data
+            // for (var i = 0; i < this.info.length; i++) {
+            //     console.log(this.info[i]["MSG_ID"])
+            //     this.msgIDs.push(Number(this.info[i]["MSG_ID"]))
+            // }
+            // console.log(this.msgIDs)
+            // console.log(this.info)
+            console.log(this.CommentInfo[0]);
+            
+        });
+  },
 
     }
 </script>
