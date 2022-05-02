@@ -79,9 +79,9 @@ export default {
         data.append("MSG_CONTENT", this.MSG_CONTENT)
 
         axios.post("http://127.0.0.1:3170/api/helloworld/", 
-            // JSON.stringify({ "MSG_ID": this.MSG_ID, "MSG_CONTENT": this.MSG_CONTENT }), 
-            data, 
-            { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }
+            { MSG_ID: this.MSG_ID, MSG_CONTENT: this.MSG_CONTENT }, 
+            //data, 
+            //{ headers: {'Content-Type': 'application/x-www-form-urlencoded'} }
 
         )
         .then((response) => { console.log(response) })
