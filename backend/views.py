@@ -85,17 +85,27 @@ def login(request):
             try:
                 username = request.GET.get("username")
                 password = request.GET.get("password")
+                print(username, "  ", password)
             except:
                 return JsonResponse(status = 400)
+            print("""
+                SELECT * FROM `Users`
+                WHERE `Username` = '%s' and `Password` = '%s';
+                """%(username, password))
+            
             cursor.execute(
                 """
                 SELECT * FROM `Users`
-                Where `Username` = %s and `Password` = %s;
+                WHERE `Username` = '%s' and `Password` = '%s';
                 """%(username, password)
             )
-            if(len(cursor.fetchall()) == 0):
+            num = len(cursor.fetchall())
+            if(num == 0):
+                print("no")
                 return JsonResponse({'messages': 'username or password is incorrect', 'status': 'failed'}, status = 400)
-            if(len(cursor.fetchall()) == 1):
+            if(num == 1):
+                print("yes")
                 return JsonResponse({'messages': 'login success', 'status':'success'}, status = 200)
+    return JsonResponse({'messages': 'login failed', 'status':'failed'}, status = 400)
 
         
