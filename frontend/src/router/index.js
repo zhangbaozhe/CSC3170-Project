@@ -4,6 +4,8 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '../views/Login.vue'
 import Course from '../views/Course.vue'
 import Home from '../views/Search.vue'
+import SignUp from '../views/SignUp.vue'
+
 //Vue.use(Router)
 Vue.use(VueRouter)
 const routes=[
@@ -27,6 +29,11 @@ const routes=[
     path: '/home',
     name: 'Home',
     component:Home
+  }, 
+  {
+    path: '/signup', 
+    name: 'SignUp', 
+    component: SignUp
   }
 
 ]

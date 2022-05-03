@@ -79,6 +79,7 @@ def hello_world(request):
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
+
 def login(request):
     with connection.cursor() as cursor:
         if(request.method == "GET"):
@@ -109,3 +110,58 @@ def login(request):
     return JsonResponse({'messages': 'login failed', 'status':'failed'}, status = 400)
 
         
+
+def register_user(request):
+    """Register a user
+    """
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO `Users` 
+                (`Username`, `Password`)
+                VALUES
+                (%s, %s)
+                """, [request.data['USERNAME'], request.data['PASSWORD']]
+            )
+            response = JsonResponse(request.data, status=status.HTTP_201_CREATED)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+    response = JsonResponse(None, status=status.HTTP_400_BAD_REQUEST)
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "*"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
+    
+    
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def get_users(request):
+    if request.method == "GET":
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT `Username` FROM `Users`
+                """
+            )
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+    response = JsonResponse(None, status=status.HTTP_400_BAD_REQUEST)
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "*"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
+
