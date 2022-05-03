@@ -10,6 +10,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
+def generate_response(data, status):
+    response = JsonResponse(data, safe=False, status = status)
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "*"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -34,12 +41,12 @@ def hello_world(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
             # print(data)
-            response = JsonResponse(data, safe=False)
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Methods"] = "*"
-            response["Access-Control-Max-Age"] = "1000"
-            response["Access-Control-Allow-Headers"] = "*"
-            return response
+            # response = JsonResponse(data, safe=False)
+            # response["Access-Control-Allow-Origin"] = "*"
+            # response["Access-Control-Allow-Methods"] = "*"
+            # response["Access-Control-Max-Age"] = "1000"
+            # response["Access-Control-Allow-Headers"] = "*"
+            return generate_response(data, 200)
         elif request.method == 'POST':
             cursor.execute(
                 """
@@ -56,18 +63,18 @@ def hello_world(request):
                    VALUES (%s, %s); 
                     """, [de_data['MSG_ID'], de_data['MSG_CONTENT']]
                 )
-                response = JsonResponse(de_data, status=status.HTTP_201_CREATED)
-                response["Access-Control-Allow-Origin"] = "*"
-                response["Access-Control-Allow-Methods"] = "*"
-                response["Access-Control-Max-Age"] = "1000"
-                response["Access-Control-Allow-Headers"] = "*"
-                return response
-            response = JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Methods"] = "*"
-            response["Access-Control-Max-Age"] = "1000"
-            response["Access-Control-Allow-Headers"] = "*"
-            return response
+                # response = JsonResponse(de_data, status=status.HTTP_201_CREATED)
+                # response["Access-Control-Allow-Origin"] = "*"
+                # response["Access-Control-Allow-Methods"] = "*"
+                # response["Access-Control-Max-Age"] = "1000"
+                # response["Access-Control-Allow-Headers"] = "*"
+                return generate_response(de_data, 201)
+            # response = JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
+            # response["Access-Control-Allow-Origin"] = "*"
+            # response["Access-Control-Allow-Methods"] = "*"
+            # response["Access-Control-Max-Age"] = "1000"
+            # response["Access-Control-Allow-Headers"] = "*"
+            return generate_response(de_data, 400)
             
 def course(request):
     with connection.cursor() as cursor:
@@ -127,3 +134,92 @@ def course(request):
     # if request.method == 'GET':
 
     # return JsonResponse(serializer.data, safe=False)
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def login(request):
+    with connection.cursor() as cursor:
+        if(request.method == "GET"):
+            try:
+                username = request.GET.get("username")
+                password = request.GET.get("password")
+                print(username, "  ", password)
+            except:
+                return JsonResponse(status = 400)
+            print("""
+                SELECT * FROM `Users`
+                WHERE `Username` = '%s' and `Password` = '%s';
+                """%(username, password))
+            
+            cursor.execute(
+                """
+                SELECT * FROM `Users`
+                WHERE `Username` = '%s' and `Password` = '%s';
+                """%(username, password)
+            )
+            num = len(cursor.fetchall())
+            if(num == 0):
+                print("no")
+                return generate_response({'messages': 'username or password is incorrect', 'status': 'failed'}, 400)
+            if(num == 1):
+                print("yes")
+                return generate_response({'messages': 'login success', 'status':'success'}, 200)
+    return generate_response({'messages': 'login failed', 'status':'failed'}, 400)
+
+        
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def register_user(request):
+    """Register a user
+    """
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO `Users` 
+                (`Username`, `Password`)
+                VALUES
+                (%s, %s)
+                """, [request.data['USERNAME'], request.data['PASSWORD']]
+            )
+            # response = JsonResponse(request.data, status=status.HTTP_201_CREATED)
+            # response["Access-Control-Allow-Origin"] = "*"
+            # response["Access-Control-Allow-Methods"] = "*"
+            # response["Access-Control-Max-Age"] = "1000"
+            # response["Access-Control-Allow-Headers"] = "*"
+            return generate_response(request.data, 201)
+    # response = JsonResponse(None, status=status.HTTP_400_BAD_REQUEST)
+    # response["Access-Control-Allow-Origin"] = "*"
+    # response["Access-Control-Allow-Methods"] = "*"
+    # response["Access-Control-Max-Age"] = "1000"
+    # response["Access-Control-Allow-Headers"] = "*"
+    return generate_response(None, 400)
+    
+    
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def get_users(request):
+    if request.method == "GET":
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT `Username` FROM `Users`
+                """
+            )
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            print(data)
+            # response = JsonResponse(data, safe=False)
+            # response["Access-Control-Allow-Origin"] = "*"
+            # response["Access-Control-Allow-Methods"] = "*"
+            # response["Access-Control-Max-Age"] = "1000"
+            # response["Access-Control-Allow-Headers"] = "*"
+            return generate_response(data, 200)
+    # response = JsonResponse(None, status=status.HTTP_400_BAD_REQUEST)
+    # response["Access-Control-Allow-Origin"] = "*"
+    # response["Access-Control-Allow-Methods"] = "*"
+    # response["Access-Control-Max-Age"] = "1000"
+    # response["Access-Control-Allow-Headers"] = "*"
+    return generate_response(None, 400)
+
