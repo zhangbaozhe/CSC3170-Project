@@ -39,10 +39,9 @@
                             <el-button style="float: right; padding: 3px 0" type="text" @click="OnClick(0)">点踩</el-button>
                             <el-button style="float: right; padding: 3px 0" type="text" @click="OnClick(1)">点赞</el-button>
                             <el-button style="float: right; padding: 3px 0" type="text" @click="open1">Response</el-button>
-                            
                         </div>
                         <div class="text">
-                            {{comment.Content}}
+                            {{comment.C}}
                             <br/><br/>
                         </div>
                         <div>
@@ -58,9 +57,9 @@
                                         <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false" class="drawer1">
                                             <el-card class="box-card">
                                                 <div slot="header" class="clearfix">
-                                                    <span>James</span>
+                                                    <span>{{comment.MUserName}}</span>
                                                 </div>
-                                                <span>What do u mean?</span>
+                                                <span>{{comment.Content}}</span>
                                             </el-card>
                                         </el-drawer>
                                     </div>
@@ -72,69 +71,6 @@
                         </div>
                     </el-card>
                 </li>
-                <!-- <li>
-                    <el-card class="box-card">
-                        <div slot="header" class="clearfix">
-                            <span>用户名</span>
-                            <span>&nbsp;&nbsp;&nbsp;给分</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">点踩</el-button>
-                            <el-button style="float: right; padding: 3px 0" type="text">点赞</el-button>
-                        </div>
-                        <div class="text">
-                            content
-                            <br/><br/>
-                        </div>
-                        <div>
-                            <el-row>
-                                <el-col :span="8"><div class="grid-content bg-purple">Year:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple-light">Semester:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple">Instructor:</div></el-col>
-                            </el-row>
-                        </div>
-                    </el-card>
-                </li>
-                <li>
-                    <el-card class="box-card">
-                        <div slot="header" class="clearfix">
-                            <span>用户名</span>
-                            <span>&nbsp;&nbsp;&nbsp;给分</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">点踩</el-button>
-                            <el-button style="float: right; padding: 3px 0" type="text">点赞</el-button>
-                        </div>
-                        <div class="text">
-                            content
-                            <br/><br/>
-                        </div>
-                        <div>
-                            <el-row>
-                                <el-col :span="8"><div class="grid-content bg-purple">Year:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple-light">Semester:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple">Instructor:</div></el-col>
-                            </el-row>
-                        </div>
-                    </el-card>
-                </li>
-                <li>
-                    <el-card class="box-card">
-                        <div slot="header" class="clearfix">
-                            <span>用户名</span>
-                            <span>&nbsp;&nbsp;&nbsp;给分</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">点踩</el-button>
-                            <el-button style="float: right; padding: 3px 0" type="text">点赞</el-button>
-                        </div>
-                        <div class="text">
-                            content
-                            <br/><br/>
-                        </div>
-                        <div>
-                            <el-row>
-                                <el-col :span="8"><div class="grid-content bg-purple">Year:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple-light">Semester:</div></el-col>
-                                <el-col :span="8"><div class="grid-content bg-purple">Instructor:</div></el-col>
-                            </el-row>
-                        </div>
-                    </el-card>
-                </li> -->
             </ul>
         </div>
         <br/><br/>
@@ -143,7 +79,7 @@
                 <el-divider></el-divider>
                 <el-row :gutter="40">
                 <el-col :span="16">
-                        <el-select v-model="value1" placeholder="Year" clearable>
+                        <el-select v-model="value1" placeholder="Year" clearable> 
                             <el-option
                             v-for="item in options1"
                             :key="item.value1"
@@ -200,40 +136,37 @@
                 count: 0,
                 instructor: '',
                 comment:'',
-                textarea2: '',
+                textarea2: '', //1's comment
                 textarea3: '',
 
                 options1: [{
-                value1: '选项1',
+                value1: '2018',
                 label: '2018'
                 }, {
-                value1: '选项2',
+                value1: '2019',
                 label: '2019'
                 }, {
-                value1: '选项3',
+                value1: '2020',
                 label: '2020'
                 }, {
-                value1: '选项4',
+                value1: '2021',
                 label: '2021'
                 }, {
-                value1: '选项5',
+                value1: '2022',
                 label: '2022'
                 }],
                 value1: '',
 
                 options2: [{
-                value2: '选项1',
+                value2: 'All',
                 label: 'All'
                 }, {
-                value2: '选项2',
+                value2: 'Spring',
                 label: 'Spring'
                 }, {
-                value2: '选项3',
+                value2: 'Autumn',
                 label: 'Autumn'
-                }, {
-                value2: '选项4',
-                label: 'HSS'
-                }, ],
+                },],
                 value2: '',
 
                 value3: null,
@@ -248,6 +181,7 @@
             OnClick(num){
                 if(num == 0){
                     console.log('点踩')
+                    console.log(this.textarea2) //just for test
                 }
                 else if(num == 1){
                     console.log('点赞')
@@ -284,6 +218,7 @@
             // console.log(this.msgIDs)
             // console.log(this.info)
             console.log(this.CommentInfo[0]);
+            console.log(this.CommentInfo[1]);
             
         });
   },
