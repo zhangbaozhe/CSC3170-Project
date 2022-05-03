@@ -15,10 +15,12 @@
 
 # From frontend to backend UPDATED: MAY 1, 2022
 
-~~How to test the hello world application? ~~
+~~How to test the hello world application?~~
 
 - At `app/csc3170` dir, run the django backend server
 - Open another terminal, go to `/app/csc3170/frontend`, run the Vue frontend
 - At your host browser, enter `localhost:8080` to test the POST and GET requests
 
 # Baozhe: sign up && init database UPDATED: MAY 2, 2022
+
+# Baozhe: notes about first comment UPDATE: MAY 3, 2022

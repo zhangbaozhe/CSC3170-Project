@@ -160,7 +160,7 @@
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入内容"
-              v-model="textarea2"
+              v-model="firstComment"
             >
             </el-input
           ></el-col>
@@ -180,11 +180,11 @@ export default {
   data() {
     return {
       count: 0,
-      instructor: "", //instructor
-      comment: "",
-      textarea2: "", //1's comment
-      textarea3: "",
-
+      instructor: "", //instructor TODO: to be submitted
+      comment: "", 
+      firstComment: "", //1's comment
+      multiComment: "", // multi-comment
+      userID: "", 
       options1: [
         {
           year: "2018",
@@ -235,12 +235,30 @@ export default {
       this.count += 2;
     },
     submit() {
-        // TODO: 
+        const backendAPI = "https://127.0.0.1:3170/api/"
+        let submitData = new FormData() 
+        submitData.append("USERID", this.userID)
+        submitData.append("YEAR", this.year)
+        submitData.append("SEMESTER", this.semester)
+        submitData.append("INSTRUCTOR", this.instructor)
+        submitData.append("SCORE", this.score)
+        submitData.append("CONTENT", this.firstComment)
+        submitData.append("LIKENUM", 0) // init to 0
+        submitData.append("DISLIKENUM", 0) // init to 0
+        submitData.append("CREDITS", 3)
+        axios
+            .post(backendAPI+"submit_comment", 
+                submitData, 
+                { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }
+            )
+            .then((response) => { console.log(response) })
+            .catch((error) => { console.log(error) })
+        location.reload() // reload the webpage after submit the comment
     }, 
     OnClick(num) {
       if (num == 0) {
         console.log("点踩");
-        console.log(this.textarea2); //just for test
+        console.log(this.firstComment); //just for test
       } else if (num == 1) {
         console.log("点赞");
       }
@@ -267,6 +285,7 @@ export default {
   watch: {},
   created() {
     console.log("MOUNTED");
+    this.userID = this.$store.state.userID
     axios.get("http://127.0.0.1:3170/api/course").then((response) => {
       this.CommentInfo = response.data;
       // for (var i = 0; i < this.info.length; i++) {
