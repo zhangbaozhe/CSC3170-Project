@@ -79,7 +79,6 @@ def hello_world(request):
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
-
 def login(request):
     with connection.cursor() as cursor:
         if(request.method == "GET"):
@@ -110,7 +109,8 @@ def login(request):
     return JsonResponse({'messages': 'login failed', 'status':'failed'}, status = 400)
 
         
-
+@csrf_exempt
+@api_view(['GET', 'POST'])
 def register_user(request):
     """Register a user
     """

@@ -93,7 +93,7 @@ export default {
   data() {
     return {
       
-      
+      tip: "",  
       userName:"",
       ID:"",
       loginSuccess: false,
