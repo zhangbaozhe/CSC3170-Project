@@ -82,9 +82,12 @@ def course(request):
         if request.method == 'GET':
             cursor.execute(
                 """
-                SELECT * 
-                FROM `Comments`,`users`
-                where comments.userid = users.userid;
+                SELECT * ,Comments.content AS C, Mul.UserID AS MUserID, MUL.UserName AS MUserName
+                FROM `Comments`,`users`,
+                (select *
+                from `MultiComments`,Users
+                where MultiComments.userid = users.userid) AS Mul
+                where (comments.userid = users.userid) and (Comments.CommentID = Mul.ParentCommentID);
                 """
             )
             columns = [col[0] for col in cursor.description]
