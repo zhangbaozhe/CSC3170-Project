@@ -118,7 +118,7 @@
             <br/>
             <el-row>
                 <el-col :span="20"><el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="textarea2"> </el-input></el-col>
-                <el-col :span="4"><el-button type="primary">Submit</el-button></el-col>
+                <el-col :span="4"><el-button type="primary">Submit</el-button></el-col> <!-- todo @OnClick -->
             </el-row>
             
             </div>
@@ -134,7 +134,7 @@
          data () {
             return {
                 count: 0,
-                instructor: '',
+                instructor: '', //instructor
                 comment:'',
                 textarea2: '', //1's comment
                 textarea3: '',
@@ -155,7 +155,7 @@
                 value1: '2022',
                 label: '2022'
                 }],
-                value1: '',
+                value1: '', //year
 
                 options2: [{
                 value2: 'All',
@@ -167,9 +167,9 @@
                 value2: 'Autumn',
                 label: 'Autumn'
                 },],
-                value2: '',
+                value2: '', //semester
 
-                value3: null,
+                value3: null, //score
                 drawer: false,
                 CommentInfo:[],
             }
