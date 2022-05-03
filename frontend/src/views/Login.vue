@@ -118,6 +118,23 @@ export default {
         this.snackbar = true;
         return false;
       }
+      this.$axios.get("http://127.0.0.1:3170/api/login/",{
+        params:{
+          username:this.userName,
+          password:this.password
+        }
+      }).then(response=>{
+        if(response.data.status == 'failed'){
+          this.tip = this.data.message
+          return
+        }
+        if(response.data.status == 'success'){
+          this.loginSuccess = true
+          this.$store.commit("loginUpdate")
+          this.$store.commit("userNameUpdate")
+          window.location.href = "/home";
+        }
+      })
     },
     toSignUp: function(){
       window.location.href = "/signup";

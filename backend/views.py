@@ -79,6 +79,38 @@ def hello_world(request):
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
+
+def login(request):
+    with connection.cursor() as cursor:
+        if(request.method == "GET"):
+            try:
+                username = request.GET.get("username")
+                password = request.GET.get("password")
+                print(username, "  ", password)
+            except:
+                return JsonResponse(status = 400)
+            print("""
+                SELECT * FROM `Users`
+                WHERE `Username` = '%s' and `Password` = '%s';
+                """%(username, password))
+            
+            cursor.execute(
+                """
+                SELECT * FROM `Users`
+                WHERE `Username` = '%s' and `Password` = '%s';
+                """%(username, password)
+            )
+            num = len(cursor.fetchall())
+            if(num == 0):
+                print("no")
+                return JsonResponse({'messages': 'username or password is incorrect', 'status': 'failed'}, status = 400)
+            if(num == 1):
+                print("yes")
+                return JsonResponse({'messages': 'login success', 'status':'success'}, status = 200)
+    return JsonResponse({'messages': 'login failed', 'status':'failed'}, status = 400)
+
+        
+
 def register_user(request):
     """Register a user
     """
@@ -132,3 +164,4 @@ def get_users(request):
     response["Access-Control-Max-Age"] = "1000"
     response["Access-Control-Allow-Headers"] = "*"
     return response
+
