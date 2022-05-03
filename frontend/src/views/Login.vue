@@ -123,9 +123,13 @@ export default {
           username:this.userName,
           password:this.password
         }
-      }).then(response=>{
+      }).then((response) => {
+        console.log(response.data.status)
+        console.log(typeof(response.data.status))
         if(response.data.status == 'failed'){
-          this.tip = this.data.message
+          // TODO: this may be redundant in this response callback
+          this.tip = this.data.messages
+          this.snackbar = true
           return
         }
         if(response.data.status == 'success'){
@@ -135,6 +139,25 @@ export default {
           window.location.href = "/home";
         }
       })
+      .catch((error) => {
+        // for error 400
+        console.log(error)
+        console.log("TEST 400")
+        console.log(error.response.data.status)
+        if(error.response.data.status == 'failed'){
+          this.tip = error.response.data.messages
+          console.log(error.response.data.messages)
+          this.snackbar = true
+          return
+        }
+        if(error.response.data.status == 'success'){
+          // TODO: this may be redundant in this error callback
+          this.loginSuccess = true
+          this.$store.commit("loginUpdate")
+          this.$store.commit("userNameUpdate")
+          window.location.href = "/home";
+        }
+      } )
     },
     toSignUp: function(){
       window.location.href = "/signup";
