@@ -1,12 +1,19 @@
 <template>
   <div>
-    <div class="hd">Hi!User</div>
+    <el-row :gutter="150">
+      <el-col :span="19">
+     <img src="https://bb.cuhk.edu.cn/themes/as_2012/images/div/title_logo.png" alt="无法显示" height = 100px>
+    </el-col>
+    <el-col :span="5">
+    <div class='hd'>Hi!User</div>
+    </el-col>
+    </el-row>
     <el-divider></el-divider>
     <div style="margin-top: 15px">
       <div class="in">
         <el-input
           placeholder="请输入内容"
-          v-model="input"
+          v-model="values.search_content"
           class="input-with-select"
         >
           <el-button
@@ -18,7 +25,7 @@
       </div>
     </div>
     <div class="md">
-      <el-select v-model="value1" class="md" placeholder="Department">
+      <el-select v-model="values.value1" class="md" placeholder="Department">
         <el-option
           v-for="item in options1"
           :key="item.value"
@@ -27,7 +34,7 @@
         >
         </el-option>
       </el-select>
-      <el-select v-model="value2" class="md" placeholder="Subject">
+      <el-select v-model="values.value2" class="md" placeholder="Subject">
         <el-option
           v-for="item in options2"
           :key="item.value"
@@ -218,7 +225,7 @@
   display: flex;
 }
 .hd {
-  font-size: 200%;
+  font-size: 300%;
   text-align: right;
   height: 50px;
 }
@@ -241,7 +248,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      input: "",
+      
       options1: [
         {
           value: "all",
@@ -294,8 +301,12 @@ export default {
           label: "ECO",
         },
       ],
+      values:{
+      search_content:"",
       value1: "",
       value2: "",
+      },
+
       info: [],
       info2: [],
     };
@@ -308,6 +319,7 @@ export default {
     },
   },
   created() {
+    console.log(this.$store.state.userName)
     axios.get("http://127.0.0.1:3170/api/search").then((response) => {
       this.info = response.data;
       console.log(this.info);
@@ -318,13 +330,16 @@ export default {
     });
   },
   watch: {
-    value1: {
+    values: {
+      deep : true,
       handler(val) {
-        console.log(val);
+        console.log(val.values);
         axios
           .get("http://127.0.0.1:3170/api/search1", {
             params: {
-              Department: val,
+              Department: val.value1,
+              Subject: val.value2,
+              SearchContent: val.search_content,
             },
           })
           .then((response) => {
@@ -334,7 +349,9 @@ export default {
         axios
           .get("http://127.0.0.1:3170/api/search2", {
             params: {
-              Department: val,
+              Department: val.value1,
+              Subject: val.value2,
+              SearchContent: val.search_content,
             },
           })
           .then((response) => {

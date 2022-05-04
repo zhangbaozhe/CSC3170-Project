@@ -283,20 +283,28 @@ def search_0(request):
 @api_view(['GET', 'POST'])
 def search_1(request):
     Department = request.GET.get('Department')
-
+    Subject = request.GET.get('Subject')
+    Content = request.GET.get('SearchContent')
+    if Subject == 'all':
+        Subject = ''
+    if Department == '':
+        Department = 'all'
     with connection.cursor() as cursor:
 
         if request.method == 'GET':
             if Department == 'all':
                 cursor.execute(
-                """
+                f"""
                 SELECT *
                 FROM `courses` as c1,
                 (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
-                where c1.courseid = c.courseid;
+                where c1.courseid = c.courseid
+                and c1.coursename like '{Subject}%'
+                and (c1.coursename like '%{Content}%'
+                or c1.school like '%{Content}%');
                 """
             )
             else:
@@ -309,7 +317,10 @@ def search_1(request):
                     where courses.courseid = comments.courseid
                     group by courses.courseid) as c
                     where c1.courseid = c.courseid
-                    and c1.school = '{Department}';
+                    and c1.school = '{Department}'
+                    and c1.coursename like '{Subject}%'
+                    and (c1.coursename like '%{Content}%'
+                    or c1.school like '%{Content}%');
                     """
                 )
 
@@ -329,17 +340,25 @@ def search_1(request):
 @api_view(['GET', 'POST'])
 def search_2(request):
     Department = request.GET.get('Department')
-
+    Subject = request.GET.get('Subject')
+    Content = request.GET.get('SearchContent')
+    if Subject == 'all':
+        Subject = ''
+    if Department == '':
+        Department = 'all'
     with connection.cursor() as cursor:
 
         if request.method == 'GET':
             if Department == 'all':
                 cursor.execute(
-                """
+                f"""
                 SELECT *
                 FROM `courses` 
                 where courses.courseid not in 
-                (SELECT courseid FROM comments);
+                (SELECT courseid FROM comments)
+                and courses.coursename like '{Subject}%'
+                and (courses.coursename like '%{Content}%'
+                or courses.school like '%{Content}%');
                 """
             )
             else:
@@ -349,7 +368,10 @@ def search_2(request):
                     FROM `courses` 
                  where courses.courseid not in 
                 (SELECT courseid FROM comments)
-                    and courses.school = '{Department}';
+                    and courses.school = '{Department}'
+                    and courses.coursename like '{Subject}%'
+                    and (courses.coursename like '%{Content}%'
+                    or courses.school like '%{Content}%');
                     """
                 )
 
