@@ -17,7 +17,6 @@
           class="input-with-select"
         >
           <el-button
-            @click="View"
             slot="append"
             icon="el-icon-search"
           ></el-button>
@@ -79,7 +78,7 @@
             >
             <el-col :span="2"
               ><div class="grid-content bg-purple">
-                credicts:{{ inf.Credits }}
+                credits:{{ inf.Credits }}
               </div></el-col
             >
           </el-row>
@@ -117,7 +116,7 @@
             >
             <el-col :span="2"
               ><div class="grid-content bg-purple">
-                credicts:{{ inf.Credits }}
+                credits:{{ inf.Credits}}
               </div></el-col
             >
           </el-row>
