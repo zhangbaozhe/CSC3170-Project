@@ -65,7 +65,7 @@
               >
             </div>
             <div class="text">
-              {{ comment.C }}
+              {{ comment.Content }}
               <br /><br />
             </div>
             <div>
@@ -88,7 +88,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-button
-                      @click="drawer = true"
+                      @click="drawer = true" <!--TODO: this should be examined to add GET for multi comments-->
                       type="primary"
                       style="margin-left: 16px"
                     >
@@ -102,6 +102,7 @@
                     >
                       <el-card class="box-card">
                         <div slot="header" class="clearfix">
+                          <!-- TODO: this is for multi comments, variables to be changed-->
                           <span>{{ comment.MUserName }}</span>
                         </div>
                         <span>{{ comment.Content }}</span>
@@ -183,11 +184,57 @@
         </el-row>
       </div>
     </div>
+    <v-snackbar v-model="snackbar">
+      {{ submitNotOKMsg }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar=false">
+          close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
   </div>
 </template>
 
 <script>
+// response.data structure
+// 一级axios structur
+// {
+//  courseName:
+//  courseCredit:
+//  courseSchool:
+//  comments:[{ --------> this.CommentInfo
+//   userID:
+//   commentID:
+//   content:
+//   likeList:
+//   dislikeList:
+//   likenNumber:
+//   dislikeNumber:
+//    }]
+
+// }
+// {
+//  CourseName:
+//  Credit:
+//  School:
+//  Comment:[{
+//   UserID:
+//   UserName: 
+//   CommentID:
+//   Content:
+//   Semester:
+//   Year:
+//   Instructor: 
+//   Score:
+//   LikeList:
+//   DislikeList:
+//   LikenNum:
+//   DislikeNum:
+
+//    }]
+
+// }
 
 import axios from "axios";
 
@@ -197,12 +244,15 @@ export default {
     return {
 
       count: 0,
-      instructor: "", //instructor TODO: to be submitted
+      instructor: "", 
       comment: "",
       firstComment: "", //1's comment
       multiComment: "", // multi-comment
-      userID: "",
-      courseID: "1", // TODO: to be passed from Search
+      userID: "",                       // the user ID right now in this page
+      commentedUserIDs: [],             // TODO: be loaded with the user IDs who have commented
+      submitNotOKMsg: "You have already submitted a comment!", 
+      snackbar: false, 
+      courseID: "1", 
       LikeColor: "grey",
       DisLikeColor: "grey",
       LikeColor1: [],
@@ -260,7 +310,16 @@ export default {
       this.count += 2;
     },
 
+    isToSubmitOK() {
+      return !this.commentedUserIDs.includes(this.userID)
+    }, 
+
     submit() {
+      // FIXME: edit Comments and other relation tables
+      if (!isToSubmitOK()) {
+        snackbar = true
+        return
+      }
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
@@ -349,22 +408,20 @@ export default {
         params:{courseID: this.$route.params.id}
       }
     ).then((response) => {
-      this.CommentInfo = response.data;
-      console.log(this.courseID)
-      // console.log(this.CommentInfo[0].CommentID);
-      // console.log(this.CommentInfo[1].CommentID);
-      console.log(response.data);
-      console.log(response.data);
+      this.CommentInfo = response.data["comments"];
       for (let i = 0; i < this.CommentInfo.length; i++) {
-        let key = this.CommentInfo[i].CommentID;
-        let value = { [key]: "gery" };
-        this.LikeColor1.push(value);
-        this.DisLikeColor1.push(value);
-        console.log(this.LikeColor1);
-        console.log(this.LikeColor1);
-        console.log(this.DisLikeColor1[1]);
-        console.log(this.DisLikeColor1[2]);
+        this.commentedUserIDs.push(this.CommentInfo[i]["UserID"])
       }
+      // for (let i = 0; i < this.CommentInfo.length; i++) {
+      //   let key = this.CommentInfo[i].CommentID;
+      //   let value = { [key]: "gery" };
+      //   this.LikeColor1.push(value);
+      //   this.DisLikeColor1.push(value);
+      //   console.log(this.LikeColor1);
+      //   console.log(this.LikeColor1);
+      //   console.log(this.DisLikeColor1[1]);
+      //   console.log(this.DisLikeColor1[2]);
+      // }
     });
 
     // console.log(this.LikeColor1);
