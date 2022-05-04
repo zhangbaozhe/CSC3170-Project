@@ -170,12 +170,14 @@
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入内容"
-              v-model="textarea2"
+              v-model="firstComment"
             >
             </el-input
           ></el-col>
           <el-col :span="4"
-            ><el-button type="primary">Submit</el-button></el-col
+            ><el-button type="primary" @click="submit"
+              >Submit</el-button
+            ></el-col
           >
           <!-- todo @OnClick -->
         </el-row>
@@ -193,10 +195,14 @@ export default {
   name: "Course",
   data() {
     return {
-      count: 0, // implement overflow
-      instructor: "", //instructor
+
+      count: 0,
+      instructor: "", //instructor TODO: to be submitted
       comment: "",
-      textarea2: "", //1's comment
+      firstComment: "", //1's comment
+      multiComment: "", // multi-comment
+      userID: "",
+      courseID: "1", // TODO: to be passed from Search
       LikeColor: "grey",
       DisLikeColor: "grey",
       LikeColor1: [],
@@ -253,10 +259,41 @@ export default {
     load() {
       this.count += 2;
     },
+
+    submit() {
+      const backendAPI = "http://127.0.0.1:3170/api/";
+      let submitData = new FormData();
+      submitData.append("USERID", this.userID);
+      submitData.append("COURSEID", this.courseID);
+      submitData.append("YEAR", this.year);
+      submitData.append("SEMESTER", this.semester);
+      submitData.append("INSTRUCTOR", this.instructor);
+      submitData.append("SCORE", this.score);
+      submitData.append("CONTENT", this.firstComment);
+      submitData.append("LIKENUM", 0); // init to 0
+      submitData.append("DISLIKENUM", 0); // init to 0
+      submitData.append("CREDITS", 3);
+      axios
+        .post(backendAPI + "course/submit_comment/", submitData, {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      // location.reload(); // reload the webpage after submit the comment
+    },
+
     OnClick(num) {
       if (num[0] == 0) {
         //点踩
         console.log("点踩");
+
+        console.log(this.firstComment); //just for test
+      } else if (num == 1) {
+
         if (this.DisLikeColor == "grey") {
           this.DisLikeColor = "red";
           console.log("yes");
@@ -270,6 +307,7 @@ export default {
         console.log(num[1]);
       } else if (num[0] == 1) {
         //点赞
+
         console.log("点赞");
         if (this.LikeColor == "grey") {
           this.LikeColor = "red";
@@ -305,6 +343,7 @@ export default {
   watch: {},
   created() {
     console.log("MOUNTED");
+    this.userID = this.$store.state.userID;
     axios.get("http://127.0.0.1:3170/api/course").then((response) => {
       this.CommentInfo = response.data;
 

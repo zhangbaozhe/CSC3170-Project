@@ -1,5 +1,7 @@
 from django.urls import path
-from backend import views, sec_comment
+from backend import views
+from backend import SubmitComment
+from backend import sec_comment
 
 app_name = 'backend'
 
@@ -8,6 +10,7 @@ urlpatterns = [
     path('helloworld/', views.hello_world, name='helloworld'), 
     path('login/', views.login),
     path('get_users/', views.get_users, name="get_users"), 
+    path('course/submit_comment/', SubmitComment.submit_comment, name="submit_comment"),
     path('register_user/', views.register_user, name="register_user"),
     path('search/', views.search),
     path('search0/', views.search_0),
