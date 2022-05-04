@@ -15,9 +15,23 @@ def generate_response(data, status):
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def submit_comment(request):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
-            """
-        )
-    return
+    if (request.method == "POST"):
+        data = request.data
+        if data is not None: 
+            print(data)
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO `Comments` (
+                        `UserID`, `Year`, `Semester`, `Instructor`, `Score`, 
+                        `Content`, `LikeNum`, `DislikeNum`, `Credits`, `CourseID`) 
+                        VALUES (
+                        %s, %s, %s, %s, %s, 
+                        %s, %s, %s, %s, %s)
+                    """, [data["USERID"], data["YEAR"],data["SEMESTER"], \
+                    data["INSTRUCTOR"],data["SCORE"],data["CONTENT"],data["LIKENUM"],data["DISLIKENUM"],data["CREDITS"], data["COURSEID"]]
+                )
+                response = generate_response(None, 201)    
+            return response
+        return generate_response(None, 400)
+    return generate_response(None, 400)

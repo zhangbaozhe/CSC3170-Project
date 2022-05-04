@@ -24,3 +24,10 @@
 # Baozhe: sign up && init database UPDATED: MAY 2, 2022
 
 # Baozhe: notes about first comment UPDATE: MAY 3, 2022
+## First-layer comment
+Backend urls:
+- /api/course/submit_comment
+
+Known BUGS: 
+- DONE: How to let a page to know the course ID
+- How to let a user only submit comment for once

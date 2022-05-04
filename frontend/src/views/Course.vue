@@ -165,7 +165,9 @@
             </el-input
           ></el-col>
           <el-col :span="4"
-            ><el-button type="primary" @click="submit">Submit</el-button></el-col
+            ><el-button type="primary" @click="submit"
+              >Submit</el-button
+            ></el-col
           >
           <!-- todo @OnClick -->
         </el-row>
@@ -175,16 +177,18 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Course",
   data() {
     return {
       count: 0,
       instructor: "", //instructor TODO: to be submitted
-      comment: "", 
+      comment: "",
       firstComment: "", //1's comment
       multiComment: "", // multi-comment
-      userID: "", 
+      userID: "",
+      courseID: "1", // TODO: to be passed from Search
       options1: [
         {
           year: "2018",
@@ -235,26 +239,30 @@ export default {
       this.count += 2;
     },
     submit() {
-        const backendAPI = "https://127.0.0.1:3170/api/"
-        let submitData = new FormData() 
-        submitData.append("USERID", this.userID)
-        submitData.append("YEAR", this.year)
-        submitData.append("SEMESTER", this.semester)
-        submitData.append("INSTRUCTOR", this.instructor)
-        submitData.append("SCORE", this.score)
-        submitData.append("CONTENT", this.firstComment)
-        submitData.append("LIKENUM", 0) // init to 0
-        submitData.append("DISLIKENUM", 0) // init to 0
-        submitData.append("CREDITS", 3)
-        axios
-            .post(backendAPI+"submit_comment", 
-                submitData, 
-                { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }
-            )
-            .then((response) => { console.log(response) })
-            .catch((error) => { console.log(error) })
-        location.reload() // reload the webpage after submit the comment
-    }, 
+      const backendAPI = "http://127.0.0.1:3170/api/";
+      let submitData = new FormData();
+      submitData.append("USERID", this.userID);
+      submitData.append("COURSEID", this.courseID);
+      submitData.append("YEAR", this.year);
+      submitData.append("SEMESTER", this.semester);
+      submitData.append("INSTRUCTOR", this.instructor);
+      submitData.append("SCORE", this.score);
+      submitData.append("CONTENT", this.firstComment);
+      submitData.append("LIKENUM", 0); // init to 0
+      submitData.append("DISLIKENUM", 0); // init to 0
+      submitData.append("CREDITS", 3);
+      axios
+        .post(backendAPI + "course/submit_comment/", submitData, {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      // location.reload(); // reload the webpage after submit the comment
+    },
     OnClick(num) {
       if (num == 0) {
         console.log("点踩");
@@ -285,7 +293,7 @@ export default {
   watch: {},
   created() {
     console.log("MOUNTED");
-    this.userID = this.$store.state.userID
+    this.userID = this.$store.state.userID;
     axios.get("http://127.0.0.1:3170/api/course").then((response) => {
       this.CommentInfo = response.data;
       // for (var i = 0; i < this.info.length; i++) {
