@@ -136,7 +136,8 @@ export default {
           this.loginSuccess = true
           this.$store.commit("loginUpdate")
           this.$store.commit("userNameUpdate")
-          window.location.href = "/home";
+          console.log(this.$store.state.userID)
+          // window.location.href = "/home";
         }
       })
       .catch((error) => {
