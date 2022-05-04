@@ -1,46 +1,41 @@
-DROP SCHEMA IF EXISTS `CommentSystem`;
-CREATE SCHEMA IF NOT EXISTS `CommentSystem` DEFAULT CHARACTER SET utf8;
-USE `CommentSystem`;
 
 -- Users
 CREATE TABLE IF NOT EXISTS `Users` (
-    `UserID` INT NOT NULL AUTO_INCREMENT, 
+    `UserID` INTEGER PRIMARY KEY NOT NULL, 
     `Username` VARCHAR(25) NOT NULL, -- set as distinct user name
-    `Password` VARCHAR(30) NOT NULL,  -- TODO: can be set as infinite long? 
-    PRIMARY KEY (`UserID`)
-)ENGINE=InnoDB;
+    `Password` VARCHAR(30) NOT NULL  -- TODO: can be set as infinite long? 
+);
 
--- Give
-CREATE TABLE IF NOT EXISTS `Give` (
+-- Give -> change to UsersGiveComments
+CREATE TABLE IF NOT EXISTS `UsersGiveComments` (
     `UserID` INT(8) NOT NULL, 
     `CommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`UserID`, `CommentID`)
-)ENGINE=InnoDB;
+);
 
 
 
--- Evaluate
-CREATE TABLE IF NOT EXISTS `Evaluate` (
+-- Evaluate --> change to CommentsEvaluateCourses
+CREATE TABLE IF NOT EXISTS `CommentsEvaluateCourses` (
     `CourseID` VARCHAR(10) NOT NULL, 
     `CommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`CourseID`, `CommentID`)
-)ENGINE=InnoDB;
+);
 
 -- Courses
 CREATE TABLE IF NOT EXISTS `Courses` (
-    `CourseID` VARCHAR(10) NOT NULL AUTO_INCREMENT, 
+    `CourseID` INTEGER PRIMARY KEY NOT NULL, 
     `CourseName` VARCHAR(30) NOT NULL, 
     `School` VARCHAR(30) NOT NULL, -- department changed to school
     `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
-    `FinalScore` DECIMAL(2,1), 
-    PRIMARY KEY (`CourseID`)
-)ENGINE=InnoDB;
+    `FinalScore` DECIMAL(2,1) 
+);
 
 -- Comments
 CREATE TABLE IF NOT EXISTS `Comments` (
-    `CommentID` INT(8) NOT NULL AUTO_INCREMENT, 
+    `CommentID` INTEGER PRIMARY KEY NOT NULL, 
     `UserID` INT(8) NOT NULL, 
-    `CourseID` VARCHAR(10) NOT NULL, 
+    `CourseID` INTEGER  NOT NULL, 
     `Semester` INT(1), -- TODO: finite insertion
     `Year` INT(4),  
     `Instructor` VARCHAR(20), -- null?
@@ -49,17 +44,16 @@ CREATE TABLE IF NOT EXISTS `Comments` (
     `LikeNum` INT(5) NOT NULL, 
     `DislikeNum` INT(5) NOT NULL, 
     `Credits` INT(1) NOT NULL, -- FIXME: credit in course table
-    PRIMARY KEY (`CommentID`), 
     FOREIGN KEY (`CourseID`) REFERENCES `Courses` (`CourseID`)
     -- TODO: UserID foreign key
-)ENGINE=InnoDB;
+);
 
 -- Appraise
-CREATE TABLE IF NOT EXISTS `Appraise` (
+CREATE TABLE IF NOT EXISTS `CommentLikeStatusAppraiseComments` (
     `CommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
     PRIMARY KEY (`CommentID`, `UserID`)
-)ENGINE=InnoDB;
+);
 
 -- CommentLikeStatus
 CREATE TABLE IF NOT EXISTS `CommentLikeStatus` (
@@ -67,14 +61,14 @@ CREATE TABLE IF NOT EXISTS `CommentLikeStatus` (
     `UserID` INT(8) NOT NULL, 
     `Status` INT(1) NOT NULL,  -- TODO: three states, like, dislike, neutral
     PRIMARY KEY (`CommentID`, `UserID`)
-)ENGINE=InnoDB;
+);
 
 -- Set TODO: maybe redaundant 
-CREATE TABLE IF NOT EXISTS `Set` (
+CREATE TABLE IF NOT EXISTS `UsersSetCommentLikeStatus` (
     `CommentID` INT(8) NOT NULL, 
     `UserID` INT(8) NOT NULL, 
     PRIMARY KEY (`CommentID`, `UserID`)
-)ENGINE=InnoDB;
+);
 
 -- MultiComments -- TODO: to be or not to be
 CREATE TABLE IF NOT EXISTS `MultiComments` (
@@ -83,18 +77,18 @@ CREATE TABLE IF NOT EXISTS `MultiComments` (
     `Content` VARCHAR(140), 
     `ParentCommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`MultiCommentID`)
-)ENGINE=InnoDB;
+);
 
--- Reply1
-CREATE TABLE IF NOT EXISTS `Reply1` (
+-- Reply
+CREATE TABLE IF NOT EXISTS `MultiCommentsReplyComments` (
     `CommentID` INT(8) NOT NULL, 
     `MultiCommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`CommentID`, `MultiCommentID`)
-)ENGINE=InnoDB;
+);
 
--- Reply2
+-- Reply2 TODO: may be not used
 CREATE TABLE IF NOT EXISTS `Reply2` (
     `MultiCommentID` INT(8) NOT NULL, 
     `ParentCommentID` INT(8) NOT NULL, 
     PRIMARY KEY (`MultiCommentID`, `ParentCommentID`)
-)ENGINE=InnoDB;
+);
