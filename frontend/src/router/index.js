@@ -3,8 +3,9 @@ import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '../views/Login.vue'
 import Course from '../views/Course.vue'
-import Home from '../views/Search.vue'
+import Home from '../views/search.vue'
 import SignUp from '../views/SignUp.vue'
+import search from '../views/search.vue'
 
 //Vue.use(Router)
 Vue.use(VueRouter)
@@ -39,6 +40,11 @@ const routes=[
     path: '/course/:id', 
     name: 'Course', 
     component: Course
+  },
+  {
+    path: '/search', 
+    name: 'search', 
+    component: search
   },
 
 ]
