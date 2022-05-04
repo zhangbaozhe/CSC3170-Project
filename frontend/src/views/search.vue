@@ -324,7 +324,7 @@ export default {
       this.info = response.data;
       console.log(this.info);
     });
-    axios.get("http://127.0.0.1:3170/api/search0").then((response) => {
+    axios.get("http://127.0.0.1:3170/api/search0/").then((response) => {
       this.info2 = response.data;
       console.log(this.info2);
     });
@@ -335,7 +335,7 @@ export default {
       handler(val) {
         console.log(val.values);
         axios
-          .get("http://127.0.0.1:3170/api/search1", {
+          .get("http://127.0.0.1:3170/api/search1/", {
             params: {
               Department: val.value1,
               Subject: val.value2,
@@ -347,7 +347,7 @@ export default {
             console.log(this.info);
           });
         axios
-          .get("http://127.0.0.1:3170/api/search2", {
+          .get("http://127.0.0.1:3170/api/search2/", {
             params: {
               Department: val.value1,
               Subject: val.value2,

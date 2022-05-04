@@ -122,23 +122,23 @@
         <el-divider></el-divider>
         <el-row :gutter="40">
           <el-col :span="16">
-            <el-select v-model="value1" placeholder="Year" clearable>
+            <el-select v-model="year" placeholder="Year" clearable>
               <el-option
                 v-for="item in options1"
-                :key="item.value1"
+                :key="item.year"
                 :label="item.label"
-                :value="item.value1"
+                :value="item.year"
               >
               </el-option>
             </el-select>
           </el-col>
           <el-col :span="8">
-            <el-select v-model="value2" placeholder="Semeter" clearable>
+            <el-select v-model="semester" placeholder="Semeter" clearable>
               <el-option
                 v-for="item in options2"
-                :key="item.value2"
+                :key="item.semester"
                 :label="item.label"
-                :value="item.value2"
+                :value="item.semester"
               >
               </el-option>
             </el-select>
@@ -158,7 +158,7 @@
             <div class="grid-content bg-purple">
               <div class="block">
                 <span class="demonstration">Score</span>
-                <el-rate v-model="value3"></el-rate>
+                <el-rate v-model="score"></el-rate>
               </div>
             </div>
           </el-col>
@@ -170,12 +170,14 @@
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入内容"
-              v-model="textarea2"
+              v-model="firstComment"
             >
             </el-input
           ></el-col>
           <el-col :span="4"
-            ><el-button type="primary">Submit</el-button></el-col
+            ><el-button type="primary" @click="submit"
+              >Submit</el-button
+            ></el-col
           >
           <!-- todo @OnClick -->
         </el-row>
@@ -193,10 +195,14 @@ export default {
   name: "Course",
   data() {
     return {
-      count: 0, // implement overflow
-      instructor: "", //instructor
+
+      count: 0,
+      instructor: "", //instructor TODO: to be submitted
       comment: "",
-      textarea2: "", //1's comment
+      firstComment: "", //1's comment
+      multiComment: "", // multi-comment
+      userID: "",
+      courseID: "1", // TODO: to be passed from Search
       LikeColor: "grey",
       DisLikeColor: "grey",
       LikeColor1: [],
@@ -205,45 +211,45 @@ export default {
       options1: [
         //year-table
         {
-          value1: "2018",
+          year: "2018",
           label: "2018",
         },
         {
-          value1: "2019",
+          year: "2019",
           label: "2019",
         },
         {
-          value1: "2020",
+          year: "2020",
           label: "2020",
         },
         {
-          value1: "2021",
+          year: "2021",
           label: "2021",
         },
         {
-          value1: "2022",
+          year: "2022",
           label: "2022",
         },
       ],
-      value1: "", //year bind value
+      year: "", //year bind value
 
       options2: [
         {
-          value2: "All",
+          semester: "All",
           label: "All",
         },
         {
-          value2: "Spring",
+          semester: "Spring",
           label: "Spring",
         },
         {
-          value2: "Autumn",
+          semester: "Autumn",
           label: "Autumn",
         },
       ],
-      value2: "", //semester
+      semester: "", //semester
 
-      value3: null, //score
+      score: null, //score
 
       drawer: false,
       CommentInfo: [],
@@ -253,10 +259,41 @@ export default {
     load() {
       this.count += 2;
     },
+
+    submit() {
+      const backendAPI = "http://127.0.0.1:3170/api/";
+      let submitData = new FormData();
+      submitData.append("USERID", this.userID);
+      submitData.append("COURSEID", this.courseID);
+      submitData.append("YEAR", this.year);
+      submitData.append("SEMESTER", this.semester);
+      submitData.append("INSTRUCTOR", this.instructor);
+      submitData.append("SCORE", this.score);
+      submitData.append("CONTENT", this.firstComment);
+      submitData.append("LIKENUM", 0); // init to 0
+      submitData.append("DISLIKENUM", 0); // init to 0
+      submitData.append("CREDITS", 3);
+      axios
+        .post(backendAPI + "course/submit_comment/", submitData, {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      // location.reload(); // reload the webpage after submit the comment
+    },
+
     OnClick(num) {
       if (num[0] == 0) {
         //点踩
         console.log("点踩");
+
+        console.log(this.firstComment); //just for test
+      } else if (num == 1) {
+
         if (this.DisLikeColor == "grey") {
           this.DisLikeColor = "red";
           console.log("yes");
@@ -270,6 +307,7 @@ export default {
         console.log(num[1]);
       } else if (num[0] == 1) {
         //点赞
+
         console.log("点赞");
         if (this.LikeColor == "grey") {
           this.LikeColor = "red";
@@ -305,9 +343,14 @@ export default {
   watch: {},
   created() {
     console.log("MOUNTED");
-    axios.get("http://127.0.0.1:3170/api/course").then((response) => {
+    this.userID = this.$store.state.userID;
+    this.courseID = this.$route.params.id
+    axios.get("http://127.0.0.1:3170/api/course", {
+        params:{courseID: this.$route.params.id}
+      }
+    ).then((response) => {
       this.CommentInfo = response.data;
-
+      console.log(this.courseID)
       // console.log(this.CommentInfo[0].CommentID);
       // console.log(this.CommentInfo[1].CommentID);
       console.log(response.data);
