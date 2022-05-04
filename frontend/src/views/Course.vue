@@ -346,7 +346,8 @@ export default {
     this.userID = this.$store.state.userID;
     axios.get("http://127.0.0.1:3170/api/course").then((response) => {
       this.CommentInfo = response.data;
-
+      this.courseID = this.$route.params.id
+      console.log(this.courseID)
       // console.log(this.CommentInfo[0].CommentID);
       // console.log(this.CommentInfo[1].CommentID);
       console.log(response.data);
