@@ -122,23 +122,23 @@
         <el-divider></el-divider>
         <el-row :gutter="40">
           <el-col :span="16">
-            <el-select v-model="value1" placeholder="Year" clearable>
+            <el-select v-model="year" placeholder="Year" clearable>
               <el-option
                 v-for="item in options1"
-                :key="item.value1"
+                :key="item.year"
                 :label="item.label"
-                :value="item.value1"
+                :value="item.year"
               >
               </el-option>
             </el-select>
           </el-col>
           <el-col :span="8">
-            <el-select v-model="value2" placeholder="Semeter" clearable>
+            <el-select v-model="semester" placeholder="Semeter" clearable>
               <el-option
                 v-for="item in options2"
-                :key="item.value2"
+                :key="item.semester"
                 :label="item.label"
-                :value="item.value2"
+                :value="item.semester"
               >
               </el-option>
             </el-select>
@@ -158,7 +158,7 @@
             <div class="grid-content bg-purple">
               <div class="block">
                 <span class="demonstration">Score</span>
-                <el-rate v-model="value3"></el-rate>
+                <el-rate v-model="score"></el-rate>
               </div>
             </div>
           </el-col>
@@ -211,45 +211,45 @@ export default {
       options1: [
         //year-table
         {
-          value1: "2018",
+          year: "2018",
           label: "2018",
         },
         {
-          value1: "2019",
+          year: "2019",
           label: "2019",
         },
         {
-          value1: "2020",
+          year: "2020",
           label: "2020",
         },
         {
-          value1: "2021",
+          year: "2021",
           label: "2021",
         },
         {
-          value1: "2022",
+          year: "2022",
           label: "2022",
         },
       ],
-      value1: "", //year bind value
+      year: "", //year bind value
 
       options2: [
         {
-          value2: "All",
+          semester: "All",
           label: "All",
         },
         {
-          value2: "Spring",
+          semester: "Spring",
           label: "Spring",
         },
         {
-          value2: "Autumn",
+          semester: "Autumn",
           label: "Autumn",
         },
       ],
-      value2: "", //semester
+      semester: "", //semester
 
-      value3: null, //score
+      score: null, //score
 
       drawer: false,
       CommentInfo: [],
