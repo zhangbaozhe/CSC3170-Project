@@ -136,8 +136,6 @@ export default {
 };
 </script>
 
-
-  
 <style>
 #building {
   width: 100%;

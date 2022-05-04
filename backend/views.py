@@ -223,3 +223,144 @@ def get_users(request):
     # response["Access-Control-Allow-Headers"] = "*"
     return generate_response(None, 400)
 
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def search(request):
+    with connection.cursor() as cursor:
+
+        if request.method == 'GET':
+            cursor.execute(
+                """
+                SELECT *
+                FROM `courses` as c1,
+                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                FROM `courses`,`comments`
+                where courses.courseid = comments.courseid
+                group by courses.courseid) as c
+                where c1.courseid = c.courseid;
+                """
+            )
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            # print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def search_0(request):
+    with connection.cursor() as cursor:
+
+        if request.method == 'GET':
+            cursor.execute(
+                """
+                SELECT *
+                FROM `courses` 
+                where courses.courseid not in 
+                (SELECT courseid FROM comments);
+                """
+            )
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            # print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def search_1(request):
+    Department = request.GET.get('Department')
+
+    with connection.cursor() as cursor:
+
+        if request.method == 'GET':
+            if Department == 'all':
+                cursor.execute(
+                """
+                SELECT *
+                FROM `courses` as c1,
+                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                FROM `courses`,`comments`
+                where courses.courseid = comments.courseid
+                group by courses.courseid) as c
+                where c1.courseid = c.courseid;
+                """
+            )
+            else:
+                cursor.execute(
+                    f"""
+                    SELECT *
+                    FROM `courses` as c1,
+                    (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                    FROM `courses`,`comments`
+                    where courses.courseid = comments.courseid
+                    group by courses.courseid) as c
+                    where c1.courseid = c.courseid
+                    and c1.school = '{Department}';
+                    """
+                )
+
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            # print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def search_2(request):
+    Department = request.GET.get('Department')
+
+    with connection.cursor() as cursor:
+
+        if request.method == 'GET':
+            if Department == 'all':
+                cursor.execute(
+                """
+                SELECT *
+                FROM `courses` 
+                where courses.courseid not in 
+                (SELECT courseid FROM comments);
+                """
+            )
+            else:
+                cursor.execute(
+                    f"""
+                  SELECT *
+                    FROM `courses` 
+                 where courses.courseid not in 
+                (SELECT courseid FROM comments)
+                    and courses.school = '{Department}';
+                    """
+                )
+
+            columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            # print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
