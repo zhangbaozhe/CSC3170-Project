@@ -56,6 +56,7 @@
               >
                 <v-icon>mdi-thumb-up</v-icon>
               </v-btn>
+
               <el-button
                 style="float: right; padding: 3px 0"
                 type="text"
@@ -180,11 +181,14 @@
         </el-row>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+
 import axios from "axios";
+
 export default {
   name: "Course",
   data() {
@@ -240,6 +244,7 @@ export default {
       value2: "", //semester
 
       value3: null, //score
+
       drawer: false,
       CommentInfo: [],
     };
@@ -323,6 +328,7 @@ export default {
     // console.log(this.LikeColor1);
     // console.log(this.DisLikeColor1[1]);
     // console.log(this.DisLikeColor1[2]);
+
   },
 };
 </script>

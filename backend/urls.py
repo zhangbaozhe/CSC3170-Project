@@ -1,5 +1,5 @@
 from django.urls import path
-from backend import views
+from backend import views, sec_comment
 
 app_name = 'backend'
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('search0/', views.search_0),
     path('search1/', views.search_1),
     path('search2/', views.search_2),
+    path('seccomment/', sec_comment.sec_comment),
 ]
