@@ -80,6 +80,7 @@ def course(request):
     with connection.cursor() as cursor:
 
         if request.method == 'GET':
+            courseid = request.GET.get("courseID")
             cursor.execute(
                 """
                 SELECT * ,Comments.content AS C, Mul.UserID AS MUserID, MUL.UserName AS MUserName
@@ -157,13 +158,15 @@ def login(request):
                 WHERE `Username` = '%s' and `Password` = '%s';
                 """%(username, password)
             )
-            num = len(cursor.fetchall())
-            if(num == 0):
+            columns = [col[0] for col in cursor.description]
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            if(len(data) == 0):
                 print("no")
                 return generate_response({'messages': 'username or password is incorrect', 'status': 'failed'}, 400)
-            if(num == 1):
+            if(len(data) == 1):
                 print("yes")
-                return generate_response({'messages': 'login success', 'status':'success'}, 200)
+                userID = data[0]["UserID"]
+                return generate_response({'messages': 'login success', 'status':'success', 'userID':userID}, 200)
     return generate_response({'messages': 'login failed', 'status':'failed'}, 400)
 
         
