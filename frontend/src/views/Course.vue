@@ -35,18 +35,28 @@
               <span>{{ comment.Username }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ comment.Score }}</span>
 
-              <el-button
-                style="float: right; padding: 3px 0"
-                type="text"
-                @click="OnClick(0)"
-                >点踩</el-button
+              <!-- 点踩 -->
+              <v-btn
+                class="ma-2"
+                text
+                icon
+                :color="DisLikeColor"
+                @click="OnClick([0, comment.CommentID])"
               >
-              <el-button
-                style="float: right; padding: 3px 0"
-                type="text"
-                @click="OnClick(1)"
-                >点赞</el-button
+                <v-icon>mdi-thumb-down</v-icon>
+              </v-btn>
+
+              <!-- 点赞 -->
+              <v-btn
+                class="ma-2"
+                text
+                icon
+                :color="LikeColor"
+                @click="OnClick([1, comment.CommentID])"
               >
+                <v-icon>mdi-thumb-up</v-icon>
+              </v-btn>
+
               <el-button
                 style="float: right; padding: 3px 0"
                 type="text"
@@ -112,23 +122,23 @@
         <el-divider></el-divider>
         <el-row :gutter="40">
           <el-col :span="16">
-            <el-select v-model="year" placeholder="Year" clearable>
+            <el-select v-model="value1" placeholder="Year" clearable>
               <el-option
                 v-for="item in options1"
-                :key="item.year"
+                :key="item.value1"
                 :label="item.label"
-                :value="item.year"
+                :value="item.value1"
               >
               </el-option>
             </el-select>
           </el-col>
           <el-col :span="8">
-            <el-select v-model="semester" placeholder="Semeter" clearable>
+            <el-select v-model="value2" placeholder="Semeter" clearable>
               <el-option
                 v-for="item in options2"
-                :key="item.semester"
+                :key="item.value2"
                 :label="item.label"
-                :value="item.semester"
+                :value="item.value2"
               >
               </el-option>
             </el-select>
@@ -148,7 +158,7 @@
             <div class="grid-content bg-purple">
               <div class="block">
                 <span class="demonstration">Score</span>
-                <el-rate v-model="score"></el-rate>
+                <el-rate v-model="value3"></el-rate>
               </div>
             </div>
           </el-col>
@@ -173,15 +183,19 @@
         </el-row>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+
 import axios from "axios";
+
 export default {
   name: "Course",
   data() {
     return {
+
       count: 0,
       instructor: "", //instructor TODO: to be submitted
       comment: "",
@@ -189,47 +203,54 @@ export default {
       multiComment: "", // multi-comment
       userID: "",
       courseID: "1", // TODO: to be passed from Search
+      LikeColor: "grey",
+      DisLikeColor: "grey",
+      LikeColor1: [],
+      DisLikeColor1: [],
+
       options1: [
+        //year-table
         {
-          year: "2018",
+          value1: "2018",
           label: "2018",
         },
         {
-          year: "2019",
+          value1: "2019",
           label: "2019",
         },
         {
-          year: "2020",
+          value1: "2020",
           label: "2020",
         },
         {
-          year: "2021",
+          value1: "2021",
           label: "2021",
         },
         {
-          year: "2022",
+          value1: "2022",
           label: "2022",
         },
       ],
-      year: "", //year
+      value1: "", //year bind value
 
       options2: [
         {
-          semester: "All",
+          value2: "All",
           label: "All",
         },
         {
-          semester: "Spring",
+          value2: "Spring",
           label: "Spring",
         },
         {
-          semester: "Autumn",
+          value2: "Autumn",
           label: "Autumn",
         },
       ],
-      semester: "", //semester
+      value2: "", //semester
 
-      score: null, //score
+      value3: null, //score
+
       drawer: false,
       CommentInfo: [],
     };
@@ -238,6 +259,7 @@ export default {
     load() {
       this.count += 2;
     },
+
     submit() {
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
@@ -263,12 +285,40 @@ export default {
         });
       // location.reload(); // reload the webpage after submit the comment
     },
+
     OnClick(num) {
-      if (num == 0) {
+      if (num[0] == 0) {
+        //点踩
         console.log("点踩");
+
         console.log(this.firstComment); //just for test
       } else if (num == 1) {
+
+        if (this.DisLikeColor == "grey") {
+          this.DisLikeColor = "red";
+          console.log("yes");
+          if (this.LikeColor == "red") {
+            this.LikeColor = "grey";
+          }
+        } else if (this.DisLikeColor == "red") {
+          this.DisLikeColor = "grey";
+        }
+        // console.log(this.DisLikeColor);
+        console.log(num[1]);
+      } else if (num[0] == 1) {
+        //点赞
+
         console.log("点赞");
+        if (this.LikeColor == "grey") {
+          this.LikeColor = "red";
+          if (this.DisLikeColor == "red") {
+            this.DisLikeColor = "grey";
+          }
+        } else if (this.LikeColor == "red") {
+          this.LikeColor = "grey";
+        }
+        // console.log(this.LikeColor)
+        console.log(num[1]);
       }
     },
     open1() {
@@ -296,22 +346,35 @@ export default {
     this.userID = this.$store.state.userID;
     axios.get("http://127.0.0.1:3170/api/course").then((response) => {
       this.CommentInfo = response.data;
-      // for (var i = 0; i < this.info.length; i++) {
-      //     console.log(this.info[i]["MSG_ID"])
-      //     this.msgIDs.push(Number(this.info[i]["MSG_ID"]))
-      // }
-      // console.log(this.msgIDs)
-      // console.log(this.info)
-      console.log(this.CommentInfo[0]);
-      console.log(this.CommentInfo[1]);
+
+      // console.log(this.CommentInfo[0].CommentID);
+      // console.log(this.CommentInfo[1].CommentID);
+      console.log(response.data);
+      console.log(response.data);
+      for (let i = 0; i < this.CommentInfo.length; i++) {
+        let key = this.CommentInfo[i].CommentID;
+        let value = { [key]: "gery" };
+        this.LikeColor1.push(value);
+        this.DisLikeColor1.push(value);
+        console.log(this.LikeColor1);
+        console.log(this.LikeColor1);
+        console.log(this.DisLikeColor1[1]);
+        console.log(this.DisLikeColor1[2]);
+      }
     });
+
+    // console.log(this.LikeColor1);
+    // console.log(this.LikeColor1);
+    // console.log(this.DisLikeColor1[1]);
+    // console.log(this.DisLikeColor1[2]);
+
   },
 };
 </script>
 
 <style scoped>
 .text {
-  font-size: 28px;
+  font-size: 20px;
 }
 
 .item {
@@ -347,27 +410,15 @@ export default {
   overflow: scroll;
   overflow-x: hidden;
   border-radius: 4px;
+  list-style: none;
 }
 .box-card {
   width: 600px;
   margin: 0 auto;
 }
-.el-row {
-  /* margin-bottom: 20px; */
-  /* width:600px; */
-}
 .el-col {
   border-radius: 4px;
 }
-/* .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  } */
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
@@ -398,5 +449,12 @@ export default {
 }
 .drawer1 {
   justify-content: space-between;
+}
+
+.ma-2 {
+  float: right;
+  padding: 3px 0;
+  width: 22px;
+  height: 22px;
 }
 </style>
