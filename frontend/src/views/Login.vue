@@ -135,9 +135,10 @@ export default {
         if(response.data.status == 'success'){
           this.loginSuccess = true
           this.$store.commit("loginUpdate")
-          this.$store.commit("userNameUpdate")
+          this.$store.commit("userNameUpdate", this.userName)
+          this.$store.commit("userIDUpdate", response.data.userID)
           console.log(this.$store.state.userID)
-          // window.location.href = "/home";
+          window.location.href = "/home";
         }
       })
       .catch((error) => {
@@ -155,7 +156,8 @@ export default {
           // TODO: this may be redundant in this error callback
           this.loginSuccess = true
           this.$store.commit("loginUpdate")
-          this.$store.commit("userNameUpdate")
+          this.$store.commit("userNameUpdate", this.userName)
+          this.$store.commit("userIDUpdate", response.data.userID)
           window.location.href = "/home";
         }
       } )
