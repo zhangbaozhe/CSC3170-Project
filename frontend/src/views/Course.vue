@@ -193,10 +193,10 @@ export default {
       instructor: "", //instructor
       comment: "",
       textarea2: "", //1's comment
-      // LikeColor: "grey",
-      // DisLikeColor: "grey",
-      LikeColor: [{}],
-      DisLikeColor: [{}],
+      LikeColor: "grey",
+      DisLikeColor: "grey",
+      LikeColor1: [],
+      DisLikeColor1: [],
 
       options1: [
         //year-table
@@ -248,36 +248,36 @@ export default {
     load() {
       this.count += 2;
     },
-    // OnClick(num) {
-    //   if (num[0] == 0) {
-    //     //点踩
-    //     console.log("点踩");
-    //     if (this.DisLikeColor == "grey") {
-    //       this.DisLikeColor = "red";
-    //       console.log("yes");
-    //       if (this.LikeColor == "red") {
-    //         this.LikeColor = "grey";
-    //       }
-    //     } else if (this.DisLikeColor == "red") {
-    //       this.DisLikeColor = "grey";
-    //     }
-    //     // console.log(this.DisLikeColor);
-    //     console.log(num[1]);
-    //   } else if (num[0] == 1) {
-    //     //点赞
-    //     console.log("点赞");
-    //     if (this.LikeColor == "grey") {
-    //       this.LikeColor = "red";
-    //       if(this.DisLikeColor == "red") {
-    //         this.DisLikeColor = "grey";
-    //       }
-    //     } else if (this.LikeColor == "red") {
-    //       this.LikeColor = "grey";
-    //     }
-    //     // console.log(this.LikeColor)
-    //     console.log(num[1]);
-    //   }
-    // },
+    OnClick(num) {
+      if (num[0] == 0) {
+        //点踩
+        console.log("点踩");
+        if (this.DisLikeColor == "grey") {
+          this.DisLikeColor = "red";
+          console.log("yes");
+          if (this.LikeColor == "red") {
+            this.LikeColor = "grey";
+          }
+        } else if (this.DisLikeColor == "red") {
+          this.DisLikeColor = "grey";
+        }
+        // console.log(this.DisLikeColor);
+        console.log(num[1]);
+      } else if (num[0] == 1) {
+        //点赞
+        console.log("点赞");
+        if (this.LikeColor == "grey") {
+          this.LikeColor = "red";
+          if (this.DisLikeColor == "red") {
+            this.DisLikeColor = "grey";
+          }
+        } else if (this.LikeColor == "red") {
+          this.LikeColor = "grey";
+        }
+        // console.log(this.LikeColor)
+        console.log(num[1]);
+      }
+    },
     open1() {
       this.$prompt("Please enter your response", {
         confirmButtonText: "确定",
@@ -305,16 +305,24 @@ export default {
 
       // console.log(this.CommentInfo[0].CommentID);
       // console.log(this.CommentInfo[1].CommentID);
+      console.log(response.data);
+      console.log(response.data);
+      for (let i = 0; i < this.CommentInfo.length; i++) {
+        let key = this.CommentInfo[i].CommentID;
+        let value = { [key]: "gery" };
+        this.LikeColor1.push(value);
+        this.DisLikeColor1.push(value);
+        console.log(this.LikeColor1);
+        console.log(this.LikeColor1);
+        console.log(this.DisLikeColor1[1]);
+        console.log(this.DisLikeColor1[2]);
+      }
     });
-    for (let i = 0; i < this.CommentInfo.length; i++) {
-      let j = this.CommentInfo[i].CommentID;
-      this.LikeColor.push({ j: "grey" });
-      this.DisLikeColor.push({ j: "grey" });
-    }
-    console.log(this.LikeColor[1]);
-    console.log(this.LikeColor[2]);
-    console.log(this.DisLikeColor[1]);
-    console.log(this.DisLikeColor[2]);
+
+    // console.log(this.LikeColor1);
+    // console.log(this.LikeColor1);
+    // console.log(this.DisLikeColor1[1]);
+    // console.log(this.DisLikeColor1[2]);
   },
 };
 </script>
