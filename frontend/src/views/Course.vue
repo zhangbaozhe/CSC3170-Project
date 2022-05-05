@@ -11,13 +11,13 @@
         </el-col>
         <el-col :span="12">
           <br /><br />
-          <h1>CSC3170</h1>
+          <h1>{{ this.courseName }}</h1>
         </el-col>
         <el-col :span="6">
           <br />
-          <div>School:</div>
+          <div>School: {{ this.school }}</div>
           <div>Credit:</div>
-          <div>FScore:</div>
+          <div>FinalScore: {{ this.FScore }}</div>
         </el-col>
       </el-row>
       <hr />
@@ -40,18 +40,18 @@
                 class="ma-2"
                 text
                 icon
-                :color="DisLikeColor"
+                :color="DisLikeColor1[comment.CommentID]"
                 @click="OnClick([0, comment.CommentID])"
               >
                 <v-icon>mdi-thumb-down</v-icon>
               </v-btn>
-
+              
               <!-- 点赞 -->
               <v-btn
                 class="ma-2"
                 text
                 icon
-                :color="LikeColor"
+                :color="LikeColor1[comment.CommentID]"
                 @click="OnClick([1, comment.CommentID])"
               >
                 <v-icon>mdi-thumb-up</v-icon>
@@ -88,7 +88,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-button
-                      @click="drawer = true" <!--TODO: this should be examined to add GET for multi comments-->
+                      @click="drawer = true"
                       type="primary"
                       style="margin-left: 16px"
                     >
@@ -187,54 +187,15 @@
     <v-snackbar v-model="snackbar">
       {{ submitNotOKMsg }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="snackbar=false">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
           close
         </v-btn>
       </template>
     </v-snackbar>
-
   </div>
 </template>
 
 <script>
-// response.data structure
-// 一级axios structur
-// {
-//  courseName:
-//  courseCredit:
-//  courseSchool:
-//  comments:[{ --------> this.CommentInfo
-//   userID:
-//   commentID:
-//   content:
-//   likeList:
-//   dislikeList:
-//   likenNumber:
-//   dislikeNumber:
-//    }]
-
-// }
-// {
-//  CourseName:
-//  Credit:
-//  School:
-//  Comment:[{
-//   UserID:
-//   UserName: 
-//   CommentID:
-//   Content:
-//   Semester:
-//   Year:
-//   Instructor: 
-//   Score:
-//   LikeList:
-//   DislikeList:
-//   LikenNum:
-//   DislikeNum:
-
-//    }]
-
-// }
 
 import axios from "axios";
 
@@ -242,21 +203,24 @@ export default {
   name: "Course",
   data() {
     return {
-
       count: 0,
-      instructor: "", 
+      instructor: "",
       comment: "",
       firstComment: "", //1's comment
       multiComment: "", // multi-comment
-      userID: "",                       // the user ID right now in this page
-      commentedUserIDs: [],             // TODO: be loaded with the user IDs who have commented
-      submitNotOKMsg: "You have already submitted a comment!", 
-      snackbar: false, 
-      courseID: "1", 
+      userID: "", // the user ID right now in this page
+      commentedUserIDs: [], // TODO: be loaded with the user IDs who have commented
+      submitNotOKMsg: "You have already submitted a comment!",
+      snackbar: false,
+      courseID: 0,
+      courseName: "",
+      school: "",
+      credit: -1,
+      FScore: -1,
       LikeColor: "grey",
       DisLikeColor: "grey",
-      LikeColor1: [],
-      DisLikeColor1: [],
+      LikeColor1: {},
+      DisLikeColor1: {},
 
       options1: [
         //year-table
@@ -311,14 +275,14 @@ export default {
     },
 
     isToSubmitOK() {
-      return !this.commentedUserIDs.includes(this.userID)
-    }, 
+      return !this.commentedUserIDs.includes(this.userID);
+    },
 
     submit() {
       // FIXME: edit Comments and other relation tables
       if (!isToSubmitOK()) {
-        snackbar = true
-        return
+        snackbar = true;
+        return;
       }
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
@@ -349,32 +313,32 @@ export default {
       if (num[0] == 0) {
         //点踩
         console.log("点踩");
-
-        console.log(this.firstComment); //just for test
-      } else if (num == 1) {
-
-        if (this.DisLikeColor == "grey") {
-          this.DisLikeColor = "red";
+        console.log(num[1]);
+        if (this.DisLikeColor1[num[1]] == "grey") {
+          this.DisLikeColor1[num[1]] = "red";
           console.log("yes");
-          if (this.LikeColor == "red") {
-            this.LikeColor = "grey";
+          if (this.LikeColor1[num[1]] == "red") {
+            this.LikeColor1[num[1]] = "grey";
           }
-        } else if (this.DisLikeColor == "red") {
-          this.DisLikeColor = "grey";
+        } 
+        else if (this.DisLikeColor1[num[1]] == "red") {
+          this.DisLikeColor1[num[1]] = "grey";
         }
         // console.log(this.DisLikeColor);
         console.log(num[1]);
-      } else if (num[0] == 1) {
+      }  
+      else if (num[0] == 1) {
         //点赞
-
         console.log("点赞");
-        if (this.LikeColor == "grey") {
-          this.LikeColor = "red";
-          if (this.DisLikeColor == "red") {
-            this.DisLikeColor = "grey";
+        if (this.LikeColor1[num[1]] == "grey") {
+          console.log("red now")
+          this.LikeColor1[num[1]] = "red";
+          if (this.DisLikeColor1[num[1]] == "red") {
+            this.DisLikeColor1[num[1]] = "grey";
           }
-        } else if (this.LikeColor == "red") {
-          this.LikeColor = "grey";
+        } else if (this.LikeColor1[num[1]] == "red") {
+          console.log("grey now")
+          this.LikeColor1[num[1]] = "grey";
         }
         // console.log(this.LikeColor)
         console.log(num[1]);
@@ -403,32 +367,37 @@ export default {
   created() {
     console.log("MOUNTED");
     this.userID = this.$store.state.userID;
-    this.courseID = this.$route.params.id
-    axios.get("http://127.0.0.1:3170/api/course", {
-        params:{courseID: this.$route.params.id}
-      }
-    ).then((response) => {
-      this.CommentInfo = response.data["comments"];
-      for (let i = 0; i < this.CommentInfo.length; i++) {
-        this.commentedUserIDs.push(this.CommentInfo[i]["UserID"])
-      }
-      // for (let i = 0; i < this.CommentInfo.length; i++) {
-      //   let key = this.CommentInfo[i].CommentID;
-      //   let value = { [key]: "gery" };
-      //   this.LikeColor1.push(value);
-      //   this.DisLikeColor1.push(value);
-      //   console.log(this.LikeColor1);
-      //   console.log(this.LikeColor1);
-      //   console.log(this.DisLikeColor1[1]);
-      //   console.log(this.DisLikeColor1[2]);
-      // }
-    });
-
-    // console.log(this.LikeColor1);
-    // console.log(this.LikeColor1);
-    // console.log(this.DisLikeColor1[1]);
-    // console.log(this.DisLikeColor1[2]);
-
+    this.courseID = this.$route.params.id;
+    axios
+      .get("http://127.0.0.1:3170/api/course", {
+        params: { courseID: this.$route.params.id },
+      })
+      .then((response) => {
+        this.CommentInfo = response.data["Comments"];
+        this.courseName = response.data["CourseName"];
+        this.school = response.data["School"];
+        this.FScore = response.data["FinalScore"];
+        for (let i = 0; i < this.CommentInfo.length; i++) {
+          // console.log(this.CommentInfo[i].likeList)
+          // console.log(this.CommentInfo[i].dislikeList)
+          if(this.CommentInfo[i].likeList.includes(this.userID)){
+            this.LikeColor1[this.CommentInfo[i].CommentID] = "red";
+          }
+          else{
+            this.LikeColor1[this.CommentInfo[i].CommentID] = "grey";
+          }
+          if(this.CommentInfo[i].dislikeList.includes(this.userID)){
+            this.DisLikeColor1[this.CommentInfo[i].CommentID] = "red";
+          }
+          else{
+            this.DisLikeColor1[this.CommentInfo[i].CommentID] = "grey";
+          }
+        };
+        console.log(this.CommentInfo);
+        // console.log(response.data);
+        console.log(this.LikeColor1);
+        console.log(this.DisLikeColor1);
+      });
   },
 };
 </script>

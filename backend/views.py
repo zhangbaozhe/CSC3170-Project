@@ -395,7 +395,7 @@ def search_2(request):
                     f"""
                   SELECT *
                     FROM `courses` 
-                 where courses.courseid not in 
+                where courses.courseid not in 
                 (SELECT courseid FROM comments)
                     and courses.school = '{Department}'
                     and courses.coursename like '{Subject}%'
