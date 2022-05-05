@@ -76,54 +76,80 @@ def hello_world(request):
             # response["Access-Control-Allow-Headers"] = "*"
             return generate_response(de_data, 400)
             
+def append_course_info(tmp, course_id):
+    with connection.cursor() as cursor:
+        print("""
+            SELECT  `CommentID`, `UserID`, `UserName`, `CourseID`, 
+                    `Semester`, `Year`, `Instructor`, 
+                    `Score`, `Content`, `LikeNum`, `DislikeNum`, `Credits`
+            FROM `Comments` c, `Users` u
+            WHERE `CourseID`=%s and u.`UserID` = c.UserID;
+            """%course_id)
+        cursor.execute(
+            """
+            SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 
+                    `Semester`, `Year`, `Instructor`, 
+                    `Score`, `Content`, `LikeNum`, `DislikeNum`, `Credits`
+            FROM `Comments` c, `Users` u
+            WHERE `CourseID`=%s and u.`UserID` = c.UserID;
+            """%course_id
+        )
+        columns = [col[0] for col in cursor.description]
+        # data is a list TODO: caution! when converting to the JSON
+        data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        for item in data:
+            cursor.execute(
+                """
+                SELECT * 
+                FROM `CommentLikeStatus`
+                WHERE `CommentID`=%s;
+                """% str(item["CommentID"])
+            )
+            _columns = [col[0] for col in cursor.description]
+            # data is a list TODO: caution! when converting to the JSON
+            _data = [dict(zip(_columns, row)) for row in cursor.fetchall()]
+
+            likeList = []
+            dislikeList = []
+            for _item in _data:
+                if(_item["Status"] == 1):   # 0 = nostatus; 1 = like; 2 = dislike
+                    likeList.append(_item["UserID"])
+                elif(_item["Status"] == 2):
+                    dislikeList.append(_item["UserID"])
+            item["likeList"] = likeList
+            item["dislikeList"] = dislikeList
+
+        tmp["Comments"] = data
+    return tmp
+        
+
 def course(request):
     with connection.cursor() as cursor:
 
         if request.method == 'GET':
-            courseid = request.GET.get("courseID")
-            cursor.execute(
-                """
-                SELECT * ,Comments.content AS C, Mul.UserID AS MUserID, MUL.UserName AS MUserName
-                FROM `Comments`,`users`,
-                (select *
-                from `MultiComments`,Users
-                where MultiComments.userid = users.userid) AS Mul
-                where (comments.userid = users.userid) and (Comments.CommentID = Mul.ParentCommentID);
-                """
-            )
+            print(request.GET.get("courseID"))
+            try:
+                courseid = str(request.GET.get("courseID"))
+            except:
+                return generate_response(None, 400)
+            try:
+                cursor.execute(
+                    """
+                    SELECT * FROM `Courses`
+                    WHERE `CourseID` = %s;
+                    """%courseid
+                )
+            except:
+                return generate_response(None, 400)
             columns = [col[0] for col in cursor.description]
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
-            # print(data)
-            response = JsonResponse(data, safe=False)
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Methods"] = "*"
-            response["Access-Control-Max-Age"] = "1000"
-            response["Access-Control-Allow-Headers"] = "*"
-            return response
-        elif request.method == 'POST':
-            cursor.execute(
-                """
-                SELECT * FROM `messages`;
-                """
-            )
-            print(request.data)
-            if request.data is not None:
-                de_data = request.data
-                print(de_data)
-                cursor.execute(
-                    """
-                   INSERT INTO `messages` (`MSG_ID`, `MSG_CONTENT`)
-                   VALUES (%s, %s); 
-                    """, [de_data['MSG_ID'], de_data['MSG_CONTENT']]
-                )
-                response = JsonResponse(de_data, status=status.HTTP_201_CREATED)
-                response["Access-Control-Allow-Origin"] = "*"
-                response["Access-Control-Allow-Methods"] = "*"
-                response["Access-Control-Max-Age"] = "1000"
-                response["Access-Control-Allow-Headers"] = "*"
-                return response
-            response = JsonResponse(de_data, status=status.HTTP_400_BAD_REQUEST)
+            if(len(data) == 0):
+                return generate_response(None, 400)
+            tmp = data[0]
+            tmp = append_course_info(tmp, courseid)
+
+            response = JsonResponse(tmp, safe=False)
             response["Access-Control-Allow-Origin"] = "*"
             response["Access-Control-Allow-Methods"] = "*"
             response["Access-Control-Max-Age"] = "1000"
@@ -369,7 +395,7 @@ def search_2(request):
                     f"""
                   SELECT *
                     FROM `courses` 
-                 where courses.courseid not in 
+                where courses.courseid not in 
                 (SELECT courseid FROM comments)
                     and courses.school = '{Department}'
                     and courses.coursename like '{Subject}%'
