@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '../views/Login.vue'
 import Course from '../views/Course.vue'
-import Home from '../views/search.vue'
+import Home from '../views/Search.vue'
 import SignUp from '../views/SignUp.vue'
-import search from '../views/search.vue'
+import Search from '../views/Search.vue'
 import store from '../store/store.js'
 
 //Vue.use(Router)
@@ -43,9 +43,9 @@ const routes=[
     component: Course
   },
   {
-    path: '/search', 
-    name: 'search', 
-    component: search
+    path: '/Search', 
+    name: 'Search', 
+    component: Search
   },
 
 ]
@@ -55,7 +55,7 @@ const router = new VueRouter({
   routes
 })
 
-const whiteList = ["login", "forget", "signin", "change"]; // 定义一个白名单列表
+const whiteList = ["login", "signup"]; // 定义一个白名单列表
 
 router.beforeEach(async (to, from, next) => {
   var isTokenAvailable;
