@@ -81,7 +81,7 @@ def append_course_info(tmp, course_id):
         print("""
             SELECT  `CommentID`, `UserID`, `UserName`, `CourseID`, 
                     `Semester`, `Year`, `Instructor`, 
-                    `Score`, `Content`, `LikeNum`, `DislikeNum`, `Credits`
+                    `Score`, `Content`, `LikeNum`, `DislikeNum`
             FROM `Comments` c, `Users` u
             WHERE `CourseID`=%s and u.`UserID` = c.UserID;
             """%course_id)
@@ -89,7 +89,7 @@ def append_course_info(tmp, course_id):
             """
             SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 
                     `Semester`, `Year`, `Instructor`, 
-                    `Score`, `Content`, `LikeNum`, `DislikeNum`, `Credits`
+                    `Score`, `Content`, `LikeNum`, `DislikeNum`
             FROM `Comments` c, `Users` u
             WHERE `CourseID`=%s and u.`UserID` = c.UserID;
             """%course_id
@@ -262,7 +262,7 @@ def search(request):
                 """
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -326,7 +326,7 @@ def search_1(request):
                 f"""
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -341,7 +341,7 @@ def search_1(request):
                     f"""
                     SELECT *
                     FROM `courses` as c1,
-                    (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                    (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                     FROM `courses`,`comments`
                     where courses.courseid = comments.courseid
                     group by courses.courseid) as c

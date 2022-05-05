@@ -88,7 +88,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-button
-                      @click="get(comment.CourseID)"
+                      @click="get(comment.CommentID)"
                       type="primary"
                       style="margin-left: 16px"
                     >
@@ -100,18 +100,14 @@
                       :with-header="false"
                       class="drawer1"
                     >
-                    <li  v-for="mul in multiComment"
+                     <li  v-for="mul in multiComment"
                     v-bind:key="mul.multiCommentID">
                       <el-card class="box-card">
                         <div slot="header" class="clearfix">
-<<<<<<< HEAD
-                          <span>{{ mul.Username}}</span>
-=======
                           <!-- TODO: this is for multi comments, variables to be changed-->
-                          <span>{{ comment.MUserName }}</span>
->>>>>>> cb6c0d6b80626dd271171d717a7f953a6a1c8fc5
+                          <span>{{ mul.Username }}</span>
                         </div>
-                        <span>{{ mul.Content}}</span>>
+                        <span>{{ mul.Content }}</span>
                       </el-card>
                       </li>
                     </el-drawer>
@@ -203,7 +199,9 @@
 </template>
 
 <script>
+
 import axios from "axios";
+
 export default {
   name: "Course",
   data() {
@@ -212,16 +210,7 @@ export default {
       instructor: "",
       comment: "",
       firstComment: "", //1's comment
-<<<<<<< HEAD
       multiComment: [], // multi-comment
-      userID: "",
-      courseID: "1", // TODO: to be passed from Search
-      LikeColor: "grey",
-      DisLikeColor: "grey",
-      LikeColor1: [],
-      DisLikeColor1: [],
-=======
-      multiComment: "", // multi-comment
       userID: "", // the user ID right now in this page
       commentedUserIDs: [], // TODO: be loaded with the user IDs who have commented
       submitNotOKMsg: "You have already submitted a comment!",
@@ -236,7 +225,6 @@ export default {
       LikeColor1: {},
       DisLikeColor1: {},
 
->>>>>>> cb6c0d6b80626dd271171d717a7f953a6a1c8fc5
       options1: [
         //year-table
         {
@@ -261,6 +249,7 @@ export default {
         },
       ],
       year: "", //year bind value
+
       options2: [
         {
           semester: "All",
@@ -276,7 +265,9 @@ export default {
         },
       ],
       semester: "", //semester
+
       score: null, //score
+
       drawer: false,
       CommentInfo: [],
     };
@@ -285,7 +276,6 @@ export default {
     load() {
       this.count += 2;
     },
-<<<<<<< HEAD
     get(courseID) {
       this.drawer = true;
       axios.get("http://127.0.0.1:3170/api/seccomment/", {
@@ -297,13 +287,10 @@ export default {
     });
     console.log(this.multiComment);
     },
-=======
-
     isToSubmitOK() {
       return !this.commentedUserIDs.includes(this.userID);
     },
 
->>>>>>> cb6c0d6b80626dd271171d717a7f953a6a1c8fc5
     submit() {
       // FIXME: edit Comments and other relation tables
       if (!isToSubmitOK()) {
@@ -334,20 +321,14 @@ export default {
         });
       // location.reload(); // reload the webpage after submit the comment
     },
+
     OnClick(num) {
       if (num[0] == 0) {
         //点踩
         console.log("点踩");
-<<<<<<< HEAD
-        console.log(this.firstComment); //just for test
-      } else if (num == 1) {
-        if (this.DisLikeColor == "grey") {
-          this.DisLikeColor = "red";
-=======
         console.log(num[1]);
         if (this.DisLikeColor1[num[1]] == "grey") {
           this.DisLikeColor1[num[1]] = "red";
->>>>>>> cb6c0d6b80626dd271171d717a7f953a6a1c8fc5
           console.log("yes");
           if (this.LikeColor1[num[1]] == "red") {
             this.LikeColor1[num[1]] = "grey";
@@ -386,8 +367,6 @@ export default {
             type: "success",
             message: "Successfully post your response",
           });
-          this.multiComment=value;
-          console.log(this.multiComment);
         })
         .catch(() => {
           this.$message({
@@ -395,7 +374,6 @@ export default {
             message: "取消输入",
           });
         });
-
     },
   },
   watch: {},
@@ -431,20 +409,8 @@ export default {
         console.log(this.CommentInfo);
         // console.log(response.data);
         console.log(this.LikeColor1);
-<<<<<<< HEAD
-        console.log(this.LikeColor1);
-        console.log(this.DisLikeColor1[1]);
-        console.log(this.DisLikeColor1[2]);
-      }
-    });
-    // console.log(this.LikeColor1);
-    // console.log(this.LikeColor1);
-    // console.log(this.DisLikeColor1[1]);
-    // console.log(this.DisLikeColor1[2]);
-=======
         console.log(this.DisLikeColor1);
       });
->>>>>>> cb6c0d6b80626dd271171d717a7f953a6a1c8fc5
   },
 };
 </script>
@@ -453,9 +419,11 @@ export default {
 .text {
   font-size: 20px;
 }
+
 .item {
   margin-bottom: 18px;
 }
+
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -464,6 +432,7 @@ export default {
 .clearfix:after {
   clear: both;
 }
+
 .box-card {
   width: 480px;
 }
@@ -524,6 +493,7 @@ export default {
 .drawer1 {
   justify-content: space-between;
 }
+
 .ma-2 {
   float: right;
   padding: 3px 0;
