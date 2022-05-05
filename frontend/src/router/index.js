@@ -37,11 +37,11 @@ const routes=[
     name: 'SignUp', 
     component: SignUp
   },
-  {
-    path: '/course/:id', 
-    name: 'Course', 
-    component: Course
-  },
+  // {
+  //   path: '/course/:id', 
+  //   name: 'Course', 
+  //   component: Course
+  // },
   {
     path: '/Search', 
     name: 'Search', 
@@ -55,7 +55,7 @@ const router = new VueRouter({
   routes
 })
 
-const whiteList = ["login", "signup"]; // 定义一个白名单列表
+const whiteList = ["/login", "/signup"]; // 定义一个白名单列表
 
 router.beforeEach(async (to, from, next) => {
   var isTokenAvailable;
