@@ -295,7 +295,6 @@ export default {
       submitData.append("CONTENT", this.firstComment);
       submitData.append("LIKENUM", 0); // init to 0
       submitData.append("DISLIKENUM", 0); // init to 0
-      submitData.append("CREDITS", 3);
       axios
         .post(backendAPI + "course/submit_comment/", submitData, {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
