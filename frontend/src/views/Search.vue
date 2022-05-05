@@ -320,10 +320,10 @@ export default {
   },
   created() {
     console.log(this.$store.state.userName)
-    axios.get("http://127.0.0.1:3170/api/search").then((response) => {
+    axios.get("http://127.0.0.1:3170/api/search/").then((response) => {
       this.info = response.data;
       console.log(this.info);
-    });
+    }).catch((error) => {console.log(error)});
     axios.get("http://127.0.0.1:3170/api/search0/").then((response) => {
       this.info2 = response.data;
       console.log(this.info2);

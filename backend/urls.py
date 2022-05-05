@@ -13,7 +13,7 @@ urlpatterns = [
     path('get_users/', views.get_users, name="get_users"), 
     path('course/submit_comment/', SubmitComment.submit_comment, name="submit_comment"),
     path('register_user/', views.register_user, name="register_user"),
-    path('search/', views.search),
+    path('search/', views.search, name="search"),
     path('search0/', views.search_0),
     path('search1/', views.search_1),
     path('search2/', views.search_2),
