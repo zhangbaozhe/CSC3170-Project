@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `Courses` (
     `CourseID` INTEGER PRIMARY KEY NOT NULL, 
     `CourseName` VARCHAR(30) NOT NULL, 
     `School` VARCHAR(30) NOT NULL, -- department changed to school
+    `Credits` INT(1) NOT NULL, 
     `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
     `FinalScore` DECIMAL(2,1) 
 );
@@ -43,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `Comments` (
     `Content` VARCHAR(140), 
     `LikeNum` INT(5) NOT NULL, 
     `DislikeNum` INT(5) NOT NULL, 
-    `Credits` INT(1) NOT NULL, -- FIXME: credit in course table
     FOREIGN KEY (`CourseID`) REFERENCES `Courses` (`CourseID`)
     -- TODO: UserID foreign key
 );
