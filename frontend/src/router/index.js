@@ -55,7 +55,7 @@ const router = new VueRouter({
   routes
 })
 
-const whiteList = ["login", "forget", "signin", "change"]; // 定义一个白名单列表
+const whiteList = ["login", "signup"]; // 定义一个白名单列表
 
 router.beforeEach(async (to, from, next) => {
   var isTokenAvailable;
