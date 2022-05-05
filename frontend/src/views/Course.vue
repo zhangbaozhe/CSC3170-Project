@@ -88,7 +88,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-button
-                      @click="drawer = true"
+                      @click="get(comment.CourseID)"
                       type="primary"
                       style="margin-left: 16px"
                     >
@@ -100,12 +100,15 @@
                       :with-header="false"
                       class="drawer1"
                     >
+                    <li  v-for="mul in multiComment"
+                    v-bind:key="mul.multiCommentID">
                       <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                          <span>{{ comment.MUserName }}</span>
+                          <span>{{ mul.Username}}</span>
                         </div>
-                        <span>{{ comment.Content }}</span>
+                        <span>{{ mul.Content}}</span>>
                       </el-card>
+                      </li>
                     </el-drawer>
                   </div>
                 </el-col>
@@ -197,7 +200,7 @@ export default {
       instructor: "", //instructor TODO: to be submitted
       comment: "",
       firstComment: "", //1's comment
-      multiComment: "", // multi-comment
+      multiComment: [], // multi-comment
       userID: "",
       courseID: "1", // TODO: to be passed from Search
       LikeColor: "grey",
@@ -251,6 +254,17 @@ export default {
   methods: {
     load() {
       this.count += 2;
+    },
+    get(courseID) {
+      this.drawer = true;
+      axios.get("http://127.0.0.1:3170/api/seccomment/", {
+            params: {
+              parentID:courseID,
+            }
+          }).then((response) => {
+      this.multiComment = response.data; 
+    });
+    console.log(this.multiComment);
     },
     submit() {
       const backendAPI = "http://127.0.0.1:3170/api/";
@@ -319,6 +333,8 @@ export default {
             type: "success",
             message: "Successfully post your response",
           });
+          this.multiComment=value;
+          console.log(this.multiComment);
         })
         .catch(() => {
           this.$message({
@@ -326,6 +342,7 @@ export default {
             message: "取消输入",
           });
         });
+
     },
   },
   watch: {},

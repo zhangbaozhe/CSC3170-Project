@@ -22,7 +22,7 @@ def sec_comment(request):
     with connection.cursor() as cursor:
         if(request.method == "GET"):
             #sec_comment_id = request.GET.get("sec_comment_id")
-            parent_id = str(request.GET.get("comment_id"))
+            parent_id = str(request.GET.get("parentID"))
             # for i in sec_comment_id:
             #     cursor.execute(
             #     """
@@ -34,8 +34,9 @@ def sec_comment(request):
             #     temp = [dict(zip(columns, row)) for row in cursor.fetchall()]
             cursor.execute(
                 """
-                SELECT * FROM `MultiComments`
-                WHERE `ParentCommentID` = %s;
+                SELECT * FROM `MultiComments`,`Users`
+                WHERE `ParentCommentID` = '%s'
+                and Multicomments.UserID = Users.UserID;
                 """%parent_id
             )
             columns = [col[0] for col in cursor.description]
