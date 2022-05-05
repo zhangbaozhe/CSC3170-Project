@@ -188,14 +188,11 @@
 </template>
 
 <script>
-
 import axios from "axios";
-
 export default {
   name: "Course",
   data() {
     return {
-
       count: 0,
       instructor: "", //instructor TODO: to be submitted
       comment: "",
@@ -207,7 +204,6 @@ export default {
       DisLikeColor: "grey",
       LikeColor1: [],
       DisLikeColor1: [],
-
       options1: [
         //year-table
         {
@@ -232,7 +228,6 @@ export default {
         },
       ],
       year: "", //year bind value
-
       options2: [
         {
           semester: "All",
@@ -248,9 +243,7 @@ export default {
         },
       ],
       semester: "", //semester
-
       score: null, //score
-
       drawer: false,
       CommentInfo: [],
     };
@@ -259,7 +252,6 @@ export default {
     load() {
       this.count += 2;
     },
-
     submit() {
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
@@ -285,15 +277,12 @@ export default {
         });
       // location.reload(); // reload the webpage after submit the comment
     },
-
     OnClick(num) {
       if (num[0] == 0) {
         //点踩
         console.log("点踩");
-
         console.log(this.firstComment); //just for test
       } else if (num == 1) {
-
         if (this.DisLikeColor == "grey") {
           this.DisLikeColor = "red";
           console.log("yes");
@@ -307,7 +296,6 @@ export default {
         console.log(num[1]);
       } else if (num[0] == 1) {
         //点赞
-
         console.log("点赞");
         if (this.LikeColor == "grey") {
           this.LikeColor = "red";
@@ -366,12 +354,10 @@ export default {
         console.log(this.DisLikeColor1[2]);
       }
     });
-
     // console.log(this.LikeColor1);
     // console.log(this.LikeColor1);
     // console.log(this.DisLikeColor1[1]);
     // console.log(this.DisLikeColor1[2]);
-
   },
 };
 </script>
@@ -380,11 +366,9 @@ export default {
 .text {
   font-size: 20px;
 }
-
 .item {
   margin-bottom: 18px;
 }
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -393,7 +377,6 @@ export default {
 .clearfix:after {
   clear: both;
 }
-
 .box-card {
   width: 480px;
 }
@@ -454,7 +437,6 @@ export default {
 .drawer1 {
   justify-content: space-between;
 }
-
 .ma-2 {
   float: right;
   padding: 3px 0;
