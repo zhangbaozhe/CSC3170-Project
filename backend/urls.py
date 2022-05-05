@@ -7,7 +7,7 @@ from backend import likeStatus
 app_name = 'backend'
 
 urlpatterns = [
-    path('course', views.course, name='course'), # TODO: add '/'
+    path('course/', views.course, name='course'), # TODO: add '/'
     path('helloworld/', views.hello_world, name='helloworld'), 
     path('login/', views.login),
     path('get_users/', views.get_users, name="get_users"), 

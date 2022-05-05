@@ -128,16 +128,24 @@ def course(request):
 
         if request.method == 'GET':
             print(request.GET.get("courseID"))
-            courseid = str(request.GET.get("courseID"))
-            cursor.execute(
-                """
-                SELECT * FROM `Courses`
-                WHERE `CourseID` = %s;
-                """%courseid
-            )
+            try:
+                courseid = str(request.GET.get("courseID"))
+            except:
+                return generate_response(None, 400)
+            try:
+                cursor.execute(
+                    """
+                    SELECT * FROM `Courses`
+                    WHERE `CourseID` = %s;
+                    """%courseid
+                )
+            except:
+                return generate_response(None, 400)
             columns = [col[0] for col in cursor.description]
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            if(len(data) == 0):
+                return generate_response(None, 400)
             tmp = data[0]
             tmp = append_course_info(tmp, courseid)
 
