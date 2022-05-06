@@ -17,7 +17,7 @@ def generate_response(data, status):
     return response
 
 @csrf_exempt
-@api_view(['PUT', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def like(request):
     with connection.cursor() as cursor:
         if(request.method == "POST"):
@@ -39,9 +39,9 @@ def like(request):
             return generate_response(None, 201)
         elif(request.method == "PUT"):
             try:
-                userID = request.data["userID"]
-                status = request.data["status"]
-                commentID = request.data["commentID"]
+                userID = str(request.data["userID"])
+                status = str(request.data["status"])
+                commentID = str(request.data["commentID"])
             except:
                 return generate_response(None, 400)
             if(status==0):
@@ -52,6 +52,7 @@ def like(request):
                         WHERE `UserID` = %s and `CommentID` = %s;
                         """(userID, commentID)
                     )
+                    return generate_response(None, 204)
             try:
                 cursor.execute(
                     """
