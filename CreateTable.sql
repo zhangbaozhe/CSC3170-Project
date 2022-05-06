@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `CommentsEvaluateCourses` (
 CREATE TABLE IF NOT EXISTS `Courses` (
     `CourseID` INTEGER PRIMARY KEY NOT NULL, 
     `CourseName` VARCHAR(30) NOT NULL, 
+    `CourseFullName` VARCHAR(30) NOT NULL, 
     `School` VARCHAR(30) NOT NULL, -- department changed to school
     `Credits` INT(1) NOT NULL, 
     `IsValid` BOOLEAN NOT NULL, -- TODO: future feature: 1 admin added, 0 user added
