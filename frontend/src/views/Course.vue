@@ -274,16 +274,15 @@ export default {
       this.count += 2;
     },
 
-    isToSubmitOK() {
-      return !this.commentedUserIDs.includes(this.userID);
-    },
-
     submit() {
       // FIXME: edit Comments and other relation tables
-      if (!isToSubmitOK()) {
+      // FIXME: commentedUserID
+
+      if (this.commentedUserIDs.includes(this.userID)) {
         snackbar = true;
-        return;
+        return
       }
+
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
