@@ -25,9 +25,9 @@ def manage_user(request):
                 userID = request.data["data"]["id"]
             except:
                 return generate_response(None, 400)
-        
+        return generate_response(None, 400)
 #allowed: delete
-def manage_comment(request):
+#def manage_comment(request):
 
 #allowed: add, delete
-def manage_course(request):
+#def manage_course(request):
