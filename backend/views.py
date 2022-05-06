@@ -78,6 +78,19 @@ def hello_world(request):
             
 def append_course_info(tmp, course_id):
     with connection.cursor() as cursor:
+        tmp["CommentedUsers"] = []
+        cursor.execute(
+            """
+            SELECT `UserID`
+            FROM `Comments` 
+            WHERE `CourseID`=%s;
+            """%course_id
+        )
+        columns = [col[0] for col in cursor.description]
+        # data is a list TODO: caution! when converting to the JSON
+        data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        for item in data:
+            tmp["CommentedUsers"].append(item["UserID"])
         cursor.execute(
             """
             SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 
@@ -266,7 +279,7 @@ def search(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-            # print(data)
+            print("In search", data)
             response = JsonResponse(data, safe=False)
             response["Access-Control-Allow-Origin"] = "*"
             response["Access-Control-Allow-Methods"] = "*"

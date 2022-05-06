@@ -52,7 +52,6 @@ def like(request):
                         WHERE `UserID` = %s and `CommentID` = %s;
                         """%(userID, commentID)
                     )
-                    
                 except:
                     return generate_response(None,400)
             else:
@@ -67,3 +66,4 @@ def like(request):
                 except:
                     return generate_response(None, 400)
             return generate_response(None, 204)
+

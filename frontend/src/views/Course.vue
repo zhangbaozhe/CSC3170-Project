@@ -190,6 +190,14 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-snackbar v-model="scoreSnackbar">
+      You have not scored yet!
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="scoreSnackbar = false">
+          close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -209,6 +217,7 @@ export default {
       commentedUserIDs: [], // TODO: be loaded with the user IDs who have commented
       submitNotOKMsg: "You have already submitted a comment!",
       snackbar: false,
+      scoreSnackbar: false, 
       courseID: 0,
       courseName: "",
       school: "",
@@ -273,16 +282,20 @@ export default {
       this.count += 2;
     },
 
-    isToSubmitOK() {
-      return !this.commentedUserIDs.includes(this.userID);
-    },
-
     submit() {
-      // FIXME: edit Comments and other relation tables
+
       if (this.commentedUserIDs.includes(this.userID)) {
-        snackbar = true;
+        console.log("HELLLLLLLLLLLLLLLLL")
+        this.snackbar = true;
+
         return;
       }
+      if (this.score == 0) {
+        console.log("HELLLLLLLL")
+        this.scoreSnackbar = true
+        return
+      }
+      console.log(this.score)
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
@@ -300,6 +313,9 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          axios.get(backendAPI + "course/submit_comment/")
+          .then((response) => { this.FScore = response.data})
+          .catch((error) => { console.log(error) })
         })
         .catch((error) => {
           console.log(error);
@@ -408,66 +424,6 @@ export default {
             console.log(response);
           });
       }
-      // if (
-      //   !(
-      //     this.LikeList1[num[1]].includes(this.userID) ||
-      //     this.DisLikeList1[num[1]].includes(this.userID)
-      //   )
-      // ) {
-      //   if (
-      //     this.LikeColor1[num[1]] == "grey" &&
-      //     this.DisLikeColor1[num[1]] == "grey"
-      //   ) {
-      //     tmpStatus = 0;
-      //   } else if (
-      //     this.LikeColor1[num[1]] == "red" &&
-      //     this.DisLikeColor1[num[1]] == "grey"
-      //   ) {
-      //     tmpStatus = 1;
-      //     console.log("append likelist")
-      //   } else if (
-      //     this.LikeColor1[num[1]] == "grey" &&
-      //     this.DisLikeColor1[num[1]] == "red"
-      //   ) {
-      //     tmpStatus = 2;
-      //     console.log("append dislikelist")
-      //   } else {
-      //     console.log("wrong state");
-      //   }
-      //   this.$axios.post("http://127.0.0.1:3170/api/like/", {
-      //     userID: this.userID,
-      //     status: tmpStatus,
-      //     commentID: num[1],
-      //   });
-      // } else {
-      //   if (
-      //     this.LikeColor1[num[1]] == "grey" &&
-      //     this.DisLikeColor1[num[1]] == "grey"
-      //   ) {
-      //     tmpStatus = 0;
-      //   } else if (
-      //     this.LikeColor1[num[1]] == "red" &&
-      //     this.DisLikeColor1[num[1]] == "grey"
-      //   ) {
-      //     tmpStatus = 1;
-      //   } else if (
-      //     this.LikeColor1[num[1]] == "grey" &&
-      //     this.DisLikeColor1[num[1]] == "red"
-      //   ) {
-      //     tmpStatus = 2;
-      //   } else {
-      //     console.log("wrong!");
-      //   }
-      //   this.$axios
-      //     .put("http://127.0.0.1:3170/api/like/", {
-      //       userID: this.userID,
-      //       status: tmpStatus,
-      //       commentID: num[1],
-      //     })
-      //     .then((response) => {
-      //       console.log(response);
-      //     });
-      // }
     },
     open1() {
       this.$prompt("Please enter your response", {
@@ -494,7 +450,7 @@ export default {
     this.userID = this.$store.state.userID;
     this.courseID = this.$route.params.id;
     axios
-      .get("http://127.0.0.1:3170/api/course", {
+      .get("http://127.0.0.1:3170/api/course/", {
         params: { courseID: this.$route.params.id },
       })
       .then((response) => {
@@ -503,6 +459,8 @@ export default {
         this.school = response.data["School"];
         this.FScore = response.data["FinalScore"];
         this.credit = response.data["Credits"];
+        // TODO: to check this
+        this.commentedUserIDs = response.data["CommentedUsers"]
         for (let i = 0; i < this.CommentInfo.length; i++) {
           this.$set(
             this.LikeList1,
