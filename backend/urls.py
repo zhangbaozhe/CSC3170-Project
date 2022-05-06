@@ -22,4 +22,7 @@ urlpatterns = [
     path('mulcomment/', sec_comment.sec_comment,name = 'mul'),
     path('like/', likeStatus.like),
     path('admin/user/', admin.manage_user),
+    path('admin/comment/', admin.manage_comment),
+    path('admin/course/', admin.manage_course),
+    path('admin/all/', admin.get_all),
 ]
