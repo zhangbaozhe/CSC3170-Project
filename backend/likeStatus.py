@@ -17,7 +17,7 @@ def generate_response(data, status):
     return response
 
 @csrf_exempt
-@api_view(['PUT', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def like(request):
     with connection.cursor() as cursor:
         if(request.method == "POST"):
