@@ -16,7 +16,7 @@
         <el-col :span="6">
           <br />
           <div>School: {{ this.school }}</div>
-          <div>Credit:</div>
+          <div>Credit: {{ this.credit }}</div>
           <div>FinalScore: {{ this.FScore }}</div>
         </el-col>
       </el-row>
@@ -283,9 +283,11 @@ export default {
     },
 
     submit() {
+
       if (this.commentedUserIDs.includes(this.userID)) {
         console.log("HELLLLLLLLLLLLLLLLL")
         this.snackbar = true;
+
         return;
       }
       if (this.score == 0) {
@@ -322,25 +324,33 @@ export default {
     },
 
     OnClick(num) {
-      console.log(this.LikeList1[num[1]]);
-      console.log(this.DisLikeList1[num[1]]);
       let tmpStatus = 0; // 判断是否已点过赞/踩
-      if (this.LikeColor1[num[1]] == "red") {
+      if (
+        this.DisLikeColor1[num[1]] == "grey" &&
+        this.LikeColor1[num[1]] == "grey"
+      ) {
+        tmpStatus = 0;
+      }
+      if (
+        this.LikeColor1[num[1]] == "red" &&
+        this.DisLikeColor1[num[1]] == "grey"
+      ) {
         tmpStatus = 1;
       }
-      if (this.DisLikeColor1[num[1]] == "red") {
+      if (
+        this.DisLikeColor1[num[1]] == "red" &&
+        this.LikeColor1[num[1]] == "grey"
+      ) {
         tmpStatus = 2;
       }
       if (
-        this.LikeColor1[num[1]] == "grey" &&
-        this.DisLikeColor1[num[1]] == "grey"
+        this.DisLikeColor1[num[1]] == "red" &&
+        this.LikeColor1[num[1]] == "red"
       ) {
-        console.log("没点过赞");
+        console.log("both red");
       }
       if (num[0] == 0) {
         //点踩
-        console.log("点踩");
-        console.log(num[1]);
         if (this.DisLikeColor1[num[1]] == "grey") {
           this.DisLikeColor1[num[1]] = "red";
           if (this.LikeColor1[num[1]] == "red") {
@@ -351,7 +361,6 @@ export default {
         }
       } else if (num[0] == 1) {
         //点赞
-        console.log("点赞");
         if (this.LikeColor1[num[1]] == "grey") {
           this.LikeColor1[num[1]] = "red";
           if (this.DisLikeColor1[num[1]] == "red") {
@@ -361,39 +370,26 @@ export default {
           this.LikeColor1[num[1]] = "grey";
         }
       }
-      if (
-        !(
-          this.LikeList1[num[1]].includes(this.userID) ||
-          this.DisLikeList1[num[1]].includes(this.userID)
-        )
-      ) {
-        // console.log(this.LikeList1[num[1]]);
-        // console.log(this.DisLikeList1[num[1]]);
+      if (tmpStatus == 0) {
+        //没操作过
         if (
           this.LikeColor1[num[1]] == "grey" &&
           this.DisLikeColor1[num[1]] == "grey"
         ) {
-          tmpStatus = 0;
+          tmpStatus = 0; //操作过，但又变成不点赞不点踩
         } else if (
           this.LikeColor1[num[1]] == "red" &&
           this.DisLikeColor1[num[1]] == "grey"
         ) {
           tmpStatus = 1;
-          // this.LikeList1[num[1]].add(this.userID);
-          console.log("append likelist")
         } else if (
           this.LikeColor1[num[1]] == "grey" &&
           this.DisLikeColor1[num[1]] == "red"
         ) {
           tmpStatus = 2;
-          // this.DisLikeList1[num[1]].add(this.userID);
-          console.log("append dislikelist")
         } else {
-          console.log("wrong state");
+          console.log("something goes wrong");
         }
-        // console.log(this.userID);
-        // console.log(tmpStatus);
-        // console.log(num[1]);
         this.$axios.post("http://127.0.0.1:3170/api/like/", {
           userID: this.userID,
           status: tmpStatus,
@@ -416,11 +412,8 @@ export default {
         ) {
           tmpStatus = 2;
         } else {
-          console.log("wrong!");
+          console.log("something went wrong");
         }
-        // console.log(this.userID);
-        // console.log(tmpStatus);
-        // console.log(num[1]);
         this.$axios
           .put("http://127.0.0.1:3170/api/like/", {
             userID: this.userID,
@@ -465,31 +458,41 @@ export default {
         this.courseName = response.data["CourseName"];
         this.school = response.data["School"];
         this.FScore = response.data["FinalScore"];
+        this.credit = response.data["Credits"];
         // TODO: to check this
         this.commentedUserIDs = response.data["CommentedUsers"]
-        
         for (let i = 0; i < this.CommentInfo.length; i++) {
-          // console.log(this.CommentInfo[i].likeList)
-          // console.log(this.CommentInfo[i].dislikeList)
-          this.$set(this.LikeList1,this.CommentInfo[i].CommentID,this.CommentInfo[i].likeList);
-          this.$set(this.DisLikeList1,this.CommentInfo[i].CommentID,this.CommentInfo[i].dislikeList);
+          this.$set(
+            this.LikeList1,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].likeList
+          );
+          this.$set(
+            this.DisLikeList1,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].dislikeList
+          );
           if (this.CommentInfo[i].likeList.includes(this.userID)) {
-            this.$set(this.LikeColor1,this.CommentInfo[i].CommentID,'red');
+            this.$set(this.LikeColor1, this.CommentInfo[i].CommentID, "red");
           } else {
-            this.$set(this.LikeColor1,this.CommentInfo[i].CommentID,'grey');
+            this.$set(this.LikeColor1, this.CommentInfo[i].CommentID, "grey");
           }
           if (this.CommentInfo[i].dislikeList.includes(this.userID)) {
-            this.$set(this.DisLikeColor1,this.CommentInfo[i].CommentID,'red');
+            this.$set(this.DisLikeColor1, this.CommentInfo[i].CommentID, "red");
           } else {
-            this.$set(this.DisLikeColor1,this.CommentInfo[i].CommentID,'grey');
+            this.$set(
+              this.DisLikeColor1,
+              this.CommentInfo[i].CommentID,
+              "grey"
+            );
           }
         }
         // console.log(this.CommentInfo);
         // console.log(response.data);
-        console.log(this.LikeColor1);
-        console.log(this.DisLikeColor1);
-        console.log(this.LikeList1);
-        console.log(this.DisLikeList1);
+        // console.log(this.LikeColor1);
+        // console.log(this.DisLikeColor1);
+        // console.log(this.LikeList1);
+        // console.log(this.DisLikeList1);
       });
   },
 };
