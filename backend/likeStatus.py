@@ -53,6 +53,8 @@ def like(request):
                         """(userID, commentID)
                     )
                     return generate_response(None, 204)
+                except:
+                    return generate_response(None,400)
             try:
                 cursor.execute(
                     """

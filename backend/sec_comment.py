@@ -59,3 +59,41 @@ def sec_comment(request):
             return generate_response(None, status = 201)
         else:
             return generate_response(None, status = 400)
+
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def submit_sec_comment(request):
+    if (request.method == "POST"):
+        data = request.data
+        if data is not None: 
+            print(data)
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO `MultiComments` (
+                        `UserID`, `Content`, `ParentCommentID`) 
+                        VALUES (
+                        %s, %s, %s)
+                    """, [data["USERID"], data["CONTENT"],data["ParentCommentID"]]
+                )
+                cursor.execute(
+                    """
+                    SELECT `MultiCommentID` 
+                    FROM `MultiComments`
+                    WHERE `UserID` = %s AND `ParentCommentID` = %s;
+                    """, [data["USERID"], data["ParentCommentID"]]
+                )
+                MultiCommentID = cursor.fetchall()[0][0]
+                cursor.execute(
+                    """
+                    INSERT INTO `MultiCommentsReplyComments` (
+                        `CommentID`,`MultiCommentID`) 
+                        VALUES (
+                        %s)
+                    """, [data["ParentCommentID"],MultiCommentID]
+                )
+                response = generate_response(None, 201)    
+            return response
+        return generate_response(None, 400)
+    return generate_response(None, 400)

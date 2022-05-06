@@ -33,13 +33,21 @@ def submit_comment(request):
                 )
                 cursor.execute(
                     """
+                    SELECT `CommentID` 
+                    FROM `Comments`
+                    WHERE `UserID` = %s AND `CourseID` = %s;
+                    """, [data["USERID"], data["COURSEID"]]
+                )
+                CommentID = cursor.fetchall()[0][0]
+                cursor.execute(
+                    """
                     INSERT INTO `UsersGiveComments` (
                         `UserID`, `CommentID`
                     )
                     VALUES (
                         %s, %s
                     )
-                    """, [data["USERID"], data["COMMENTID"]]
+                    """, [data["USERID"], CommentID]
                 )
                 response = generate_response(None, 201)    
             return response
