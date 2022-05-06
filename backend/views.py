@@ -78,13 +78,6 @@ def hello_world(request):
             
 def append_course_info(tmp, course_id):
     with connection.cursor() as cursor:
-        print("""
-            SELECT  `CommentID`, `UserID`, `UserName`, `CourseID`, 
-                    `Semester`, `Year`, `Instructor`, 
-                    `Score`, `Content`, `LikeNum`, `DislikeNum`
-            FROM `Comments` c, `Users` u
-            WHERE `CourseID`=%s and u.`UserID` = c.UserID;
-            """%course_id)
         cursor.execute(
             """
             SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 

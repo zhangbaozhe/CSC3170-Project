@@ -44,22 +44,26 @@ def like(request):
                 commentID = str(request.data["commentID"])
             except:
                 return generate_response(None, 400)
-            if(status==0):
+            if(status=="0"):
                 try:
                     cursor.execute(
                         """
                         DELETE FROM `CommentLikeStatus`
                         WHERE `UserID` = %s and `CommentID` = %s;
-                        """(userID, commentID)
+                        """%(userID, commentID)
                     )
-                    return generate_response(None, 204)
-            try:
-                cursor.execute(
-                    """
-                    UPDATE `CommentLikeStatus` 
-                    SET `Status` = %s
-                    WHERE `UserID` = %s and `CommentID` = %s;
-                    """%(status, userID, commentID)
-                )
-            except:
-                return generate_response(None, 400)
+                    
+                except:
+                    return generate_response(None,400)
+            else:
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE `CommentLikeStatus` 
+                        SET `Status` = %s
+                        WHERE `UserID` = %s and `CommentID` = %s;
+                        """%(status, userID, commentID)
+                    )
+                except:
+                    return generate_response(None, 400)
+            return generate_response(None, 204)
