@@ -280,7 +280,7 @@ def search(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-            # print(data)
+            print("In search", data)
             response = JsonResponse(data, safe=False)
             response["Access-Control-Allow-Origin"] = "*"
             response["Access-Control-Allow-Methods"] = "*"

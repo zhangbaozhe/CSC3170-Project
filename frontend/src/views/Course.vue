@@ -190,6 +190,14 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-snackbar v-model="scoreSnackbar">
+      You have not scored yet!
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="scoreSnackbar = false">
+          close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -209,6 +217,7 @@ export default {
       commentedUserIDs: [], // TODO: be loaded with the user IDs who have commented
       submitNotOKMsg: "You have already submitted a comment!",
       snackbar: false,
+      scoreSnackbar: false, 
       courseID: 0,
       courseName: "",
       school: "",
@@ -273,16 +282,18 @@ export default {
       this.count += 2;
     },
 
-    isToSubmitOK() {
-      return !this.commentedUserIDs.includes(this.userID);
-    },
-
     submit() {
-      // FIXME: edit Comments and other relation tables
-      if (!isToSubmitOK()) {
-        snackbar = true;
+      if (this.commentedUserIDs.includes(this.userID)) {
+        console.log("HELLLLLLLLLLLLLLLLL")
+        this.snackbar = true;
         return;
       }
+      if (this.score == 0) {
+        console.log("HELLLLLLLL")
+        this.scoreSnackbar = true
+        return
+      }
+      console.log(this.score)
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
@@ -300,6 +311,9 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          axios.get(backendAPI + "course/submit_comment/")
+          .then((response) => { this.FScore = response.data})
+          .catch((error) => { console.log(error) })
         })
         .catch((error) => {
           console.log(error);
@@ -443,7 +457,7 @@ export default {
     this.userID = this.$store.state.userID;
     this.courseID = this.$route.params.id;
     axios
-      .get("http://127.0.0.1:3170/api/course", {
+      .get("http://127.0.0.1:3170/api/course/", {
         params: { courseID: this.$route.params.id },
       })
       .then((response) => {
@@ -451,6 +465,9 @@ export default {
         this.courseName = response.data["CourseName"];
         this.school = response.data["School"];
         this.FScore = response.data["FinalScore"];
+        // TODO: to check this
+        this.commentedUserIDs = response.data["CommentedUsers"]
+        
         for (let i = 0; i < this.CommentInfo.length; i++) {
           // console.log(this.CommentInfo[i].likeList)
           // console.log(this.CommentInfo[i].dislikeList)
