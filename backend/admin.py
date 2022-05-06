@@ -25,7 +25,17 @@ def manage_user(request):
                 userID = request.data["data"]["id"]
             except:
                 return generate_response(None, 400)
-        return generate_response(None, 400)
+            try:
+                cursor.execute(
+                    """
+                    DELETE FROM `Users`
+                    WHERE `UserID` = %s;
+                    """%str(userID)
+                )
+            except:
+                return generate_response(None, 400)
+            return (None, 204)
+
 #allowed: delete
 #def manage_comment(request):
 
