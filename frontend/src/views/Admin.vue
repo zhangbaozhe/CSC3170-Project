@@ -55,10 +55,10 @@
     <!-- List the comments and they can be deleted -->
     <v-card v-for="comment in Comments" v-bind:key="comment.url" class="d-flex pa-2 ma-2">
         <v-card-title>
-            CommentID: {{ comment.CommentID }}
+            CID: {{ comment.CommentID }}
         </v-card-title>
         <v-card-text>
-            Comment content: {{ comment.Content }}
+            CContent: {{ comment.Content }}
         </v-card-text>
         <v-card-actions>
             <v-btn color="error" class="mr-4" @click="deleteComment(comment.CommentID)">
@@ -70,7 +70,7 @@
     <!-- List the users and they can be deleted -->
     <v-card v-for="user in Users" v-bind:key="user.url" class="d-flex pa-2 ma-2">
         <v-card-title>
-            UserID: {{ user.UserID}}
+            UID: {{ user.UserID}}
         </v-card-title>
         <v-card-text>
             Username: {{ user.Username }}
@@ -94,6 +94,7 @@ export default {
   name: "HelloWorld",
   data: function () {
     return {
+      info: "",
       valid: true, 
       CourseCode: '', 
       CourseCodeRules: [
@@ -158,8 +159,12 @@ export default {
 
   }, 
   created() {
-    axios.get("http://127.0.0.1:3170/api/admin/").then((response) => {
-      this.info = response.data
+    axios.get("http://127.0.0.1:3170/api/admin/all/").then((response) => {
+      this.info = response.data;
+      console.log(response.data);
+      this.Courses = response.data.Courses;
+      this.Users = response.data.Users;
+      this.Comments = response.data.Comments;
       for (var i = 0; i < this.info.length; i++) {
         console.log(this.info[i]["MSG_ID"])
         this.msgIDs.push(Number(this.info[i]["MSG_ID"]))
