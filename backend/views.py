@@ -78,13 +78,20 @@ def hello_world(request):
             
 def append_course_info(tmp, course_id):
     with connection.cursor() as cursor:
-        print("""
-            SELECT  `CommentID`, `UserID`, `UserName`, `CourseID`, 
-                    `Semester`, `Year`, `Instructor`, 
-                    `Score`, `Content`, `LikeNum`, `DislikeNum`
-            FROM `Comments` c, `Users` u
-            WHERE `CourseID`=%s and u.`UserID` = c.UserID;
-            """%course_id)
+        tmp["CommentedUsers"] = []
+        cursor.execute(
+            """
+            SELECT `UserID`
+            FROM `Comments` 
+            WHERE `CourseID`=%s;
+            """%course_id
+        )
+        columns = [col[0] for col in cursor.description]
+        # data is a list TODO: caution! when converting to the JSON
+        data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        for item in data:
+            tmp["CommentedUsers"].append(item["UserID"])
+
         cursor.execute(
             """
             SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 
