@@ -168,13 +168,9 @@ export default {
   }, 
   created() {
     axios.get("http://127.0.0.1:3170/api/admin/all/").then((response) => {
-      this.info = response.data
-      for (var i = 0; i < this.info.length; i++) {
-        console.log(this.info[i]["MSG_ID"])
-        this.msgIDs.push(Number(this.info[i]["MSG_ID"]))
-      }
-      console.log(this.msgIDs)
-      console.log(this.info)
+      this.Courses = response.data.Courses;
+      this.Users = response.data.Users;
+      this.Comments = response.data.Comments;
     });
   },
 };
