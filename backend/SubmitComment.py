@@ -39,6 +39,7 @@ def submit_comment(request):
                     """, [data["USERID"], data["COURSEID"]]
                 )
                 CommentID = cursor.fetchall()[0][0]
+                print("Hello", CommentID)
                 cursor.execute(
                     """
                     INSERT INTO `UsersGiveComments` (

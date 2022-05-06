@@ -54,7 +54,7 @@ def like(request):
                     )
                     return generate_response(None, 204)
                 except:
-                    return generate_response(None,400)
+                    return generate_response(None, 400)
             try:
                 cursor.execute(
                     """
