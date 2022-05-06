@@ -318,6 +318,7 @@ export default {
     },
   },
   created() {
+
     console.log(this.$store.state.userName)
     axios.get("http://127.0.0.1:3170/api/search").then((response) => {
       this.info = response.data;
