@@ -44,6 +44,14 @@ def like(request):
                 commentID = request.data["commentID"]
             except:
                 return generate_response(None, 400)
+            if(status==0):
+                try:
+                    cursor.execute(
+                        """
+                        DELETE FROM `CommentLikeStatus`
+                        WHERE `UserID` = %s and `CommentID` = %s;
+                        """(userID, commentID)
+                    )
             try:
                 cursor.execute(
                     """
