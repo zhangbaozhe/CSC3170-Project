@@ -288,7 +288,9 @@ export default {
         console.log("HELLLLLLLLLLLLLLLLL")
         this.snackbar = true;
 
+
         return;
+
       }
       if (this.score == 0) {
         console.log("HELLLLLLLL")
@@ -313,9 +315,6 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          axios.get(backendAPI + "course/submit_comment/")
-          .then((response) => { this.FScore = response.data})
-          .catch((error) => { console.log(error) })
         })
         .catch((error) => {
           console.log(error);
