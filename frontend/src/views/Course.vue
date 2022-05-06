@@ -235,6 +235,8 @@ export default {
       DisLikeColor: "grey",
       LikeColor1: {},
       DisLikeColor1: {},
+      LikeList1: {},
+      DisLikeList1: {},
 
       options1: [
         //year-table
@@ -406,6 +408,8 @@ OnClick(num) {
         ) {
           tmpStatus = 2;
         } else {
+          console.log(this.LikeColor1[num[1]]);
+          console.log(this.DisLikeColor1[num[1]]);
           console.log("something goes wrong");
         }
         this.$axios.post("http://127.0.0.1:3170/api/like/", {
@@ -496,6 +500,8 @@ open1(parentCommentID) {
     console.log("MOUNTED");
     this.userID = this.$store.state.userID;
     this.courseID = this.$route.params.id;
+    // console.log(this.LikeColor1);
+    // console.log(this.DisLikeColor1);
     axios
       .get("http://127.0.0.1:3170/api/course/", {
         params: { courseID: this.$route.params.id },
@@ -536,8 +542,8 @@ open1(parentCommentID) {
         }
         // console.log(this.CommentInfo);
         // console.log(response.data);
-        // console.log(this.LikeColor1);
-        // console.log(this.DisLikeColor1);
+        console.log(this.LikeColor1);
+        console.log(this.DisLikeColor1);
         // console.log(this.LikeList1);
         // console.log(this.DisLikeList1);
       });
