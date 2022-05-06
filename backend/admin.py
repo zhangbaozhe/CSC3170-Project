@@ -24,34 +24,47 @@ def manage_user(request):
     with connection.cursor() as cursor:
         if(request.method == "DELETE"):
             try: 
-                userID = str(request.data["data"]["id"])
+                userID = str(request.data["id"])
             except:
                 return generate_response(None, 400)
-            try:
-                cursor.execute(
-                    f"""
-                    DELETE FROM `Users`
-                    WHERE `UserID` = {userID};
+            cursor.execute(
+                f"""
+                DELETE FROM `UsersGiveComments`
+                WHERE `UserID` = {userID};
+                """
+            )
+            cursor.execute(
+                f"""
+                DELETE FROM `Comments`
+                WHERE `UserID` = {userID};
+                """
+            )
+            cursor.execute(
+                f"""
+                DELETE FROM `CommentLikeStatusAppraiseComments`
+                WHERE `UserID` = {userID};
+                """
+            )
+            cursor.execute(
+                f"""
+                DELETE FROM `CommentLikeStatus`
+                WHERE `UserID` = {userID};
+                """
+            )
+            cursor.execute(
+                f"""
+                DELETE FROM `MultiComments`
+                WHERE `UserID` = {userID};
+                """
+            )
+            cursor.execute(
+                f"""
+                DELETE FROM `Users`
+                WHERE `UserID` = {userID};
+                """
+            )
+            return generate_response(None, 204)
 
-                    DELETE FROM `UsersGiveComments`
-                    WHERE `UserID` = {userID};
-
-                    DELETE FROM `Comments`
-                    WHERE `UserID` = {userID};
-
-                    DELETE FROM `CommentLikeStatusAppraiseComments`
-                    WHERE `UserID` = {userID};
-
-                    DELETE FROM `CommentLikeStatus`
-                    WHERE `UserID` = {userID};
-
-                    DELETE FROM `MultiComments`
-                    WHERE `UserID` = {userID};
-                    """
-                )
-            except:
-                return generate_response(None, 400)
-            return (None, 204)
 
 #allowed: delete
 @csrf_exempt
@@ -60,34 +73,50 @@ def manage_comment(request):
     with connection.cursor() as cursor:
         if(request.method == "DELETE"):
             try: 
-                commentID = str(request.data["data"]["id"])
+                commentID = str(request.data["id"])
             except:
                 return generate_response(None, 400)
             try:
+
+                cursor.execute(
+                    f"""
+                    DELETE FROM `CommentLikeStatusAppraiseComments`
+                    WHERE `CommentID` = {commentID};
+                    """
+                )
+                cursor.execute(
+                    f"""
+                    DELETE FROM `CommentLikeStatus`
+                    WHERE `CommentID` = {commentID};
+                    """
+                )
+                cursor.execute(
+                    f"""
+                    DELETE FROM `UsersSetCommentLikeStatus`
+                    WHERE `CommentID` = {commentID};
+                    """
+                )
+                cursor.execute(
+                    f"""
+                    DELETE FROM `MultiComments`
+                    WHERE `ParentCommentID` = {commentID};
+                    """
+                )
+                cursor.execute(
+                    f"""
+                    DELETE FROM `MultiCommentsReplyComments`
+                    WHERE `CommentID` = {commentID};
+                    """
+                )
                 cursor.execute(
                     f"""
                     DELETE FROM `Comments`
-                    WHERE `CommentID` = {commentID};
-                    
-                    DELETE FROM `CommentLikeStatusAppraiseComments`
-                    WHERE `CommentID` = {commentID};
-
-                    DELETE FROM `CommentLikeStatus`
-                    WHERE `CommentID` = {commentID};
-
-                    DELETE FROM `UsersSetCommentLikeStatus`
-                    WHERE `CommentID` = {commentID};
-
-                    DELETE FROM `MultiComments`
-                    WHERE `ParentCommentID` = {commentID};
-
-                    DELETE FROM `MultiCommentsReplyComments`
                     WHERE `CommentID` = {commentID};
                     """
                 )
             except:
                 return generate_response(None, 400)
-            return (None, 204)
+            return generate_response(None, 204)
 
 #allowed: add, delete
 @csrf_exempt
@@ -96,23 +125,29 @@ def manage_course(request):
     with connection.cursor() as cursor:
         if(request.method == "DELETE"):
             try: 
-                courseID = str(request.data["data"]["id"])
+                courseID = str(request.data["id"])
             except:
                 return generate_response(None, 400)
 
+
             cursor.execute(
                 f"""
-                DELETE FROM `Courses`
-                WHERE `CourseID` = {courseID};
-                
                 DELETE FROM `Comments`
                 WHERE `CourseID` = {courseID};
-
+                """
+            )
+            cursor.execute(
+                f"""
                 DELETE FROM `CommentsEvaluateCourses`
                 WHERE `CourseID` = {courseID};
                 """
             )
-
+            cursor.execute(
+                f"""
+                DELETE FROM `Courses`
+                WHERE `CourseID` = {courseID};
+                """
+            )
             return generate_response(None, 204)
         elif(request.method == "POST"):
             try: 
