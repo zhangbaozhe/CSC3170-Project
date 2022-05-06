@@ -16,7 +16,7 @@
         <el-col :span="6">
           <br />
           <div>School: {{ this.school }}</div>
-          <div>Credit:</div>
+          <div>Credit: {{ this.credit }}</div>
           <div>FinalScore: {{ this.FScore }}</div>
         </el-col>
       </el-row>
@@ -295,9 +295,10 @@ export default {
               parentID:courseID,
             }
           }).then((response) => {
-      this.multiComment = response.data; 
+      this.multiComment = response.data;
+      console.log(this.multiComment);
     });
-    console.log(this.multiComment);
+
     },
     isToSubmitOK() {
       return !this.commentedUserIDs.includes(this.userID);
@@ -308,6 +309,7 @@ export default {
         console.log("HELLLLLLLLLLLLLLLLL")
         this.snackbar = true;
         return;
+
       }
       if (this.score == 0) {
         console.log("HELLLLLLLL")
@@ -332,53 +334,128 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          axios.get(backendAPI + "course/submit_comment/")
-          .then((response) => { this.FScore = response.data})
-          .catch((error) => { console.log(error) })
         })
         .catch((error) => {
           console.log(error);
         });
-      // location.reload(); // reload the webpage after submit the comment
+       location.reload(); // reload the webpage after submit the comment
     },
 
-    OnClick(num) {
+OnClick(num) {
+      let tmpStatus = 0; // 判断是否已点过赞/踩
+      if (
+        this.DisLikeColor1[num[1]] == "grey" &&
+        this.LikeColor1[num[1]] == "grey"
+      ) {
+        tmpStatus = 0;
+      }
+      if (
+        this.LikeColor1[num[1]] == "red" &&
+        this.DisLikeColor1[num[1]] == "grey"
+      ) {
+        tmpStatus = 1;
+      }
+      if (
+        this.DisLikeColor1[num[1]] == "red" &&
+        this.LikeColor1[num[1]] == "grey"
+      ) {
+        tmpStatus = 2;
+      }
+      if (
+        this.DisLikeColor1[num[1]] == "red" &&
+        this.LikeColor1[num[1]] == "red"
+      ) {
+        console.log("both red");
+      }
       if (num[0] == 0) {
         //点踩
-        console.log("点踩");
-        console.log(num[1]);
         if (this.DisLikeColor1[num[1]] == "grey") {
           this.DisLikeColor1[num[1]] = "red";
-          console.log("yes");
           if (this.LikeColor1[num[1]] == "red") {
             this.LikeColor1[num[1]] = "grey";
           }
-        } 
-        else if (this.DisLikeColor1[num[1]] == "red") {
+        } else if (this.DisLikeColor1[num[1]] == "red") {
           this.DisLikeColor1[num[1]] = "grey";
         }
-        // console.log(this.DisLikeColor);
-        console.log(num[1]);
-      }  
-      else if (num[0] == 1) {
+      } else if (num[0] == 1) {
         //点赞
-        console.log("点赞");
         if (this.LikeColor1[num[1]] == "grey") {
-          console.log("red now")
           this.LikeColor1[num[1]] = "red";
           if (this.DisLikeColor1[num[1]] == "red") {
             this.DisLikeColor1[num[1]] = "grey";
           }
         } else if (this.LikeColor1[num[1]] == "red") {
-          console.log("grey now")
           this.LikeColor1[num[1]] = "grey";
         }
-        // console.log(this.LikeColor)
-        console.log(num[1]);
+      }
+      if (tmpStatus == 0) {
+        //没操作过
+        if (
+          this.LikeColor1[num[1]] == "grey" &&
+          this.DisLikeColor1[num[1]] == "grey"
+        ) {
+          tmpStatus = 0; //操作过，但又变成不点赞不点踩
+        } else if (
+          this.LikeColor1[num[1]] == "red" &&
+          this.DisLikeColor1[num[1]] == "grey"
+        ) {
+          tmpStatus = 1;
+        } else if (
+          this.LikeColor1[num[1]] == "grey" &&
+          this.DisLikeColor1[num[1]] == "red"
+        ) {
+          tmpStatus = 2;
+        } else {
+          console.log("something goes wrong");
+        }
+        this.$axios.post("http://127.0.0.1:3170/api/like/", {
+          userID: this.userID,
+          status: tmpStatus,
+          commentID: num[1],
+        });
+      } else {
+        if (
+          this.LikeColor1[num[1]] == "grey" &&
+          this.DisLikeColor1[num[1]] == "grey"
+        ) {
+          tmpStatus = 0;
+        } else if (
+          this.LikeColor1[num[1]] == "red" &&
+          this.DisLikeColor1[num[1]] == "grey"
+        ) {
+          tmpStatus = 1;
+        } else if (
+          this.LikeColor1[num[1]] == "grey" &&
+          this.DisLikeColor1[num[1]] == "red"
+        ) {
+          tmpStatus = 2;
+        } else {
+          console.log("something went wrong");
+        }
+        this.$axios
+          .put("http://127.0.0.1:3170/api/like/", {
+            userID: this.userID,
+            status: tmpStatus,
+            commentID: num[1],
+          })
+          .then((response) => {
+            console.log(response);
+          });
       }
     },
-    open1(parentCommentID) {
-      console.log(parentCommentID);
+open1(parentCommentID) {
+      axios.get("http://127.0.0.1:3170/api/mulcomment/", {
+            params: {
+              parentID:parentCommentID,
+            }
+          }).then((response) => {
+          for(let i=0;i<response.data.length;i++){
+            if (!this.mulCommentedUserIDs.includes(response.data[i]["UserID"])){
+              this.mulCommentedUserIDs.push(response.data[i]["UserID"]);
+            }
+          };
+          console.log(this.mulCommentedUserIDs);
+    });
       this.$prompt("Please enter your response", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -428,29 +505,41 @@ export default {
         this.courseName = response.data["CourseName"];
         this.school = response.data["School"];
         this.FScore = response.data["FinalScore"];
+        this.credit = response.data["Credits"];
         // TODO: to check this
         this.commentedUserIDs = response.data["CommentedUsers"]
-        
         for (let i = 0; i < this.CommentInfo.length; i++) {
-          // console.log(this.CommentInfo[i].likeList)
-          // console.log(this.CommentInfo[i].dislikeList)
-          if(this.CommentInfo[i].likeList.includes(this.userID)){
-            this.LikeColor1[this.CommentInfo[i].CommentID] = "red";
+          this.$set(
+            this.LikeList1,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].likeList
+          );
+          this.$set(
+            this.DisLikeList1,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].dislikeList
+          );
+          if (this.CommentInfo[i].likeList.includes(this.userID)) {
+            this.$set(this.LikeColor1, this.CommentInfo[i].CommentID, "red");
+          } else {
+            this.$set(this.LikeColor1, this.CommentInfo[i].CommentID, "grey");
           }
-          else{
-            this.LikeColor1[this.CommentInfo[i].CommentID] = "grey";
+          if (this.CommentInfo[i].dislikeList.includes(this.userID)) {
+            this.$set(this.DisLikeColor1, this.CommentInfo[i].CommentID, "red");
+          } else {
+            this.$set(
+              this.DisLikeColor1,
+              this.CommentInfo[i].CommentID,
+              "grey"
+            );
           }
-          if(this.CommentInfo[i].dislikeList.includes(this.userID)){
-            this.DisLikeColor1[this.CommentInfo[i].CommentID] = "red";
-          }
-          else{
-            this.DisLikeColor1[this.CommentInfo[i].CommentID] = "grey";
-          }
-        };
-        console.log(this.CommentInfo);
+        }
+        // console.log(this.CommentInfo);
         // console.log(response.data);
-        console.log(this.LikeColor1);
-        console.log(this.DisLikeColor1);
+        // console.log(this.LikeColor1);
+        // console.log(this.DisLikeColor1);
+        // console.log(this.LikeList1);
+        // console.log(this.DisLikeList1);
       });
   },
 };

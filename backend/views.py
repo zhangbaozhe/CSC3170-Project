@@ -91,7 +91,6 @@ def append_course_info(tmp, course_id):
         data = [dict(zip(columns, row)) for row in cursor.fetchall()]
         for item in data:
             tmp["CommentedUsers"].append(item["UserID"])
-
         cursor.execute(
             """
             SELECT  `CommentID`, u.`UserID`, `UserName`, `CourseID`, 

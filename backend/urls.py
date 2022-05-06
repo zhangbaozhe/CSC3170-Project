@@ -18,7 +18,8 @@ urlpatterns = [
     path('search0/', views.search_0),
     path('search1/', views.search_1),
     path('search2/', views.search_2),
-    path('seccomment/', sec_comment.sec_comment),
+    path('seccomment/', sec_comment.sec_comment,name='sec'),
+    path('mulcomment/', sec_comment.sec_comment,name = 'mul'),
     path('like/', likeStatus.like),
     path('admin/user/', admin.manage_user),
 ]

@@ -6,6 +6,7 @@ import Course from '../views/Course.vue'
 import Home from '../views/Search.vue'
 import SignUp from '../views/SignUp.vue'
 import Search from '../views/Search.vue'
+import Admin from '../views/Admin.vue'
 import store from '../store/store.js'
 
 //Vue.use(Router)
@@ -17,6 +18,11 @@ const routes=[
     name: 'HelloWorld',
     component: HelloWorld
   },
+  {
+    path: '/admin', 
+    name: 'Admin', 
+    component: Admin
+  }, 
   {
     path: '/login',
     name: 'Lgoin',
