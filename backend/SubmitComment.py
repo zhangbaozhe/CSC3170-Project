@@ -31,29 +31,15 @@ def submit_comment(request):
                     """, [data["USERID"], data["YEAR"],data["SEMESTER"], \
                     data["INSTRUCTOR"],data["SCORE"],data["CONTENT"],data["LIKENUM"],data["DISLIKENUM"], data["COURSEID"]]
                 )
-                response = generate_response(None, 201)    
-            return response
-        return generate_response(None, 400)
-    return generate_response(None, 400)
-
-
-
-@csrf_exempt
-@api_view(['GET', 'POST'])
-def submit_mul_comment(request):
-    if (request.method == "POST"):
-        data = request.data
-        if data is not None: 
-            print(data)
-            with connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    INSERT INTO `multicomments` (
-                        `MultiCommentID`,`UserID`, `Content`, `ParentCommentID`) 
-                        VALUES (
-                        %s, %s, %s, %s)
-                    """, [data["MultiCommentID"], data["UserID"], \
-                    data["CONTENT"], data["ParentCommentID"]]
+                    INSERT INTO `UsersGiveComments` (
+                        `UserID`, `CommentID`
+                    )
+                    VALUES (
+                        %s, %s
+                    )
+                    """, [data["USERID"], data["COMMENTID"]]
                 )
                 response = generate_response(None, 201)    
             return response

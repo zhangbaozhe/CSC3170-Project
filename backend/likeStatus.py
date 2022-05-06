@@ -17,7 +17,7 @@ def generate_response(data, status):
     return response
 
 @csrf_exempt
-@api_view(['GET', 'POST'])
+@api_view(['PUT', 'POST'])
 def like(request):
     with connection.cursor() as cursor:
         if(request.method == "POST"):
@@ -44,6 +44,14 @@ def like(request):
                 commentID = request.data["commentID"]
             except:
                 return generate_response(None, 400)
+            if(status==0):
+                try:
+                    cursor.execute(
+                        """
+                        DELETE FROM `CommentLikeStatus`
+                        WHERE `UserID` = %s and `CommentID` = %s;
+                        """(userID, commentID)
+                    )
             try:
                 cursor.execute(
                     """

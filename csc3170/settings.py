@@ -125,7 +125,6 @@ STATIC_URL = '/static/'
 
 
 CORS_ORIGIN_WHITELIST = [
-
     'http://127.0.0.1:8080', 
     'http://127.0.0.1:3170', 
     'http://172.17.0.2:8080', 
