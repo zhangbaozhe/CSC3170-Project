@@ -12,7 +12,6 @@ urlpatterns = [
     path('login/', views.login),
     path('get_users/', views.get_users, name="get_users"), 
     path('course/submit_comment/', SubmitComment.submit_comment, name="submit_comment"),
-    path('course/submit_sec_comment/', sec_comment.submit_sec_comment, name="submit_sec_comment"),
     path('register_user/', views.register_user, name="register_user"),
     path('search/', views.search, name="search"),
     path('search0/', views.search_0),

@@ -5,7 +5,7 @@
       <el-row>
         <el-col :span="6">
           <img
-            src="https://i.cuhk.edu.cn/static/assets/images/white-logo-4.png"
+            src="https://i.cuhk.edu.cn/static/assets/images/white-logo-4.png/"
             alt="无法显示"
           />
         </el-col>
@@ -38,7 +38,6 @@
               <!-- 点踩 -->
               <v-btn
                 class="ma-2"
-                text
                 icon
                 :color="DisLikeColor1[comment.CommentID]"
                 @click="OnClick([0, comment.CommentID])"
@@ -49,7 +48,6 @@
               <!-- 点赞 -->
               <v-btn
                 class="ma-2"
-                text
                 icon
                 :color="LikeColor1[comment.CommentID]"
                 @click="OnClick([1, comment.CommentID])"
@@ -302,16 +300,12 @@ export default {
     });
 
     },
-    isToSubmitOK() {
-      return !this.commentedUserIDs.includes(this.userID);
-    },
 
     submit() {
       if (this.commentedUserIDs.includes(this.userID)) {
         console.log("HELLLLLLLLLLLLLLLLL")
         this.snackbar = true;
         return;
-
       }
       if (this.score == 0) {
         console.log("HELLLLLLLL")
@@ -340,7 +334,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-       location.reload(); // reload the webpage after submit the comment
+      //  location.reload(); // reload the webpage after submit the comment
     },
 
 OnClick(num) {
@@ -408,8 +402,8 @@ OnClick(num) {
         ) {
           tmpStatus = 2;
         } else {
-          console.log(this.LikeColor1[num[1]]);
-          console.log(this.DisLikeColor1[num[1]]);
+          // console.log(this.LikeColor1[num[1]]);
+          // console.log(this.DisLikeColor1[num[1]]);
           console.log("something goes wrong");
         }
         this.$axios.post("http://127.0.0.1:3170/api/like/", {
@@ -448,6 +442,7 @@ OnClick(num) {
       }
     },
 open1(parentCommentID) {
+  this.mulCommentedUserIDs = [];
       axios.get("http://127.0.0.1:3170/api/mulcomment/", {
             params: {
               parentID:parentCommentID,
@@ -458,26 +453,36 @@ open1(parentCommentID) {
               this.mulCommentedUserIDs.push(response.data[i]["UserID"]);
             }
           };
-          console.log(this.mulCommentedUserIDs);
+          
     });
       this.$prompt("Please enter your response", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       })
         .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "Successfully post your response",
-          });
           this.multiInputContent = value;
+          if (this.mulCommentedUserIDs.includes(this.userID)){
+            this.$message({
+            type: 'info',
+            message: 'You have already submitted a second comment'
+          });
+            return;
+          }
+          else if(this.multiInputContent==null || this.multiInputContent.replace(/[ ]/g, "").length==0){
+            this.$message({
+            type: 'info',
+            message: 'Comment cannot be empty'
+          });
+          }
+          else {
           console.log(this.multiInputContent);
           const backendAPI = "http://127.0.0.1:3170/api/";
           let submitData = new FormData();
           submitData.append("USERID", this.userID);
           submitData.append("CONTENT", this.multiInputContent);
           submitData.append("ParentCommentID", parentCommentID);
-          axios
-          .post(backendAPI + "course/submit_sec_comment/", submitData, {
+            axios
+          .post(backendAPI + "seccomment/", submitData, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
           })
           .then((response) => {
@@ -486,7 +491,13 @@ open1(parentCommentID) {
           .catch((error) => {
             console.log(error);
           });
-        })
+          this.$message({
+            type: "success",
+            message: "Successfully post your response",
+          });
+        }
+          }
+          )
         .catch(() => {
           this.$message({
             type: "info",
@@ -636,4 +647,10 @@ open1(parentCommentID) {
   width: 22px;
   height: 22px;
 }
+.butt {
+ 		  float: right;
+ 		  padding: 3px 0;
+ 		  width: 30px;
+ 		  height: 30px;
+ 		}
 </style>
