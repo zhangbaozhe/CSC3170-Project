@@ -22,7 +22,7 @@ def sec_comment(request):
     with connection.cursor() as cursor:
         if(request.method == "GET"):
             #sec_comment_id = request.GET.get("sec_comment_id")
-            parent_id = str(request.GET.get("comment_id"))
+            parent_id = str(request.GET.get("parentID"))
             # for i in sec_comment_id:
             #     cursor.execute(
             #     """
@@ -34,8 +34,9 @@ def sec_comment(request):
             #     temp = [dict(zip(columns, row)) for row in cursor.fetchall()]
             cursor.execute(
                 """
-                SELECT * FROM `MultiComments`
-                WHERE `ParentCommentID` = %s;
+                SELECT * FROM `MultiComments`,`Users`
+                WHERE `ParentCommentID` = '%s'
+                and Multicomments.UserID = Users.UserID;
                 """%parent_id
             )
             columns = [col[0] for col in cursor.description]
@@ -44,17 +45,38 @@ def sec_comment(request):
         
         #create secondary comment
         elif request.method == "POST":
-            parent_id = str(request.data["comment_id"])
-            content = request.data["content"]
-            userid = str(request.data['user_id'])
-            cursor.execute(
-                """
-                INSERT INTO `MultiComments` 
-                (`UserID`, `Content`,`ParentCommentID`)
-                VALUES
-                (%s, %s, %s)
-                """%(userid, content, parent_id)
-            )
-            return generate_response(None, status = 201)
+            data = request.data
+            if data is not None: 
+                print(data)
+                parent_id = str(request.data["ParentCommentID"])
+                content = request.data["CONTENT"]
+                userid = str(request.data['USERID'])
+                cursor.execute(
+                    """
+                    INSERT INTO `MultiComments` 
+                    (`UserID`, `Content`,`ParentCommentID`)
+                    VALUES
+                    (%s, %s, %s)
+                    """,[userid, content, parent_id]
+                )
+                cursor.execute(
+                    """
+                    SELECT `MultiCommentID` 
+                    FROM `MultiComments`
+                    WHERE `UserID` = %s AND `ParentCommentID` = %s;
+                    """, [userid, parent_id]
+                )
+                MultiCommentID = cursor.fetchall()[0][0]
+                print(MultiCommentID)
+                cursor.execute(
+                    """
+                    INSERT INTO `MultiCommentsReplyComments` (
+                        `CommentID`,`MultiCommentID`) 
+                        VALUES (
+                        %s,%s)
+                    """, [data["ParentCommentID"],MultiCommentID]
+                )
+                
+                return generate_response(None, status = 201)
         else:
             return generate_response(None, status = 400)

@@ -44,7 +44,7 @@
               >
                 <v-icon>mdi-thumb-down</v-icon>
               </v-btn>
-
+              
               <!-- 点赞 -->
               <v-btn
                 class="ma-2"
@@ -58,7 +58,7 @@
               <el-button
                 style="float: right; padding: 3px 0"
                 type="text"
-                @click="open1"
+                @click="open1(comment.CommentID)"
                 >Response</el-button
               >
             </div>
@@ -86,7 +86,7 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
                     <el-button
-                      @click="drawer = true"
+                      @click="get(comment.CommentID)"
                       type="primary"
                       style="margin-left: 16px"
                     >
@@ -98,13 +98,16 @@
                       :with-header="false"
                       class="drawer1"
                     >
+                     <li  v-for="mul in multiComment"
+                    v-bind:key="mul.multiCommentID">
                       <el-card class="box-card">
                         <div slot="header" class="clearfix">
                           <!-- TODO: this is for multi comments, variables to be changed-->
-                          <span>{{ comment.MUserName }}</span>
+                          <span>{{ mul.Username }}</span>
                         </div>
-                        <span>{{ comment.Content }}</span>
+                        <span>{{ mul.Content }}</span>
                       </el-card>
+                      </li>
                     </el-drawer>
                   </div>
                 </el-col>
@@ -202,6 +205,7 @@
 </template>
 
 <script>
+
 import axios from "axios";
 
 export default {
@@ -212,9 +216,11 @@ export default {
       instructor: "",
       comment: "",
       firstComment: "", //1's comment
-      multiComment: "", // multi-comment
+      multiComment: [], // multi-comment
+      multiInputContent: "",
       userID: "", // the user ID right now in this page
       commentedUserIDs: [], // TODO: be loaded with the user IDs who have commented
+      mulCommentedUserIDs: [],
       submitNotOKMsg: "You have already submitted a comment!",
       snackbar: false,
       scoreSnackbar: false, 
@@ -282,15 +288,24 @@ export default {
       this.count += 2;
     },
 
-    submit() {
+    get(courseID) {
+      this.drawer = true;
+      axios.get("http://127.0.0.1:3170/api/seccomment/", {
+            params: {
+              parentID:courseID,
+            }
+          }).then((response) => {
+      this.multiComment = response.data;
+      console.log(this.multiComment);
+    });
 
+    },
+
+    submit() {
       if (this.commentedUserIDs.includes(this.userID)) {
         console.log("HELLLLLLLLLLLLLLLLL")
         this.snackbar = true;
-
-
         return;
-
       }
       if (this.score == 0) {
         console.log("HELLLLLLLL")
@@ -319,10 +334,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      // location.reload(); // reload the webpage after submit the comment
+      //  location.reload(); // reload the webpage after submit the comment
     },
 
-    OnClick(num) {
+OnClick(num) {
       let tmpStatus = 0; // 判断是否已点过赞/踩
       if (
         this.DisLikeColor1[num[1]] == "grey" &&
@@ -387,6 +402,8 @@ export default {
         ) {
           tmpStatus = 2;
         } else {
+          // console.log(this.LikeColor1[num[1]]);
+          // console.log(this.DisLikeColor1[num[1]]);
           console.log("something goes wrong");
         }
         this.$axios.post("http://127.0.0.1:3170/api/like/", {
@@ -424,17 +441,63 @@ export default {
           });
       }
     },
-    open1() {
+open1(parentCommentID) {
+  this.mulCommentedUserIDs = [];
+      axios.get("http://127.0.0.1:3170/api/mulcomment/", {
+            params: {
+              parentID:parentCommentID,
+            }
+          }).then((response) => {
+          for(let i=0;i<response.data.length;i++){
+            if (!this.mulCommentedUserIDs.includes(response.data[i]["UserID"])){
+              this.mulCommentedUserIDs.push(response.data[i]["UserID"]);
+            }
+          };
+          
+    });
       this.$prompt("Please enter your response", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       })
         .then(({ value }) => {
+          this.multiInputContent = value;
+          if (this.mulCommentedUserIDs.includes(this.userID)){
+            this.$message({
+            type: 'info',
+            message: 'You have already submitted a second comment'
+          });
+            return;
+          }
+          else if(this.multiInputContent==null || this.multiInputContent.replace(/[ ]/g, "").length==0){
+            this.$message({
+            type: 'info',
+            message: 'Comment cannot be empty'
+          });
+          }
+          else {
+          console.log(this.multiInputContent);
+          const backendAPI = "http://127.0.0.1:3170/api/";
+          let submitData = new FormData();
+          submitData.append("USERID", this.userID);
+          submitData.append("CONTENT", this.multiInputContent);
+          submitData.append("ParentCommentID", parentCommentID);
+            axios
+          .post(backendAPI + "seccomment/", submitData, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
           this.$message({
             type: "success",
             message: "Successfully post your response",
           });
-        })
+        }
+          }
+          )
         .catch(() => {
           this.$message({
             type: "info",
@@ -448,6 +511,8 @@ export default {
     console.log("MOUNTED");
     this.userID = this.$store.state.userID;
     this.courseID = this.$route.params.id;
+    // console.log(this.LikeColor1);
+    // console.log(this.DisLikeColor1);
     axios
       .get("http://127.0.0.1:3170/api/course/", {
         params: { courseID: this.$route.params.id },
@@ -488,8 +553,8 @@ export default {
         }
         // console.log(this.CommentInfo);
         // console.log(response.data);
-        // console.log(this.LikeColor1);
-        // console.log(this.DisLikeColor1);
+        console.log(this.LikeColor1);
+        console.log(this.DisLikeColor1);
         // console.log(this.LikeList1);
         // console.log(this.DisLikeList1);
       });
@@ -524,10 +589,7 @@ export default {
   margin: 0 auto;
 }
 .box2 {
-  /* position: absolute; */
   width: 600px;
-  /* top: 767px;
-  left: 193px; */
   /* max-height: 500px; */
   margin: 0 auto;
   border-radius: 4px;
@@ -585,11 +647,10 @@ export default {
   width: 22px;
   height: 22px;
 }
-
 .butt {
-  float: right;
-  padding: 3px 0;
-  width: 30px;
-  height: 30px;
-}
+ 		  float: right;
+ 		  padding: 3px 0;
+ 		  width: 30px;
+ 		  height: 30px;
+ 		}
 </style>
