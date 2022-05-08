@@ -115,6 +115,7 @@ export default {
     // CourseCode -> CourseName (backend)
     // CourseName -> CourseFullName (backend)
     return {
+      info: "",
       valid: true, 
       School: "", 
       Credit: "", 
