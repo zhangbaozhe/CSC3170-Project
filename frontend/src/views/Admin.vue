@@ -153,11 +153,9 @@ export default {
         location.reload()
     }, 
     deleteCourse(CourseID) {
-        let data = new FormData()
-        data.append("id", CourseID)
         axios.delete("http://127.0.0.1:3170/api/admin/course/", 
             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
-            data
+            {data: {"id" : CourseID}}
         )
         .then((response)=>{console.log(response)})
         // location.reload()
@@ -167,7 +165,7 @@ export default {
         data.append("id", CommentID)
         axios.delete("http://127.0.0.1:3170/api/admin/comment/", 
         {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
-        data) 
+        {data: {"id" : CommentID}})
         .then((response)=>{console.log(response)})
         location.reload()
     }, 
@@ -176,7 +174,7 @@ export default {
         data.append("id", UserID)
         axios.delete("http://127.0.0.1:3170/api/admin/user/", 
         {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
-        data) 
+        {data: {"id" : UserID}})
         .then((response)=>{console.log(response)})
         location.reload()
     }, 
