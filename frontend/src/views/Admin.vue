@@ -158,6 +158,7 @@ export default {
 
   }, 
   created() {
+    // TODO: to do 
     axios.get("http://127.0.0.1:3170/api/admin/").then((response) => {
       this.info = response.data
       for (var i = 0; i < this.info.length; i++) {
