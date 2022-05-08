@@ -353,7 +353,7 @@ export default {
           })
           .then((response) => {
             this.info2 = response.data;
-            console.log(this.info);
+            console.log(this.info2);
           });
       },
     },
