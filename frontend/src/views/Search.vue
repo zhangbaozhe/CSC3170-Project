@@ -123,28 +123,21 @@
         </div>
       </el-card>
     </div>
-
+    
     <div class="in">
-      推荐课程:
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
+      <el-row :gutter="20">
+        <el-col :span="6">
+      <div>推荐课程:</div>
+      </el-col>
+      <el-col :span="6">
+      <li v-for="course in recommendCourses" v-bind:key="course.courseID">
+      <el-link @click="recommend(course.courseID)" target="_blank" type="primary"
+        >{{course.courseName}}</el-link
       >
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
-      >
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
-      >
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
-      >
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
-      >
-      <el-link href="https://www.baidu.com" target="_blank" type="primary"
-        >CSC3170</el-link
-      >
+      </li></el-col>
+     </el-row>
     </div>
+    
   </div>
 </template>
 
@@ -247,7 +240,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-      
       options1: [
         {
           value: "all",
@@ -305,7 +297,7 @@ export default {
       value1: "",
       value2: "",
       },
-
+      recommendCourses: [],
       info: [],
       info2: [],
     };
@@ -316,10 +308,12 @@ export default {
       window.open("http://localhost:8080/course/" + i);
       console.log(i);
     },
+    recommend(i){
+      window.open("http://localhost:8080/course/" + i);
+    },
   },
   created() {
-
-    console.log(this.$store.state.userName)
+    console.log(this.$store.state.userID)
     axios.get("http://127.0.0.1:3170/api/search/").then((response) => {
       this.info = response.data;
       console.log(this.info);
@@ -327,6 +321,14 @@ export default {
     axios.get("http://127.0.0.1:3170/api/search0/").then((response) => {
       this.info2 = response.data;
       console.log(this.info2);
+    });
+    axios.get("http://127.0.0.1:3170/api/knn/",{
+      params: {
+              userid : this.$store.state.userID
+            },
+    }).then((response) => {
+      this.recommendCourses = response.data;
+      console.log(this.recommendCourses);
     });
   },
   watch: {

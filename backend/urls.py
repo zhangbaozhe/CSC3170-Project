@@ -24,4 +24,5 @@ urlpatterns = [
     path('admin/comment/', admin.manage_comment),
     path('admin/course/', admin.manage_course),
     path('admin/all/', admin.get_all),
+    path('knn/', views.knn,name = 'knn'),
 ]
