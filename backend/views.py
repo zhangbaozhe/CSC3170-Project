@@ -339,7 +339,8 @@ def search_1(request):
                 where c1.courseid = c.courseid
                 and c1.coursename like '{Subject}%'
                 and (c1.coursename like '%{Content}%'
-                or c1.school like '%{Content}%');
+                or c1.school like '%{Content}%'
+                or c1.coursefullname like '%{Content}%');
                 """
             )
             else:
@@ -355,7 +356,8 @@ def search_1(request):
                     and c1.school = '{Department}'
                     and c1.coursename like '{Subject}%'
                     and (c1.coursename like '%{Content}%'
-                    or c1.school like '%{Content}%');
+                    or c1.school like '%{Content}%'
+                    or c1.coursefullname like '%{Content}%');
                     """
                 )
 
@@ -393,7 +395,8 @@ def search_2(request):
                 (SELECT courseid FROM comments)
                 and courses.coursename like '{Subject}%'
                 and (courses.coursename like '%{Content}%'
-                or courses.school like '%{Content}%');
+                or courses.school like '%{Content}%'
+                or courses.coursefullname like '%{Content}%');
                 """
             )
             else:
@@ -406,7 +409,8 @@ def search_2(request):
                     and courses.school = '{Department}'
                     and courses.coursename like '{Subject}%'
                     and (courses.coursename like '%{Content}%'
-                    or courses.school like '%{Content}%');
+                    or courses.school like '%{Content}%'
+                    or courses.coursefullname like '%{Content}%');
                     """
                 )
 

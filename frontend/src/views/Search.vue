@@ -48,7 +48,7 @@
       <el-card class="box-card" v-for="inf in info" v-bind:key="inf.CourseID">
         <div slot="header" class="clearfix">
           <span>
-            {{ inf.CourseName }}
+            {{ inf.CourseName }}:{{inf.CourseFullName}}
           </span>
           <el-button
             @click="View(inf.CourseID)"
@@ -88,7 +88,7 @@
       <el-card class="box-card" v-for="inf in info2" v-bind:key="inf.CourseID">
         <div slot="header" class="clearfix">
           <span>
-            {{ inf.CourseName }}
+            {{ inf.CourseName }}:{{inf.CourseFullName}}
           </span>
           <el-button
             @click="View(inf.CourseID)"
@@ -125,16 +125,14 @@
     </div>
     
     <div class="in">
-      <el-row :gutter="20">
-        <el-col :span="6">
+      <el-row :gutter="10">
+        <el-col :span="3">
       <div>推荐课程:</div>
       </el-col>
-      <el-col :span="6">
-      <li v-for="course in recommendCourses" v-bind:key="course.courseID">
+      <el-col :span="3" v-for="course in recommendCourses" v-bind:key="course.courseID">
       <el-link @click="recommend(course.courseID)" target="_blank" type="primary"
         >{{course.courseName}}</el-link
-      >
-      </li></el-col>
+      ></el-col>
      </el-row>
     </div>
     
