@@ -123,14 +123,19 @@
         </div>
       </el-card>
     </div>
-
+    
     <div class="in">
-      推荐课程:
+      <el-row :gutter="20">
+        <el-col :span="6">
+      <div>推荐课程:</div>
+      </el-col>
+      <el-col :span="6">
       <li v-for="course in recommendCourses" v-bind:key="course.courseID">
       <el-link @click="recommend(course.courseID)" target="_blank" type="primary"
         >{{course.courseName}}</el-link
       >
-      </li>
+      </li></el-col>
+     </el-row>
     </div>
     
   </div>

@@ -500,9 +500,11 @@ def knn(request):
                 recommendCourses = cursor.fetchall()
                 if recommendCourses != []:
                     break
+                if len(recommendCourses) > 5:
+                    recommendCourses = recommendCourses[:6]
             # print(recommendCourses)
             columns = ['courseID','courseName']
-            
+
             data = [dict(zip(columns, row)) for row in recommendCourses]
             # print(data)
             response = JsonResponse(data, safe=False)
