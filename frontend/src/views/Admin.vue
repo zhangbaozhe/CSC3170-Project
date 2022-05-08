@@ -155,7 +155,7 @@ export default {
     }, 
     deleteCourse(CourseID) {
         axios.delete("http://127.0.0.1:3170/api/admin/course/", 
-            {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
+            // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
             {data: {"id" : CourseID}}
         )
         .then((response)=>{console.log(response)})
@@ -165,19 +165,18 @@ export default {
         let data = new FormData()
         data.append("id", CommentID)
         axios.delete("http://127.0.0.1:3170/api/admin/comment/", 
-        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
+        // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
         {data: {"id" : CommentID}})
         .then((response)=>{console.log(response)})
-        location.reload()
     }, 
     deleteUser(UserID) {
         let data = new FormData()
         data.append("id", UserID)
         axios.delete("http://127.0.0.1:3170/api/admin/user/", 
-        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
+        // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
         {data: {"id" : UserID}})
         .then((response)=>{console.log(response)})
-        location.reload()
+        
     }, 
     reset () {
       this.$refs.form.reset()
