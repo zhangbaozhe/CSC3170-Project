@@ -268,7 +268,7 @@ def search(request):
                 """
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -332,7 +332,7 @@ def search_1(request):
                 f"""
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -347,7 +347,7 @@ def search_1(request):
                     f"""
                     SELECT *
                     FROM `courses` as c1,
-                    (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                    (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                     FROM `courses`,`comments`
                     where courses.courseid = comments.courseid
                     group by courses.courseid) as c

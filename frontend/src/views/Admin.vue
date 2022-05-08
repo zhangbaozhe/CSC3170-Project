@@ -136,7 +136,7 @@ export default {
         // submit the course
         let data = new FormData()
         data.append(CourseCode + " " + CourseName)
-        axios.post("http://127.0.0.1:3170/api/xxxxxxx/", 
+        axios.post("http://127.0.0.1:3170/api/admin/course/", 
             data, 
             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
         )
@@ -144,13 +144,22 @@ export default {
         .catch((error) => { console.log(error) })
     }, 
     deleteCourse(CourseID) {
-        // TODO: 
+        axios.delete("http://127.0.0.1:3170/api/admin/course/", 
+        {data:{id:CourseID}},
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+        .then((response)=>{console.log(response)})
     }, 
     deleteComment(CommentID) {
-
+        axios.delete("http://127.0.0.1:3170/api/admin/comment/", 
+        {data:{id:CommentID}},
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+        .then((response)=>{console.log(response)})
     }, 
     deleteUser(UserID) {
-
+        axios.delete("http://127.0.0.1:3170/api/admin/user/", 
+        {data:{id:UserID}},
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+        .then((response)=>{console.log(response)})
     }, 
     reset () {
       this.$refs.form.reset()
@@ -158,15 +167,10 @@ export default {
 
   }, 
   created() {
-    // TODO: to do 
-    axios.get("http://127.0.0.1:3170/api/admin/").then((response) => {
-      this.info = response.data
-      for (var i = 0; i < this.info.length; i++) {
-        console.log(this.info[i]["MSG_ID"])
-        this.msgIDs.push(Number(this.info[i]["MSG_ID"]))
-      }
-      console.log(this.msgIDs)
-      console.log(this.info)
+    axios.get("http://127.0.0.1:3170/api/admin/all/").then((response) => {
+      this.Courses = response.data.Courses;
+      this.Users = response.data.Users;
+      this.Comments = response.data.Comments;
     });
   },
 };
