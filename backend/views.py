@@ -268,7 +268,7 @@ def search(request):
                 """
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -332,7 +332,7 @@ def search_1(request):
                 f"""
                 SELECT *
                 FROM `courses` as c1,
-                (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                 FROM `courses`,`comments`
                 where courses.courseid = comments.courseid
                 group by courses.courseid) as c
@@ -347,7 +347,7 @@ def search_1(request):
                     f"""
                     SELECT *
                     FROM `courses` as c1,
-                    (SELECT COUNT(*) as count, AVG(comments.score) as a, courses.courseid
+                    (SELECT COUNT(*) as count, ROUND(AVG(comments.score),1) as a, courses.courseid
                     FROM `courses`,`comments`
                     where courses.courseid = comments.courseid
                     group by courses.courseid) as c
@@ -414,6 +414,98 @@ def search_2(request):
             # data is a list TODO: caution! when converting to the JSON
             data = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
+            # print(data)
+            response = JsonResponse(data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "*"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "*"
+            return response
+
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def knn(request):
+    with connection.cursor() as cursor:
+        userid = request.GET.get('userid')
+        if request.method == 'GET':
+            cursor.execute(
+                """
+                SELECT courses.COURSEID, comments.SCORE
+                FROM `comments` , `courses`
+                where userid = %s
+                and comments.courseid = courses.courseid;
+                """%userid
+            )
+            commentedCourses = cursor.fetchall()
+            print(commentedCourses)
+            cursor.execute(
+                """
+                SELECT USERID
+                FROM USERS;
+                """
+            )
+            data = cursor.fetchall()
+            allUsers = [data[i][0] for i in range(len(data))]
+            print(allUsers)
+            distance = -1
+            recommendID = -1
+            recommendUsers = []
+            for user in allUsers:
+                d = 0
+                if str(user) != userid:
+                    print(user)
+                    cursor.execute(
+                        """
+                        SELECT courseid,score
+                        FROM comments
+                        where userid = %s
+                        """%user
+                    )
+                    for course in commentedCourses:
+                        cid = course[0]
+                        score = course[1]
+                        cursor.execute(
+                        f"""
+                        SELECT score
+                        FROM comments
+                        where userid = {user}
+                        and courseid = {cid};
+                        """
+                        )
+                        othersScore = cursor.fetchall()
+                        if othersScore  == []:
+                            d += 3 #how to determine this distance
+                        else:
+                            d += abs(othersScore[0][0] - score)
+                    recommendUsers.append((user,d))
+            recommendUsers = sorted(recommendUsers,key=lambda x:x[1])
+            print(recommendUsers)
+            for recommendUser in recommendUsers:
+                recommendID = recommendUser[0]
+                print(recommendID)
+                cursor.execute(
+                    f"""
+                    SELECT courses.COURSEID, courses.COURSENAME
+                    FROM `comments`, `courses`
+                    where comments.courseid = courses.courseid
+                    and comments.userid = {recommendID}
+                    and courses.courseid not in (
+                        SELECT COURSEID
+                        FROM comments
+                        where comments.userid = {userid}
+                    );
+                    """
+                )
+                recommendCourses = cursor.fetchall()
+                if recommendCourses != []:
+                    break
+                if len(recommendCourses) > 5:
+                    recommendCourses = recommendCourses[:6]
+            # print(recommendCourses)
+            columns = ['courseID','courseName']
+
+            data = [dict(zip(columns, row)) for row in recommendCourses]
             # print(data)
             response = JsonResponse(data, safe=False)
             response["Access-Control-Allow-Origin"] = "*"
