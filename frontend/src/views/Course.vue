@@ -22,7 +22,6 @@
       </el-row>
       <hr />
     </div>
-    <br />
     <div class="box1">
       <ul class="list1">
         <li
@@ -42,9 +41,10 @@
                 :color="DisLikeColor1[comment.CommentID]"
                 @click="OnClick([0, comment.CommentID])"
               >
-                <v-icon>mdi-thumb-down</v-icon>
+                <v-icon>mdi-thumb-down</v-icon
+                ><span>{{ DisLikeNum[comment.CommentID] }}</span>
               </v-btn>
-              
+
               <!-- 点赞 -->
               <v-btn
                 class="ma-2"
@@ -52,7 +52,8 @@
                 :color="LikeColor1[comment.CommentID]"
                 @click="OnClick([1, comment.CommentID])"
               >
-                <v-icon>mdi-thumb-up</v-icon>
+                <v-icon>mdi-thumb-up</v-icon
+                ><span>{{ LikeNum[comment.CommentID] }}</span>
               </v-btn>
 
               <el-button
@@ -98,15 +99,17 @@
                       :with-header="false"
                       class="drawer1"
                     >
-                     <li  v-for="mul in multiComment"
-                    v-bind:key="mul.multiCommentID">
-                      <el-card class="box-card">
-                        <div slot="header" class="clearfix">
-                          <!-- TODO: this is for multi comments, variables to be changed-->
-                          <span>{{ mul.Username }}</span>
-                        </div>
-                        <span>{{ mul.Content }}</span>
-                      </el-card>
+                      <li
+                        v-for="mul in multiComment"
+                        v-bind:key="mul.multiCommentID"
+                      >
+                        <el-card class="box-card">
+                          <div slot="header" class="clearfix">
+                            <!-- TODO: this is for multi comments, variables to be changed-->
+                            <span>{{ mul.Username }}</span>
+                          </div>
+                          <span>{{ mul.Content }}</span>
+                        </el-card>
                       </li>
                     </el-drawer>
                   </div>
@@ -118,7 +121,6 @@
         </li>
       </ul>
     </div>
-    <br /><br />
     <div class="box2">
       <div class="box2_1">
         <el-divider></el-divider>
@@ -146,7 +148,6 @@
             </el-select>
           </el-col>
         </el-row>
-        <br />
         <el-row :gutter="40">
           <el-col :span="16">
             <div class="grid-content bg-purple">
@@ -165,7 +166,6 @@
             </div>
           </el-col>
         </el-row>
-        <br />
         <el-row>
           <el-col :span="20"
             ><el-input
@@ -205,7 +205,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 
 export default {
@@ -223,7 +222,7 @@ export default {
       mulCommentedUserIDs: [],
       submitNotOKMsg: "You have already submitted a comment!",
       snackbar: false,
-      scoreSnackbar: false, 
+      scoreSnackbar: false,
       courseID: 0,
       courseName: "",
       school: "",
@@ -235,6 +234,8 @@ export default {
       DisLikeColor1: {},
       LikeList1: {},
       DisLikeList1: {},
+      LikeNum: {},
+      DisLikeNum: {},
 
       options1: [
         //year-table
@@ -290,29 +291,30 @@ export default {
 
     get(courseID) {
       this.drawer = true;
-      axios.get("http://127.0.0.1:3170/api/seccomment/", {
-            params: {
-              parentID:courseID,
-            }
-          }).then((response) => {
-      this.multiComment = response.data;
-      console.log(this.multiComment);
-    });
-
+      axios
+        .get("http://127.0.0.1:3170/api/seccomment/", {
+          params: {
+            parentID: courseID,
+          },
+        })
+        .then((response) => {
+          this.multiComment = response.data;
+          console.log(this.multiComment);
+        });
     },
 
     submit() {
       if (this.commentedUserIDs.includes(this.userID)) {
-        console.log("HELLLLLLLLLLLLLLLLL")
+        console.log("HELLLLLLLLLLLLLLLLL");
         this.snackbar = true;
         return;
       }
       if (this.score == 0) {
-        console.log("HELLLLLLLL")
-        this.scoreSnackbar = true
-        return
+        console.log("HELLLLLLLL");
+        this.scoreSnackbar = true;
+        return;
       }
-      console.log(this.score)
+      console.log(this.score);
       const backendAPI = "http://127.0.0.1:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
@@ -337,7 +339,7 @@ export default {
       //  location.reload(); // reload the webpage after submit the comment
     },
 
-OnClick(num) {
+    OnClick(num) {
       let tmpStatus = 0; // 判断是否已点过赞/踩
       if (
         this.DisLikeColor1[num[1]] == "grey" &&
@@ -367,21 +369,27 @@ OnClick(num) {
         //点踩
         if (this.DisLikeColor1[num[1]] == "grey") {
           this.DisLikeColor1[num[1]] = "red";
+          this.DisLikeNum[num[1]] = this.DisLikeNum[num[1]] + 1;
           if (this.LikeColor1[num[1]] == "red") {
             this.LikeColor1[num[1]] = "grey";
+            this.LikeNum[num[1]] = this.LikeNum[num[1]] - 1;
           }
         } else if (this.DisLikeColor1[num[1]] == "red") {
           this.DisLikeColor1[num[1]] = "grey";
+          this.DisLikeNum[num[1]] = this.DisLikeNum[num[1]] - 1;
         }
       } else if (num[0] == 1) {
         //点赞
         if (this.LikeColor1[num[1]] == "grey") {
           this.LikeColor1[num[1]] = "red";
+          this.LikeNum[num[1]] = this.LikeNum[num[1]] + 1;
           if (this.DisLikeColor1[num[1]] == "red") {
             this.DisLikeColor1[num[1]] = "grey";
+            this.DisLikeNum[num[1]] = this.DisLikeNum[num[1]] - 1;
           }
         } else if (this.LikeColor1[num[1]] == "red") {
           this.LikeColor1[num[1]] = "grey";
+          this.LikeNum[num[1]] = this.LikeNum[num[1]] - 1;
         }
       }
       if (tmpStatus == 0) {
@@ -402,14 +410,14 @@ OnClick(num) {
         ) {
           tmpStatus = 2;
         } else {
-          // console.log(this.LikeColor1[num[1]]);
-          // console.log(this.DisLikeColor1[num[1]]);
           console.log("something goes wrong");
         }
         this.$axios.post("http://127.0.0.1:3170/api/like/", {
           userID: this.userID,
           status: tmpStatus,
           commentID: num[1],
+          likeNum: this.LikeNum[num[1]],
+          dislikeNum: this.DisLikeNum[num[1]],
         });
       } else {
         if (
@@ -435,69 +443,73 @@ OnClick(num) {
             userID: this.userID,
             status: tmpStatus,
             commentID: num[1],
-          })
-          .then((response) => {
-            console.log(response);
+            likeNum: this.LikeNum[num[1]],
+            dislikeNum: this.DisLikeNum[num[1]],
           });
       }
     },
-open1(parentCommentID) {
-  this.mulCommentedUserIDs = [];
-      axios.get("http://127.0.0.1:3170/api/mulcomment/", {
-            params: {
-              parentID:parentCommentID,
-            }
-          }).then((response) => {
-          for(let i=0;i<response.data.length;i++){
-            if (!this.mulCommentedUserIDs.includes(response.data[i]["UserID"])){
+    open1(parentCommentID) {
+      this.mulCommentedUserIDs = [];
+      axios
+        .get("http://127.0.0.1:3170/api/mulcomment/", {
+          params: {
+            parentID: parentCommentID,
+          },
+        })
+        .then((response) => {
+          for (let i = 0; i < response.data.length; i++) {
+            if (
+              !this.mulCommentedUserIDs.includes(response.data[i]["UserID"])
+            ) {
               this.mulCommentedUserIDs.push(response.data[i]["UserID"]);
             }
-          };
-          
-    });
+          }
+        });
       this.$prompt("Please enter your response", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       })
         .then(({ value }) => {
           this.multiInputContent = value;
-          if (this.mulCommentedUserIDs.includes(this.userID)){
+          if (this.mulCommentedUserIDs.includes(this.userID)) {
             this.$message({
-            type: 'info',
-            message: 'You have already submitted a second comment'
-          });
+              type: "info",
+              message: "You have already submitted a second comment",
+            });
             return;
-          }
-          else if(this.multiInputContent==null || this.multiInputContent.replace(/[ ]/g, "").length==0){
+          } else if (
+            this.multiInputContent == null ||
+            this.multiInputContent.replace(/[ ]/g, "").length == 0
+          ) {
             this.$message({
-            type: 'info',
-            message: 'Comment cannot be empty'
-          });
-          }
-          else {
-          console.log(this.multiInputContent);
-          const backendAPI = "http://127.0.0.1:3170/api/";
-          let submitData = new FormData();
-          submitData.append("USERID", this.userID);
-          submitData.append("CONTENT", this.multiInputContent);
-          submitData.append("ParentCommentID", parentCommentID);
+              type: "info",
+              message: "Comment cannot be empty",
+            });
+          } else {
+            console.log(this.multiInputContent);
+            const backendAPI = "http://127.0.0.1:3170/api/";
+            let submitData = new FormData();
+            submitData.append("USERID", this.userID);
+            submitData.append("CONTENT", this.multiInputContent);
+            submitData.append("ParentCommentID", parentCommentID);
             axios
-          .post(backendAPI + "seccomment/", submitData, {
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-          this.$message({
-            type: "success",
-            message: "Successfully post your response",
-          });
-        }
+              .post(backendAPI + "seccomment/", submitData, {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+              })
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            this.$message({
+              type: "success",
+              message: "Successfully post your response",
+            });
           }
-          )
+        })
         .catch(() => {
           this.$message({
             type: "info",
@@ -524,7 +536,7 @@ open1(parentCommentID) {
         this.FScore = response.data["FinalScore"];
         this.credit = response.data["Credits"];
         // TODO: to check this
-        this.commentedUserIDs = response.data["CommentedUsers"]
+        this.commentedUserIDs = response.data["CommentedUsers"];
         for (let i = 0; i < this.CommentInfo.length; i++) {
           this.$set(
             this.LikeList1,
@@ -536,6 +548,17 @@ open1(parentCommentID) {
             this.CommentInfo[i].CommentID,
             this.CommentInfo[i].dislikeList
           );
+          this.$set(
+            this.LikeNum,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].LikeNum
+          );
+          this.$set(
+            this.DisLikeNum,
+            this.CommentInfo[i].CommentID,
+            this.CommentInfo[i].DislikeNum
+          );
+
           if (this.CommentInfo[i].likeList.includes(this.userID)) {
             this.$set(this.LikeColor1, this.CommentInfo[i].CommentID, "red");
           } else {
@@ -551,12 +574,6 @@ open1(parentCommentID) {
             );
           }
         }
-        // console.log(this.CommentInfo);
-        // console.log(response.data);
-        console.log(this.LikeColor1);
-        console.log(this.DisLikeColor1);
-        // console.log(this.LikeList1);
-        // console.log(this.DisLikeList1);
       });
   },
 };
@@ -625,6 +642,7 @@ open1(parentCommentID) {
 .header {
   text-align: center;
   margin-top: 0px;
+  background-color: purple;
 }
 .el-textarea__inner {
   align-self: center;
@@ -648,9 +666,9 @@ open1(parentCommentID) {
   height: 22px;
 }
 .butt {
- 		  float: right;
- 		  padding: 3px 0;
- 		  width: 30px;
- 		  height: 30px;
- 		}
+  float: right;
+  padding: 3px 0;
+  width: 30px;
+  height: 30px;
+}
 </style>
