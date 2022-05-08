@@ -68,7 +68,7 @@ router.beforeEach(async (to, from, next) => {
   isTokenAvailable = store.state.hasLogin; // 校验token是否失效
   console.log(to.path)
   if(to.path == "/admin" && store.state.userName != "CSC3170"){
-    return next()
+    return next("/login")
   }
   if (!isTokenAvailable && !whiteList.includes(to.path)) { // 如果是访问的白名单中的页面
     return next("/login"); // 不需要校验，直接返回继续访问该页面
