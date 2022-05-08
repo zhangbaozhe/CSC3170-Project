@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-row :gutter="150">
+    <el-row :gutter="150" style="background-color: purple">
       <el-col :span="19">
      <img src="https://bb.cuhk.edu.cn/themes/as_2012/images/div/title_logo.png" alt="无法显示" height = 100px>
     </el-col>
     <el-col :span="5">
-    <div class='hd'>Hi!User</div>
+    <div class='hd'>Hi!{{this.$store.state.userName}}</div>
     </el-col>
     </el-row>
     <el-divider></el-divider>
@@ -179,12 +179,6 @@
 }
 .el-col {
   border-radius: 4px;
-}
-.bg-purple-dark {
-}
-.bg-purple {
-}
-.bg-purple-light {
 }
 .grid-content {
   border-radius: 4px;

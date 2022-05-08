@@ -25,6 +25,8 @@ def like(request):
                 userID = request.data["userID"]
                 status = request.data["status"]
                 commentID = request.data["commentID"]
+                likeNum = request.data["likeNum"]
+                dislikeNum = request.data["dislikeNum"]
             except:
                 return generate_response(None, 400)
             cursor.execute(
@@ -35,6 +37,14 @@ def like(request):
                 (%s, %s, %s);
                 """%(userID, commentID, status)
             )
+            if(status == 1 or status == 2):
+                cursor.execute(
+                            """
+                            UPDATE `Comments` 
+                            SET `LikeNum` = %d, `DisLikeNum` = %d
+                            WHERE `CommentID` = %s;
+                            """%(likeNum,dislikeNum,commentID)
+                        )
             #TODO: update `UsersSetCommentLikeStatus`?
             return generate_response(None, 201)
         elif(request.method == "PUT"):
@@ -42,6 +52,8 @@ def like(request):
                 userID = str(request.data["userID"])
                 status = str(request.data["status"])
                 commentID = str(request.data["commentID"])
+                likeNum = request.data["likeNum"]
+                dislikeNum = request.data["dislikeNum"]
             except:
                 return generate_response(None, 400)
             if(status=="0"):
@@ -51,6 +63,13 @@ def like(request):
                         DELETE FROM `CommentLikeStatus`
                         WHERE `UserID` = %s and `CommentID` = %s;
                         """%(userID, commentID)
+                    )
+                    cursor.execute(
+                            """
+                            UPDATE `Comments` 
+                            SET `LikeNum` = %d, `DisLikeNum` = %d
+                            WHERE `CommentID` = %s;
+                            """%(likeNum,dislikeNum,commentID)
                     )
                 except:
                     return generate_response(None,400)
@@ -62,6 +81,13 @@ def like(request):
                         SET `Status` = %s
                         WHERE `UserID` = %s and `CommentID` = %s;
                         """%(status, userID, commentID)
+                    )
+                    cursor.execute(
+                            """
+                            UPDATE `Comments` 
+                            SET `LikeNum` = %d, `DisLikeNum` = %d
+                            WHERE `CommentID` = %s;
+                            """%(likeNum,dislikeNum,commentID)
                     )
                 except:
                     return generate_response(None, 400)
