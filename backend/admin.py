@@ -17,6 +17,7 @@ def generate_response(data, status):
     response["Access-Control-Max-Age"] = "1000"
     response["Access-Control-Allow-Headers"] = "*"
     return response
+
 #allowed: delete,
 @csrf_exempt
 @api_view(['DELETE'])
@@ -152,6 +153,7 @@ def manage_course(request):
         elif(request.method == "POST"):
             try: 
                 courseName = request.data["CourseName"]
+                courseFullName = request.data["CourseFullName"]
                 school = request.data['School']
                 credit = request.data["Credits"]
             except:
@@ -159,10 +161,10 @@ def manage_course(request):
             cursor.execute(
                 f"""
                 INSERT INTO `Courses` (
-                    `CourseName`, `School`, `Credits`, `IsValid`, 
+                    `CourseName`, `CourseFullName`, `School`, `Credits`, `IsValid`, 
                     `FinalScore`) 
                     VALUES (
-                    "{courseName}", "{school}", {credit}, 1, 0.0);
+                    "{courseName}", "{courseFullName}", "{school}", {credit}, 1, 0.0);
                 """
             )
             return generate_response(None, 201)
@@ -175,9 +177,10 @@ def get_all(request):
         tmp["Courses"] = []
         tmp["Users"] = []
         tmp["Comments"] = []
+        # Baozhe: added `CourseFullName`
         cursor.execute(
             """
-            SELECT `CourseID`, `CourseName` FROM `Courses`
+            SELECT `CourseID`, `CourseName`, `CourseFullName` FROM `Courses`
             """
         )
         columns = [col[0] for col in cursor.description]
