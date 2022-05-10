@@ -418,7 +418,7 @@ export default {
         data.append("commentID", num[1])
         data.append("likeNum", this.LikeNum[num[1]])
         data.append("dislikeNum", this.DisLikeNum[num[1]])
-        this.$axios.post("http:/175.178.163.91:3170/api/like/", data);
+        this.$axios.post("http://175.178.163.91:3170/api/like/", data);
       } else {
         if (
           this.LikeColor1[num[1]] == "grey" &&
