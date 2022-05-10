@@ -87,7 +87,7 @@ export default {
     // first use axios to get all the users
     // TODO: add this api in the backend and add views
     axios
-      .get("http://127.0.0.1:3170/api/get_users/")
+      .get("http://175.178.163.91:3170/api/get_users/")
       .then((response) => {
         this.allUsersObjectArray = response.data;
         for (var i = 0; i < this.allUsersObjectArray.length; i++) {
@@ -119,7 +119,7 @@ export default {
         data.append("USERNAME", this.userName)
         data.append("PASSWORD", this.password)
         axios
-          .post("http://127.0.0.1:3170/api/register_user/", 
+          .post("http://175.178.163.91:3170/api/register_user/", 
             data, 
             { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }
           ) 

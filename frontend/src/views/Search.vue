@@ -308,11 +308,11 @@ export default {
   },
   created() {
     console.log(this.$store.state.userID)
-    axios.get("http://127.0.0.1:3170/api/search/").then((response) => {
+    axios.get("http://175.178.163.91:3170/api/search/").then((response) => {
       this.info = response.data;
       console.log(this.info);
     }).catch((error) => {console.log(error)});
-    axios.get("http://127.0.0.1:3170/api/search0/").then((response) => {
+    axios.get("http://175.178.163.91:3170/api/search0/").then((response) => {
       this.info2 = response.data;
       console.log(this.info2);
     });
@@ -331,7 +331,7 @@ export default {
       handler(val) {
         console.log(val.values);
         axios
-          .get("http://127.0.0.1:3170/api/search1/", {
+          .get("http://175.178.163.91:3170/api/search1/", {
             params: {
               Department: val.value1,
               Subject: val.value2,
@@ -343,7 +343,7 @@ export default {
             console.log(this.info);
           });
         axios
-          .get("http://127.0.0.1:3170/api/search2/", {
+          .get("http://175.178.163.91:3170/api/search2/", {
             params: {
               Department: val.value1,
               Subject: val.value2,

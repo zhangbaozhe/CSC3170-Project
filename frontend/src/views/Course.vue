@@ -412,7 +412,7 @@ export default {
         } else {
           console.log("something goes wrong");
         }
-        this.$axios.post("http://127.0.0.1:3170/api/like/", {
+        this.$axios.post("http:/175.178.163.91:3170/api/like/", {
           userID: this.userID,
           status: tmpStatus,
           commentID: num[1],
@@ -439,7 +439,7 @@ export default {
           console.log("something went wrong");
         }
         this.$axios
-          .put("http://127.0.0.1:3170/api/like/", {
+          .put("http://175.178.163.91:3170/api/like/", {
             userID: this.userID,
             status: tmpStatus,
             commentID: num[1],
@@ -451,7 +451,7 @@ export default {
     open1(parentCommentID) {
       this.mulCommentedUserIDs = [];
       axios
-        .get("http://127.0.0.1:3170/api/mulcomment/", {
+        .get("http://175.178.163.91:3170/api/mulcomment/", {
           params: {
             parentID: parentCommentID,
           },
@@ -487,7 +487,7 @@ export default {
             });
           } else {
             console.log(this.multiInputContent);
-            const backendAPI = "http://127.0.0.1:3170/api/";
+            const backendAPI = "http://175.178.163.91:3170/api/";
             let submitData = new FormData();
             submitData.append("USERID", this.userID);
             submitData.append("CONTENT", this.multiInputContent);
@@ -526,7 +526,7 @@ export default {
     // console.log(this.LikeColor1);
     // console.log(this.DisLikeColor1);
     axios
-      .get("http://127.0.0.1:3170/api/course/", {
+      .get("http://175.178.163.91:3170/api/course/", {
         params: { courseID: this.$route.params.id },
       })
       .then((response) => {

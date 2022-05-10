@@ -118,7 +118,7 @@ export default {
         this.snackbar = true;
         return false;
       }
-      this.$axios.get("http://127.0.0.1:3170/api/login/",{
+      this.$axios.get("http://175.178.163.91:3170/api/login/",{
         params:{
           username:this.userName,
           password:this.password

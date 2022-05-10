@@ -145,7 +145,7 @@ export default {
         data.append("CourseFullName", this.CourseName)
         data.append("School", this.School)
         data.append("Credits", this.Credit)
-        axios.post("http://127.0.0.1:3170/api/admin/course/", 
+        axios.post("http://175.178.163.91:3170/api/admin/course/", 
             data, 
             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
         )
@@ -155,7 +155,7 @@ export default {
         
     }, 
     deleteCourse(CourseID) {
-        axios.delete("http://127.0.0.1:3170/api/admin/course/", 
+        axios.delete("http://175.178.163.91:3170/api/admin/course/", 
             //{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
             {data: {"id" : CourseID}}
         )
@@ -168,7 +168,7 @@ export default {
     deleteComment(CommentID) {
         let data = new FormData()
         data.append("id", CommentID)
-        axios.delete("http://127.0.0.1:3170/api/admin/comment/", 
+        axios.delete("http://175.178.163.91:3170/api/admin/comment/", 
         //{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
         {data: {"id" : CommentID}})
         .then((response)=>{
@@ -179,7 +179,7 @@ export default {
     deleteUser(UserID) {
         let data = new FormData()
         data.append("id", UserID)
-        axios.delete("http://127.0.0.1:3170/api/admin/user/", 
+        axios.delete("http://175.178.163.91:3170/api/admin/user/", 
         //{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
         {data: {"id" : UserID}})
         .then((response)=>{
@@ -193,7 +193,7 @@ export default {
 
   }, 
   created() {
-    axios.get("http://127.0.0.1:3170/api/admin/all/").then((response) => {
+    axios.get("http://175.178.163.91:3170/api/admin/all/").then((response) => {
       console.log(response)
       this.Courses = response.data.Courses;
       for (let i = 0; i < this.Courses.length; i++) {
