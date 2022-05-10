@@ -292,7 +292,7 @@ export default {
     get(courseID) {
       this.drawer = true;
       axios
-        .get("http://127.0.0.1:3170/api/seccomment/", {
+        .get("http://175.178.163.91:3170/api/seccomment/", {
           params: {
             parentID: courseID,
           },
@@ -315,7 +315,7 @@ export default {
         return;
       }
       console.log(this.score);
-      const backendAPI = "http://127.0.0.1:3170/api/";
+      const backendAPI = "http://175.178.163.91:3170/api/";
       let submitData = new FormData();
       submitData.append("USERID", this.userID);
       submitData.append("COURSEID", this.courseID);
