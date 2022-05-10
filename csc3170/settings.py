@@ -162,5 +162,5 @@ CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
 CORS_ORGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '::1', 'localhost', 'vue client IP']
+ALLOWED_HOSTS = ['*','127.0.0.1', '::1', 'localhost', 'vue client IP']
 

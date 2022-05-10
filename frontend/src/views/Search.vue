@@ -299,11 +299,11 @@ export default {
   methods: {
     View(i) {
       console.log("yes");
-      window.open("http://localhost:8080/course/" + i);
+      window.open("http://175.178.163.91:8080/course/" + i);
       console.log(i);
     },
     recommend(i){
-      window.open("http://localhost:8080/course/" + i);
+      window.open("http://175.178.163.91:8080/course/" + i);
     },
   },
   created() {
@@ -316,7 +316,7 @@ export default {
       this.info2 = response.data;
       console.log(this.info2);
     });
-    axios.get("http://127.0.0.1:3170/api/knn/",{
+    axios.get("http://175.178.163.91:3170/api/knn/",{
       params: {
               userid : this.$store.state.userID
             },
