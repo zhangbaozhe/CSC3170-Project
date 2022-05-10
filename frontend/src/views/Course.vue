@@ -412,13 +412,13 @@ export default {
         } else {
           console.log("something goes wrong");
         }
-        this.$axios.post("http:/175.178.163.91:3170/api/like/", {
-          userID: this.userID,
-          status: tmpStatus,
-          commentID: num[1],
-          likeNum: this.LikeNum[num[1]],
-          dislikeNum: this.DisLikeNum[num[1]],
-        });
+        let data = new FormData()
+        data.append("userID", this.userID)
+        data.append("status", tmpStatus)
+        data.append("commentID", num[1])
+        data.append("likeNum", this.LikeNum[num[1]])
+        data.append("dislikeNum", this.DisLikeNum[num[1]])
+        this.$axios.post("http:/175.178.163.91:3170/api/like/", data);
       } else {
         if (
           this.LikeColor1[num[1]] == "grey" &&
@@ -438,14 +438,14 @@ export default {
         } else {
           console.log("something went wrong");
         }
+        let data = new FormData()
+        data.append("userID", this.userID)
+        data.append("status", tmpStatus)
+        data.append("commentID", num[1])
+        data.append("likeNum", this.LikeNum[num[1]])
+        data.append("dislikeNum", this.DisLikeNum[num[1]])
         this.$axios
-          .put("http://175.178.163.91:3170/api/like/", {
-            userID: this.userID,
-            status: tmpStatus,
-            commentID: num[1],
-            likeNum: this.LikeNum[num[1]],
-            dislikeNum: this.DisLikeNum[num[1]],
-          });
+          .put("http://175.178.163.91:3170/api/like/", data);
       }
     },
     open1(parentCommentID) {
