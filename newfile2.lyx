@@ -172,6 +172,10 @@ university courses, comment and evaluation systems, database management
 Introduction
 \end_layout
 
+\begin_layout Subsection
+Motivation
+\end_layout
+
 \begin_layout Standard
 \begin_inset Flex Paragraph Start
 status open
@@ -181,42 +185,108 @@ status open
 status open
 
 \begin_layout Plain Layout
-H
+C
 \end_layout
 
 \end_inset
 
-ere
+ourse
 \end_layout
 
 \end_inset
 
-
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-The 
-\series bold
-
-\backslash
-IEEEPARstart
-\series default
- command is needed in the first paragraph of the document.
+ selection is very important for college students' learning in CUHKSZ.
+ How to choose satisfactory courses troubles many students.
+ It is common for college students more interested in some popular courses,
+ but not in certain courses.
+ However, selecting courses purely based on interest sometimes results in
+ poor results.
+ Other students' evaluations of course contents, lecturers, assignments,
+ and other factors have gradually become the focus of students' course selection.
+ At present, students cannot obtain this information from a standard platform.
+ Even though the school provides OCTE system to obtain the feedback from
+ students, the data collected is all closed and students have no access
+ to it.
+ There is a growing need for a more efficient course review system for college
+ students.
 \end_layout
 
-\end_inset
+\begin_layout Subsection
+Project Overview
+\end_layout
 
- is the text text text text text text text text text text text text text
- text text text.
+\begin_layout Standard
+To ease the process of college students selecting courses and provide references
+ to previous comments or feedbacks of courses offered, we propose a design
+ of Course Comment System for students in our university CUHKSZ.
+ Aspired by some review websites like Doupan and Dianping, our design is
+ an open plateform for students to freely obtain or post cousrse commets.
+ In our design, users can signup, login, serach for courses and comments,
+ comment on a course, and reply to or like/dislike a comment.
+ Compared woth OCTE system, our design's target users are the college students
+ in CUHKSZ, so all commet data is open to users.
+ Besides, we implement user anonymity to allow users to share their ideas
+ more freely.
+ To ensure the validity and reliability of the comments posted, we introduce
+ multi-comment system and like/dislike system, the users can show thier
+ agreeement or disagreeement with others by send multi-comment (reply) to
+ other comments or like/dislake other comments.
+ We also implement a recommendation algorithm based on data mining to provied
+ users personalized course comment recommendation service.
+ 
+\end_layout
+
+\begin_layout Subsection
+Need & Requirement
+\end_layout
+
+\begin_layout Standard
+We analyze the needs and requirements of our design, and our conclusion
+ is shown below:
+\end_layout
+
+\begin_layout Subsubsection
+User Permissions
+\end_layout
+
+\begin_layout Standard
+In our design, every user has access to all course comments stored in our
+ database.
+ However, to comment on a certain course, the user must have registered
+ and loged in.
+ Likewise, to reply to a comment or like/dislike a comment also requires
+ user to log in first.
+ Besides, the admin user has the privilege to delete users, courses, and
+ comments, or add new courses to the database.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Comment Limitations
+\end_layout
+
+\begin_layout Standard
+To provide a more accurate evaluation on courses, except the content of
+ a comment, we allow user to include the year, semester, instrutor info,
+ and a score (from 1 to 5) in a comment.
+ However, if some users have no time to include all information in his/her
+ comment, we allow user to only submit the score he/she wants to give to
+ the course.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Like/Dislike Comments
+\end_layout
+
+\begin_layout Standard
+The like/dislike system is uesed to evaluate the qulity of a certain comment.
+ In this case, a user can only like or dislike a comment at one time.
+ 
 \end_layout
 
 \begin_layout Section
 Database System Design
-\end_layout
-
-\begin_layout Standard
-text text text text text text text text text text text text text text text
 \end_layout
 
 \begin_layout Subsection
@@ -823,6 +893,10 @@ Detailed Course Web Page
 
 \begin_layout Subsubsection
 Administration
+\end_layout
+
+\begin_layout Standard
+As shown in Figure 8, the Admin page 
 \end_layout
 
 \begin_layout Section
