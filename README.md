@@ -11,7 +11,7 @@ This is the repo contains the source code of thie project. The team members are
 
 ## Run in a docker container (recommended)
 
-We use docker environment to run the code. The docker image can be found at [somewhere](). Please download it and unzip it using 
+We use docker environment to run the code. The docker image can be found at [OneDrive](https://cuhko365-my.sharepoint.com/:u:/g/personal/119010421_link_cuhk_edu_cn/EUk24NcJt2ZGg4knjibpTfEB5BShSzt3ROC186z7NPdGPA?e=RjzdGR). Please download it and unzip it using 
 
 ```bash
 $ tar -zxvf image.tar.gz 
