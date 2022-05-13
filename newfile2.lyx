@@ -743,7 +743,7 @@ status open
 \begin_inset Graphics
 	filename figures/courses.png
 	lyxscale 30
-	scale 15
+	scale 14
 
 \end_inset
 
@@ -813,9 +813,26 @@ The data then will be transfered via
 axios
 \emph default
  to the frontend as a list to render.
- ## TODO: search At the bottom of this page, a few recommended courses based
- on the current user status (i.e., commented courses, given scores, etc.) are
- shown as the below figure shows: 
+ Note that the user can enter some texts in the search bar to search for
+ some courses and use filtering.
+ This function is complex.
+ Here we only list the corresponding SQL commads, for more detailed logic,
+ please refer to the source code.
+ 
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/searchBar.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Search Bar Functions}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+At the bottom of this page, a few recommended courses based on the current
+ user status (i.e., commented courses, given scores, etc.) are shown as the
+ below figure shows: 
 \begin_inset Float figure
 placement H
 wide false
