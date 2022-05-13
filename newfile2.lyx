@@ -818,7 +818,29 @@ Detailed Course Web Page
 
  At the right-top corner of the above page, the information of offering
  school, credits, and final score is shown.
- 
+ Each of the card in the middle shows the comment information given by some
+ user.
+ The information of each card includes the following fields: 
+\end_layout
+
+\begin_layout Itemize
+User name
+\end_layout
+
+\begin_layout Itemize
+Score given by the user
+\end_layout
+
+\begin_layout Itemize
+Comment content
+\end_layout
+
+\begin_layout Itemize
+Number of likes
+\end_layout
+
+\begin_layout Itemize
+Number of dislikes
 \end_layout
 
 \begin_layout Subsubsection
