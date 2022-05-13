@@ -1,4 +1,4 @@
 INSERT INTO `Users` 
 (`Username`, `Password`)
- VALUES
+VALUES
 (%s, %s);

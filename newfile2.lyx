@@ -204,7 +204,7 @@ ourse
  Other students' evaluations of course contents, lecturers, assignments,
  and other factors have gradually become the focus of students' course selection.
  At present, students cannot obtain this information from a standard platform.
- Even though the school provides OCTE system to obtain the feedback from
+ Even though the school provides CTE system to obtain the feedback from
  students, the data collected is all closed and students have no access
  to it.
  There is a growing need for a more efficient course review system for college
@@ -223,7 +223,7 @@ To ease the process of college students selecting courses and provide references
  an open plateform for students to freely obtain or post cousrse commets.
  In our design, users can signup, login, serach for courses and comments,
  comment on a course, and reply to or like/dislike a comment.
- Compared woth OCTE system, our design's target users are the college students
+ Compared woth CTE system, our design's target users are the college students
  in CUHKSZ, so all commet data is open to users.
  Besides, we implement user anonymity to allow users to share their ideas
  more freely.
@@ -765,7 +765,16 @@ Display of Courses
 \end_inset
 
  For each of the course card shown in the above figure, the following types
- of information should be obtained from the database:
+ of information should be obtained from the database.
+ Once clike the 
+\begin_inset Quotes eld
+\end_inset
+
+DELETE
+\begin_inset Quotes erd
+\end_inset
+
+ button on the right, a delete request, which, will be sent to the backend
 \end_layout
 
 \begin_layout Itemize
@@ -1041,7 +1050,172 @@ Administration
 \end_layout
 
 \begin_layout Standard
-As shown in Figure 8, the Admin page 
+As shown in the Figures below, the Admin page includes the APIs for creating
+ new courses, delete courses, comments, and users.
+ The admin user can add a new course by entering the required inforamtion
+ of a course item and click 
+\begin_inset Quotes eld
+\end_inset
+
+SUBMIT
+\begin_inset Quotes erd
+\end_inset
+
+ button, an axios request will be sent to backend to add the course by executing
+ the SQL query: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/admin_1.png
+	lyxscale 30
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Administration: Course Management
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_add.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Add Course}"
+
+\end_inset
+
+ As for the data deletion, once clike the 
+\begin_inset Quotes eld
+\end_inset
+
+DELETE
+\begin_inset Quotes erd
+\end_inset
+
+ button on the right, an axios request, which containging the course/comment/use
+r id, to the backend and corresponding SQL query, as shown below will be
+ executed to delete the data.
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_course.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete Course}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/admin_2.png
+	lyxscale 30
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Administration: Comment Management
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/admin_3.png
+	lyxscale 30
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Administration: User Management
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_comment.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete Comment}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_user.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete User}"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
