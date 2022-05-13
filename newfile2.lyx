@@ -1044,37 +1044,14 @@ SUBMIT
 
  button, an axios request will be sent to backend to add the course by executing
  the SQL query: 
-\begin_inset CommandInset include
-LatexCommand lstinputlisting
-filename "src/search.sql"
-lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={List Courses}"
+\end_layout
 
-\end_inset
-
- As for the data deletion, once clike the 
-\begin_inset Quotes eld
-\end_inset
-
-DELETE
-\begin_inset Quotes erd
-\end_inset
-
- button on the right, an axios request, which containging the course/comment/use
-r id, to the backend and corresponding SQL query, as shown below will be
- executed to delete the data.
-\begin_inset CommandInset include
-LatexCommand lstinputlisting
-filename "src/search.sql"
-lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={List Courses}"
-
-\end_inset
-
-
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1103,11 +1080,40 @@ Administration: Course Management
 \end_inset
 
 
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_add.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Add Course}"
+
+\end_inset
+
+ As for the data deletion, once clike the 
+\begin_inset Quotes eld
+\end_inset
+
+DELETE
+\begin_inset Quotes erd
+\end_inset
+
+ button on the right, an axios request, which containging the course/comment/use
+r id, to the backend and corresponding SQL query, as shown below will be
+ executed to delete the data.
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_course.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete Course}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1140,7 +1146,7 @@ Administration: Comment Management
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1165,6 +1171,28 @@ Administration: User Management
 
 
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_comment.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete Comment}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/admin_delete_user.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Delete User}"
 
 \end_inset
 

@@ -1,12 +1,17 @@
 DELETE FROM `UsersGiveComments`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
+
 DELETE FROM `Comments`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
+
 DELETE FROM `CommentLikeStatusAppraiseComments`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
+
 DELETE FROM `CommentLikeStatus`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
+
 DELETE FROM `MultiComments`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
+
 DELETE FROM `Users`
-WHERE `UserID` = {userID};
+WHERE `UserID` = %d;
