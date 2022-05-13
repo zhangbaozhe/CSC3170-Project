@@ -156,7 +156,7 @@ export default {
     }, 
     deleteCourse(CourseID) {
         axios.delete("http://127.0.0.1:3170/api/admin/course/", 
-            //{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
+            // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}, 
             {data: {"id" : CourseID}}
         )
         .then((response)=>{
@@ -174,7 +174,6 @@ export default {
         .then((response)=>{
           console.log(response)
           location.reload()})
-        
     }, 
     deleteUser(UserID) {
         let data = new FormData()
