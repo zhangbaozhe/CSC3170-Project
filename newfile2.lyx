@@ -953,7 +953,7 @@ Besides, the user can add a reply (a multi-comment) to an existing comment
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -986,7 +986,7 @@ Respond to a Comment
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -1014,7 +1014,26 @@ View Multi-Comments
 
 \end_inset
 
- 
+ When the user responds to a comment, the page will send a request to the
+ backend application and the following SQL commands will be performed: 
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/postRespond.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Post a Respond}"
+
+\end_inset
+
+When the user tries to view other response from other users, the page will
+ send a request to the backend application and the following SQL query will
+ be performed: 
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/viewResponse.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={View Multi-Comments}"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection
