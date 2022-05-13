@@ -1,4 +1,5 @@
 /usr/local/lib
+├── @vue/cli-init@5.0.4
 ├── @vue/cli@5.0.4
 ├── cnpm@7.1.1
 ├── corepack@0.10.0

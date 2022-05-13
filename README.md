@@ -1,33 +1,47 @@
-# NEW ENV settings UPDATE: APR 30
+# CSC3170 Group Project: Course Comment and Evaluation System
 
-1. DONE: Delete the whole `frontend/` dir (or just pulling from GitHub would be fine)
+This is the repo contains the source code of thie project. The team members are
 
-2. DONE: Remove the old `vue-cli` package by running `npm uninstall vue-cli -g`
+- Baozhe Zhang (Leader, 119010421)
+- Yuyang Liang (119010174)
+- Junxiao Liu (120090809)
+- Yongqi Yu (120090761)
 
-3. DONE: Install the new version `@vue/cli` by running `npm install -g @vue/cli`
+# How to run the code (for TA)
 
-3. The global node modules are liste in `node_global_requirements.txt`
+## Run in a docker container (recommended)
 
-# Router specifications UPDATED: MAY 1, 2022
+We use docker environment to run the code. The docker image can be found at [somewhere](). Please download it and unzip it using 
 
-- ~~Use the router of django? Maybe use the Vue router~~
-- Vue router
+```bash
+$ tar -zxvf image.tar.gz 
+```
 
-# From frontend to backend UPDATED: MAY 1, 2022
+To run the docker image, first you need to load the image using the command
+```bash
+$ docker load < image.tar
+```
+Use `docker images` to check the new added image and copy the image ID as `<IMAGE_ID>`
 
-~~How to test the hello world application?~~
+Create the container using 
+```bash
+$ docker docker create -it --name csc3170 -p 3170:8000 -p 8080:8080 <IMAGE_ID> /bin/sh 
+```
+Use `docker container list` to check the new container named as csc3170 and remember the container ID as `<CONTAINER_ID>`
 
-- At `app/csc3170` dir, run the django backend server
-- Open another terminal, go to `/app/csc3170/frontend`, run the Vue frontend
-- At your host browser, enter `localhost:8080` to test the POST and GET requests
+Execute the container by running 
+```bash
+$ docker start <CONTAINER_ID>
+```
+Once you start the container, you can execute it
+```bash
+$ docker exec -it <CONTAINER_ID> /bin/sh
+```
+Then you will enter a terminal which goes into the docker container. In the container, enter 
+```bash
+> cd csc3170
+> ./run_backend.sh & ./run_frontend.sh 
+```
+Then in your host browser, enter `localhost:8080/login`. You can test the demo. 
 
-# Baozhe: sign up && init database UPDATED: MAY 2, 2022
 
-# Baozhe: notes about first comment UPDATE: MAY 3, 2022
-## First-layer comment
-Backend urls:
-- /api/course/submit_comment
-
-Known BUGS: 
-- DONE: How to let a page to know the course ID
-- How to let a user only submit comment for once
