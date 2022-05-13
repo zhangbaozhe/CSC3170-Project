@@ -161,7 +161,16 @@ CSC3170 Report
 \end_layout
 
 \begin_layout Abstract
-This is the abstract text.
+To facilitate students' course selction in CUHKSZ, we design and implement
+ a course comment and evaluation database system.
+ Three main components are included in our design, which are User, Comment,
+ and Course.
+ We also design and implement subsystem including course scoring system
+ to do the quantification of course comments, and Comment like/dislike system
+ with Multi-comment system to ensure the quality of course comments.
+ We also introduce KNN method to implement a recommendation system.
+ This paper include the basic design and detailed implementation of this
+ course comment system.
 \end_layout
 
 \begin_layout Keywords
@@ -195,14 +204,14 @@ ourse
 
 \end_inset
 
- selection is very important for college students' learning in CUHKSZ.
+ selection is very important for college student's learning in CUHKSZ.
  How to choose satisfactory courses troubles many students.
  It is common for college students more interested in some popular courses,
  but not in certain courses.
  However, selecting courses purely based on interest sometimes results in
  poor results.
- Other students' evaluations of course contents, lecturers, assignments,
- and other factors have gradually become the focus of students' course selection.
+ Other student's evaluations of course contents, lecturers, assignments,
+ and other factors have gradually become the focus of student's course selection.
  At present, students cannot obtain this information from a standard platform.
  Even though the school provides CTE system to obtain the feedback from
  students, the data collected is all closed and students have no access
@@ -219,19 +228,19 @@ Project Overview
 To ease the process of college students selecting courses and provide references
  to previous comments or feedbacks of courses offered, we propose a design
  of Course Comment System for students in our university CUHKSZ.
- Aspired by some review websites like Doupan and Dianping, our design is
- an open plateform for students to freely obtain or post cousrse commets.
- In our design, users can signup, login, serach for courses and comments,
+ Aspired by some review websites like Douban and Dianping, our design is
+ an open platform for students to freely obtain or post course comments.
+ In our design, users can signup, login, search for courses and comments,
  comment on a course, and reply to or like/dislike a comment.
- Compared woth CTE system, our design's target users are the college students
- in CUHKSZ, so all commet data is open to users.
+ Compared with CTE system, our design's target users are the college students
+ in CUHKSZ, so all comment data is open to users.
  Besides, we implement user anonymity to allow users to share their ideas
  more freely.
  To ensure the validity and reliability of the comments posted, we introduce
- multi-comment system and like/dislike system, the users can show thier
- agreeement or disagreeement with others by send multi-comment (reply) to
- other comments or like/dislake other comments.
- We also implement a recommendation algorithm based on data mining to provied
+ multi-comment system and like/dislike system, the users can show their
+ agreement or disagreement with others by send multi-comment (reply) to
+ other comments or like/dislike other comments.
+ We also implement a recommendation algorithm based on data mining to provide
  users personalized course comment recommendation service.
  
 \end_layout
@@ -267,7 +276,7 @@ Comment Limitations
 
 \begin_layout Standard
 To provide a more accurate evaluation on courses, except the content of
- a comment, we allow user to include the year, semester, instrutor info,
+ a comment, we allow user to include the year, semester, instructor info,
  and a score (from 1 to 5) in a comment.
  However, if some users have no time to include all information in his/her
  comment, we allow user to only submit the score he/she wants to give to
@@ -280,7 +289,7 @@ Like/Dislike Comments
 \end_layout
 
 \begin_layout Standard
-The like/dislike system is uesed to evaluate the qulity of a certain comment.
+The like/dislike system is used to evaluate the quality of a certain comment.
  In this case, a user can only like or dislike a comment at one time.
  
 \end_layout
@@ -302,7 +311,7 @@ Database System Implementation
 \end_layout
 
 \begin_layout Standard
-To avoid environment confilicts during the development of the system among
+To avoid environment conflicts during the development of the system among
  team members, we use a Docker container to hold our project and run the
  code on it.
  Docker container is a hypervised 
@@ -454,13 +463,13 @@ literal "false"
  and the SQLite database binary file, which enables us to write Python code
  to handle more difficult data processing.
  On a higher level, we use Django, a Python library to quickly develop web
- pages, to handle the data update or transimission between the database
- and the user interface.
+ pages, to handle the data update or transmission between the database and
+ the user interface.
  
 \end_layout
 
 \begin_layout Standard
-As stated in last section, we use Django as the intermidiate level between
+As stated in last section, we use Django as the intermediate level between
  the user interface and the lower level database engine.
  In this project, we do not use the database abstraction provided by Django
  which is the so-called Object-Relational Mapping (ORM) which allows the
@@ -485,12 +494,12 @@ django.db.connection
 \emph on
 django.db.connection
 \emph default
- to handle the data trasmission, database update and queries.
+ to handle the data transmission, database update and queries.
  
 \end_layout
 
 \begin_layout Standard
-As a intermidate level, by using Django, we try to seperate the backend
+As a intermidate level, by using Django, we try to separate the backend
  (API level) from the frontend (user interface).
  We set a API port 3170 for the backend application, which allows the frontend
  application to send requests to specific URLs and obtain the desired data
@@ -529,17 +538,17 @@ Users of this system can directly access the web pages we provided to register
  new users (making insertions to the database), view the information of
  courses (from the database), posting comments (making insertions to the
  database), etc.
- The webpages are constructed by using a popular web framework Vue.js with
+ The web pages are constructed by using a popular web framework Vue.js with
  plugins such as Vuetify and ElementUI to beautify the web pages.
  The frontend application consists of the following web pages:
 \end_layout
 
 \begin_layout Itemize
-User managment system: user signup page and login page
+User management system: user signup page and login page
 \end_layout
 
 \begin_layout Itemize
-Content display system: course search page and detailed coure information
+Content display system: course search page and detailed course information
  page
 \end_layout
 
@@ -562,7 +571,7 @@ User Interface & SQL Function Implementation
 \end_layout
 
 \begin_layout Standard
-In this section, we will elebrate the details of the implementation between
+In this section, we will elaborate the details of the implementation between
  the user interface and the SQL functions.
  In the below contents, we will illustrate the user interface with specific
  functions and its corresponding SQL function(s) which defined in the backend
@@ -658,7 +667,7 @@ lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\sm
 
 \end_inset
 
-Then, in this page, the system will not allow a registerd user to create
+Then, in this page, the system will not allow a registered user to create
  an account again, if he/she uses the same user name.
  The figure below illustrates this situation: 
 \begin_inset Float figure
@@ -766,7 +775,7 @@ Display of Courses
 
  For each of the course card shown in the above figure, the following types
  of information should be obtained from the database.
- Once clike the 
+ Once click the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -808,7 +817,7 @@ lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\sm
 
 \end_inset
 
-The data then will be transfered via 
+The data then will be transferred via 
 \emph on
 axios
 \emph default
@@ -816,7 +825,7 @@ axios
  Note that the user can enter some texts in the search bar to search for
  some courses and use filtering.
  This function is complex.
- Here we only list the corresponding SQL commads, for more detailed logic,
+ Here we only list the corresponding SQL commands, for more detailed logic,
  please refer to the source code.
  
 \begin_inset CommandInset include
@@ -1069,7 +1078,7 @@ Administration
 \begin_layout Standard
 As shown in the Figures below, the Admin page includes the APIs for creating
  new courses, delete courses, comments, and users.
- The admin user can add a new course by entering the required inforamtion
+ The admin user can add a new course by entering the required information
  of a course item and click 
 \begin_inset Quotes eld
 \end_inset
@@ -1123,7 +1132,7 @@ lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\sm
 
 \end_inset
 
- As for the data deletion, once clike the 
+ As for the data deletion, once click the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1131,8 +1140,8 @@ DELETE
 \begin_inset Quotes erd
 \end_inset
 
- button on the right, an axios request, which containging the course/comment/use
-r id, to the backend and corresponding SQL query, as shown below will be
+ button on the right, an axios request, which containing the course/comment/user
+ id, to the backend and corresponding SQL query, as shown below will be
  executed to delete the data.
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
