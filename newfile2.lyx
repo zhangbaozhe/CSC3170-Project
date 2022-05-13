@@ -858,7 +858,7 @@ view
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -911,6 +911,110 @@ Number of likes
 
 \begin_layout Itemize
 Number of dislikes
+\end_layout
+
+\begin_layout Itemize
+Year, semester, and instructor of course offered
+\end_layout
+
+\begin_layout Standard
+These data are first obtained by sending a request to the server.
+ The following SQL queries are performed in the backend:
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/detailedCourse.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Fetch Detailed Course Information}"
+
+\end_inset
+
+The backend application will use the data fetched from the three queries
+ in the above listing and compress the data to a list of dictionaries format
+ to the frontend.
+ The user in this page can submit the comment and scores at the bottom of
+ the page.
+ The following SQL query is performed: 
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "src/submitComment.sql"
+lstparams "language=SQL,fontadjust=true,basicstyle={\\ttfamily\\footnotesize\\small},caption={Submit Comment}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Besides, the user can add a reply (a multi-comment) to an existing comment
+ to the course.
+ The figures below illustrate the page when the use responds and when the
+ user checks other multi-comments.
+ 
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/response.png
+	lyxscale 30
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Respond to a Comment
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename figures/multi_comment.png
+	lyxscale 30
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+View Multi-Comments
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
 \end_layout
 
 \begin_layout Subsubsection
